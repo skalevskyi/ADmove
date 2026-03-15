@@ -6,11 +6,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { BASE_PATH } from '@/lib/base-path';
 
 const OFFRES = [
-  { id: 'rear' as const, image: '/vehicle/rear.png', featured: false },
-  { id: 'side' as const, image: '/vehicle/side.png', featured: true },
-  { id: 'full' as const, image: '/vehicle/full.png', featured: false },
+  { id: 'rear' as const, image: `${BASE_PATH}/vehicle/rear.png`, featured: false },
+  { id: 'side' as const, image: `${BASE_PATH}/vehicle/side.png`, featured: true },
+  { id: 'full' as const, image: `${BASE_PATH}/vehicle/full.png`, featured: false },
 ];
 
 type OfferId = (typeof OFFRES)[number]['id'];

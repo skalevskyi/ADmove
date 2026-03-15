@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
+import { BASE_PATH } from '@/lib/base-path';
+
 const FORMATS = [
   {
     id: 'basic',
@@ -12,7 +14,7 @@ const FORMATS = [
     monthly: '~110 000',
     price: '250 €',
     priceLabel: '250 € / mois',
-    image: '/vehicle/rear.png',
+    image: `${BASE_PATH}/vehicle/rear.png`,
     alt: 'Format BASIC — publicité arrière sur véhicule ADMOVE',
     featured: false,
     badge: null,
@@ -25,7 +27,7 @@ const FORMATS = [
     monthly: '~150 000',
     price: '450 €',
     priceLabel: '450 € / mois',
-    image: '/vehicle/side.png',
+    image: `${BASE_PATH}/vehicle/side.png`,
     alt: 'Format PRO — publicité latérale sur véhicule ADMOVE',
     featured: false,
     badge: null,
@@ -38,7 +40,7 @@ const FORMATS = [
     monthly: '~200 000',
     price: '750 €',
     priceLabel: '750 € / mois',
-    image: '/vehicle/full.png',
+    image: `${BASE_PATH}/vehicle/full.png`,
     alt: 'Format EXCLUSIVE — habillage complet du véhicule ADMOVE',
     featured: true,
     badge: 'Visibilité maximale',

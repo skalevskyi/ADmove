@@ -1,7 +1,9 @@
 'use client';
 
 import Image from 'next/image';
+
 import { useLanguage } from '@/context/LanguageContext';
+import { BASE_PATH } from '@/lib/base-path';
 
 export function Footer() {
   const { t } = useLanguage();
@@ -11,7 +13,7 @@ export function Footer() {
         <div className="flex flex-col gap-2">
           <div className="flex h-8 w-auto max-w-full items-center gap-2">
             <Image
-              src="/vehicle/admove-icon.svg"
+              src={`${BASE_PATH}/vehicle/admove-icon.svg`}
               alt=""
               width={32}
               height={32}

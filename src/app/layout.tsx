@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Manrope } from 'next/font/google';
 
 import { Providers } from '@/components/Providers';
+import { BASE_PATH } from '@/lib/base-path';
 
 import './globals.css';
 
@@ -17,15 +18,15 @@ export const metadata: Metadata = {
     'Publicité sur véhicule à Montpellier, Port Marianne, Carnon, Palavas, La Grande-Motte. Formats Rear, Side, Full.',
   icons: {
     icon: [
-      { url: '/logo/favicon.ico' },
-      { url: '/logo/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
-      { url: '/logo/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+      { url: `${BASE_PATH}/logo/favicon.ico` },
+      { url: `${BASE_PATH}/logo/favicon-16x16.png`, sizes: '16x16', type: 'image/png' },
+      { url: `${BASE_PATH}/logo/favicon-32x32.png`, sizes: '32x32', type: 'image/png' },
     ],
     apple: [
-      { url: '/logo/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: `${BASE_PATH}/logo/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' },
     ],
   },
-  manifest: '/logo/site.webmanifest',
+  manifest: `${BASE_PATH}/logo/site.webmanifest`,
 };
 
 export const viewport: Viewport = {

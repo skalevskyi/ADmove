@@ -6,11 +6,12 @@ import { AnimatePresence, motion } from 'framer-motion';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { BASE_PATH } from '@/lib/base-path';
 
 const HERO_IMAGES = [
-  '/vehicle/hero-car-1.png',
-  '/vehicle/hero-car-2.png',
-  '/vehicle/hero-car-3.png',
+  `${BASE_PATH}/vehicle/hero-car-1.png`,
+  `${BASE_PATH}/vehicle/hero-car-2.png`,
+  `${BASE_PATH}/vehicle/hero-car-3.png`,
 ] as const;
 
 const CAROUSEL_INTERVAL_MS = 5000;

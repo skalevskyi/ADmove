@@ -8,6 +8,7 @@ import { useRef, useState, useEffect } from 'react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
+import { BASE_PATH } from '@/lib/base-path';
 import type { Locale } from '@/i18n';
 
 const linkClass =
@@ -133,7 +134,7 @@ export function Navbar() {
           className={`flex min-w-0 items-center justify-self-start ${linkClass}`}
         >
           <Image
-            src="/vehicle/admove-logo.png"
+            src={`${BASE_PATH}/vehicle/admove-logo.png`}
             alt="ADMOVE"
             width={140}
             height={36}
