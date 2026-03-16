@@ -168,26 +168,28 @@ export function VehicleSection() {
 
           {/* Right: dynamic title + description, then static bullets + note */}
           <div className="flex max-w-xl flex-col space-y-6">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeLocationId}
-                className="flex flex-col gap-4"
-                initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 8 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : -6 }}
-                transition={{
-                  duration: reducedMotion ? 0 : 0.2,
-                  ease: 'easeOut',
-                }}
-              >
-                <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-                  {routePoints[activeIndex].label}
-                </h3>
-                <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 md:text-base">
-                  {activeContent.description}
-                </p>
-              </motion.div>
-            </AnimatePresence>
+            <div className="min-h-[120px] md:min-h-[140px]">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeLocationId}
+                  className="flex flex-col gap-4"
+                  initial={{ opacity: reducedMotion ? 1 : 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: reducedMotion ? 1 : 0 }}
+                  transition={{
+                    duration: reducedMotion ? 0 : 0.2,
+                    ease: 'easeOut',
+                  }}
+                >
+                  <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                    {routePoints[activeIndex].label}
+                  </h3>
+                  <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 md:text-base">
+                    {activeContent.description}
+                  </p>
+                </motion.div>
+              </AnimatePresence>
+            </div>
             <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
               <li className="flex gap-3 items-start">
                 <Car

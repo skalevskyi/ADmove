@@ -74,7 +74,7 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative overflow-hidden px-4 pt-24 pb-20 md:px-6 md:py-24"
+      className="relative overflow-hidden px-4 pt-28 pb-20 md:px-6 md:pt-32 md:pb-24"
     >
       {/* Premium minimal background: subtle gradient + optional soft radial glow */}
       <div

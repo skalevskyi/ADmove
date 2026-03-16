@@ -1,5 +1,8 @@
 /**
- * Base path for GitHub Pages deployment.
- * Must match next.config.ts basePath when deployed under https://skalevskyi.github.io/ADmove/
+ * Base path for static assets.
+ * In dev we serve from root (/), in production from /ADmove (GitHub Pages).
+ * Must stay in sync with next.config.ts basePath / assetPrefix.
  */
-export const BASE_PATH = '/ADmove';
+const isProd = process.env.NODE_ENV === 'production';
+
+export const BASE_PATH = isProd ? '/ADmove' : '';

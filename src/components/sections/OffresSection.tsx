@@ -52,7 +52,7 @@ export function OffresSection() {
         >
           {t.offres.subtitle}
         </motion.p>
-        <div className="mt-12 grid gap-6 md:grid-cols-3 md:items-start">
+        <div className="mt-12 grid gap-6 md:grid-cols-3 items-stretch md:items-stretch">
           {OFFRES.map((offer, i) => {
             const name = t.offres[offer.id];
             const positioning =
@@ -94,7 +94,7 @@ export function OffresSection() {
             return (
               <motion.article
                 key={offer.id}
-                className={`flex flex-col rounded-xl border bg-white dark:bg-slate-800/50 ${
+                className={`flex h-full flex-col rounded-2xl border bg-white dark:bg-slate-800/50 ${
                   offer.featured
                     ? 'border-sky-200 ring-1 ring-sky-500/20 dark:border-sky-800/60 dark:ring-sky-400/20'
                     : 'border-slate-200 dark:border-slate-700'
