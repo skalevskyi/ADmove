@@ -3,12 +3,28 @@
  */
 
 export const support = {
-  title: 'Le support publicitaire',
+  title: 'Comment ça fonctionne',
   subtitle:
-    'Un support publicitaire mobile pour une visibilité locale dans les flux quotidiens.',
-  bullets: [
-    'Visibilité dans les flux quotidiens',
-    'Présence locale concrète',
-    'Message simple et mémorisable',
+    'Un véhicule circule chaque jour sur le même parcours pour créer une visibilité locale répétée.',
+  steps: [
+    {
+      title: 'Parcours quotidien',
+      text: 'Le véhicule circule chaque jour sur un itinéraire fixe entre Montpellier et le littoral.',
+    },
+    {
+      title: 'Visibilité réelle',
+      text: 'Le message est vu dans le trafic, pendant les arrêts et lors du stationnement.',
+    },
+    {
+      title: 'Répétition',
+      text: 'Le même parcours revient régulièrement, ce qui renforce la mémorisation du message.',
+    },
+    {
+      title: 'Accumulation',
+      text: 'La visibilité se construit progressivement grâce à la répétition quotidienne.',
+    },
   ],
+  methodologyTitle: 'Comment la visibilité se construit',
+  methodologyText:
+    "L’estimation dépend du parcours, du trafic local et de la répétition du trajet.",
 } as const;

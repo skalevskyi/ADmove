@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { Car, MapPin, Repeat, BarChart3 } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -8,6 +9,7 @@ import { useReducedMotion } from '@/hooks/useReducedMotion';
 export function ConceptSection() {
   const reducedMotion = useReducedMotion();
   const { t } = useLanguage();
+
   const container = {
     hidden: { opacity: reducedMotion ? 1 : 0 },
     visible: {
@@ -15,10 +17,13 @@ export function ConceptSection() {
       transition: { staggerChildren: reducedMotion ? 0 : 0.08 },
     },
   };
+
   const item = {
     hidden: { opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 },
     visible: { opacity: 1, y: 0 },
   };
+
+  const steps = t.support.steps;
 
   return (
     <section
@@ -51,14 +56,41 @@ export function ConceptSection() {
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
         >
-          <ul className="space-y-2 text-slate-600 dark:text-slate-300">
-            {t.support.bullets.map((text, i) => (
-              <motion.li key={i} variants={item} className="flex gap-2">
-                <span className="text-sky-500" aria-hidden>•</span>
-                {text}
-              </motion.li>
-            ))}
-          </ul>
+          <div className="grid gap-6 text-slate-600 dark:text-slate-300 md:grid-cols-2 md:gap-8">
+            {steps.map((step, index) => {
+              const Icon =
+                index === 0 ? Car : index === 1 ? MapPin : index === 2 ? Repeat : BarChart3;
+              return (
+                <motion.div
+                  key={step.title}
+                  variants={item}
+                  className="flex items-start gap-3"
+                >
+                  <Icon
+                    className="mt-0.5 h-5 w-5 shrink-0 stroke-[2] text-sky-600 dark:text-sky-400"
+                    aria-hidden
+                  />
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-semibold text-slate-900 dark:text-white">
+                      {step.title}
+                    </h3>
+                    <p className="text-xs text-slate-600 dark:text-slate-300">
+                      {step.text}
+                    </p>
+                  </div>
+                </motion.div>
+              );
+            })}
+          </div>
+
+          <div className="mt-6">
+            <p className="text-sm font-semibold text-slate-900 dark:text-white">
+              {t.support.methodologyTitle}
+            </p>
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">
+              {t.support.methodologyText}
+            </p>
+          </div>
         </motion.div>
       </div>
     </section>

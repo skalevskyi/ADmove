@@ -3,12 +3,12 @@
  */
 
 export const hero = {
-  headline:
-    'mobile advertising Montpellier — local visibility on your route',
+  headline: 'Mobile advertising in Montpellier for real local visibility',
   subheadline:
-    'A branded vehicle circulates daily between Montpellier and the coast.\nYour brand appears in local traffic where residents pass every day.',
-  trustLine:
-    'estimated visibility · Rear / Side / Full formats · request an estimate',
+    'A branded vehicle drives daily on a fixed route between Montpellier and the coast, ensuring constant presence in everyday traffic flows.',
+  scale: 'Up to ~200,000 contacts per month along the route',
+  route: 'Montpellier → Coast',
+  trust: 'For local businesses and professionals',
   ctaPrimary: 'Request an estimate',
   ctaSecondary: 'View the route',
   imageAlt: 'Advertising vehicle driving between Montpellier and the coast',

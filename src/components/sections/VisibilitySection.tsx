@@ -2,6 +2,9 @@
 
 import { motion } from 'framer-motion';
 
+// Legacy / unused component.
+// This block contains hardcoded BASIC / PRO / EXCLUSIVE estimation content.
+// It must not be reintroduced into the landing page without explicit SPEC approval.
 export function VisibilitySection() {
   return (
     <section

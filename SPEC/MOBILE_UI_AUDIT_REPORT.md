@@ -1,4 +1,4 @@
-# Mobile UI Audit Report — ADMOVE Landing
+# SPM — Mobile UI Audit Report
 
 **Date:** 2025-03-14  
 **Mode:** Read-only analysis. No code or architecture changes.  
@@ -13,18 +13,18 @@
 | Item | Details |
 |------|--------|
 | **Section** | Navigation & Safe Area / Contact / Offres |
-| **Problem** | When the user taps a bottom-nav link (e.g. #contact, #offres), the browser scrolls so the section id is at the top of the viewport. There is no `scroll-margin-bottom` or `scroll-padding-bottom`. When the user then scrolls down to reach the primary CTA (Contact submit, or Offres “Calculer” / calculator CTA), that CTA can sit at the very bottom of the viewport and be partially or fully covered by the fixed bottom nav. |
-| **Reason** | `main` uses `pb-24` (96px) on mobile. The bottom nav height is `py-3` + content (min ~44px) + `pb-[env(safe-area-inset-bottom)]`, so total height is often ≥100px on devices with a home indicator. So 96px does not guarantee that the last visible “content row” (e.g. submit button) sits above the nav. No `scroll-margin-bottom` on `#contact`, `#offres`, etc., and no `scroll-padding-bottom` on `html` to reserve space for the nav. |
-| **Suggested UI direction** | (1) Add `scroll-margin-bottom` to section anchors (`#contact`, `#offres`, `#parcours`, `#support`) so that when the user scrolls to the bottom of a section, the last interactive element sits above the nav (e.g. `scroll-margin-bottom: calc(5rem + env(safe-area-inset-bottom))`). (2) Optionally increase `main` bottom padding on mobile to at least match nav height + buffer, e.g. `pb-[calc(5.5rem+env(safe-area-inset-bottom))]`, so the last stretch of content is never under the nav. |
+| **Problem** | The overlap risk with fixed bottom nav was identified when content sits near the bottom of the viewport after hash navigation. In the current Phase 2A UI iteration, this was mitigated by using safe-area–aware bottom padding for the main content, keeping CTAs tappable above the bottom nav. |
+| **Reason** | Main bottom padding on mobile now includes safe-area (`pb-[calc(6rem+env(safe-area-inset-bottom))]`), so the last visible content row stays above the floating bottom nav even on devices with a home indicator. |
+| **Suggested UI direction** | Re-verify on the smallest screens only. If any rare overlap is still observed, consider adding `scroll-margin-bottom` to the affected anchors as a follow-up. |
 
 ### 1.2 Contact section — submit button can sit under bottom nav
 
 | Item | Details |
 |------|--------|
 | **Section** | Contact |
-| **Problem** | When the user has scrolled down to bring the submit button into view, the button can align with the bottom of the viewport and be partially covered by the fixed bottom nav, making it hard to tap. |
-| **Reason** | The section has `py-16` (64px bottom). That padding is below the submit button. There is no extra mobile-only bottom padding to keep the submit clearly above the nav when the user has scrolled to the end of the form. Combined with the lack of scroll-margin (see 1.1), the CTA is at risk of being hidden. |
-| **Suggested UI direction** | On mobile (e.g. below `md`), add substantial bottom padding to the Contact section so that when the user scrolls to the bottom of the section, the submit button sits well above the nav (e.g. `pb-28` or `pb-[calc(5rem+env(safe-area-inset-bottom))]`). This keeps the CTA always tappable when in view. |
+| **Problem** | The identified “submit under nav” risk is mitigated in the current Phase 2A UI iteration because the main content uses safe-area–aware bottom padding, keeping the submit button above the floating bottom nav in typical scroll positions. |
+| **Reason** | Main safe-area–aware bottom padding reduces the chance that end-of-section content is covered by the bottom nav. |
+| **Suggested UI direction** | If you observe an edge case on a very small viewport, consider a mobile-only increase in Contact bottom padding, but re-check first to avoid unnecessary layout changes. |
 
 ---
 
@@ -35,9 +35,9 @@
 | Item | Details |
 |------|--------|
 | **Section** | Navigation & Safe Area |
-| **Problem** | `main` uses a fixed `pb-24` (96px) on mobile. On devices with a large `safe-area-inset-bottom` (e.g. ~34px), the total bottom nav height can exceed 96px, so the very bottom of the main content area (e.g. the strip above the footer) can sit under the nav. |
-| **Reason** | Nav uses `pb-[env(safe-area-inset-bottom)]` but the main container does not add safe area to its bottom padding. |
-| **Suggested UI direction** | Use bottom padding that includes the safe area on mobile, e.g. `pb-[calc(6rem+env(safe-area-inset-bottom))]` or `pb-[calc(5.5rem+env(safe-area-inset-bottom))]`, so the last content is always above the nav and the home indicator. |
+| **Problem** | The identified mismatch between bottom nav height and main content padding was mitigated in Phase 2A by using safe-area–aware bottom padding for the main content. |
+| **Reason** | Main bottom padding on mobile now includes safe-area (`pb-[calc(6rem+env(safe-area-inset-bottom))]`). |
+| **Suggested UI direction** | No change required; re-verify on the smallest viewports. |
 
 ### 2.2 Parcours route markers — small touch and visual size on mobile
 
@@ -62,9 +62,9 @@
 | Item | Details |
 |------|--------|
 | **Section** | Parcours (right column) |
-| **Problem** | The shared note uses `text-[11px]`, which is below common readability guidelines (e.g. 12px minimum) and can be hard to read on small screens. |
-| **Reason** | Fixed 11px for compactness. |
-| **Suggested UI direction** | On mobile, use at least `text-xs` (12px) for the note to improve readability and accessibility. |
+| **Problem** | The previously repeated shared note under the bullet list was removed in the current UI iteration, so this readability concern no longer applies. |
+| **Reason** | The redundant helper line under the Parcours right-side bullets is no longer rendered. |
+| **Suggested UI direction** | No change required. |
 
 ### 2.5 Hero — first-screen density and height on 320px
 
@@ -92,8 +92,8 @@
 | Item | Details |
 |------|--------|
 | **Section** | Support (ConceptSection) |
-| **Observation** | Bullets use `space-y-2` (8px). On 320px with long lines, the list can feel slightly tight. |
-| **Suggested UI direction** | Consider `space-y-3` on mobile for a bit more vertical rhythm; low priority. |
+| **Observation** | The Support section is no longer a text-heavy bullet list; it is a concise 4-step explanatory flow. The old bullet-list spacing recommendation is no longer applicable. |
+| **Suggested UI direction** | No change required. |
 
 ### 3.3 Parcours visibility card density
 
@@ -116,7 +116,7 @@
 | Item | Details |
 |------|--------|
 | **Section** | Offres |
-| **Observation** | When a card’s calculator is expanded, the inner CTA (“Demander une estimation”) can sit near the bottom of the card. With `main` pb-24, it should usually be above the nav after scroll; see Critical 1.1 for global anchor/padding improvements. |
+| **Observation** | When a card’s calculator is expanded, the inner CTA (“Demander une estimation”) can sit near the bottom of the card. With Phase 2A safe-area–aware main padding, it should usually remain above the nav after scroll; see Critical 1.1 for context. |
 | **Suggested UI direction** | Once scroll-margin and/or main padding are updated (see 1.1), no extra change needed; optionally add a small bottom padding to the expanded calculator block on mobile so the CTA is clearly above the nav. |
 
 ---
@@ -128,15 +128,16 @@
 | **Fixed heights** | Offres cards: `min-h-[360px]` — see 2.3. No other problematic fixed heights in Hero or other sections. |
 | **Flex / grid** | Hero CTAs use `flex-col` below `sm` (stacked) — good. Parcours uses single-column grid with `gap-12` on mobile — good. Offres stacks cards with `gap-6` — good. |
 | **Breakpoints** | 320–430px use default (no `sm`/`md`). No breakpoint-related bugs in the audited components. |
-| **Margins / paddings** | Section padding is consistent (`px-4`, `py-16`). Main `pb-24` is the only padding that should be revisited for nav/safe area (see 1.1, 2.1). |
+| **Margins / paddings** | Section padding is consistent (`px-4`, `py-16`). Mobile bottom padding is now safe-area aware to prevent nav overlap. |
 
 ---
 
 ## 5. Summary
 
-- **Critical:** Address anchor scrolling and bottom spacing so that CTAs (especially Contact submit and Offres actions) are never covered by the fixed bottom nav; add scroll-margin and/or increase main and Contact bottom padding and respect safe area.
-- **Moderate:** Align main bottom padding with nav height + safe area; improve Parcours marker size and Offres card min-height on mobile; increase Parcours note font size on mobile; optionally refine Hero first-screen density.
-- **Minor:** Optional tweaks to Support list spacing, visibility card spacing, and body overflow; scroll-to-top is already well placed.
+- **Critical:** Bottom-nav overlapping risk was mitigated in Phase 2A by safe-area–aware main bottom padding (CTAs remain tappable); scroll-margin-bottom remains an optional follow-up for rare edge cases.
+- **Moderate:** Parcours timeline readability remains a focus area; current improvements include a calmer autoplay cadence and a subtle interaction hint.
+- **Still open (re-verify):** Offres mobile polish and Contact CTA tapability on the smallest viewports.
+- **Minor:** Support bullet spacing note is obsolete (Support is now a 4-step flow). scroll-to-top positioning is already well placed.
 
 No code was modified; this report is analysis only and can be used to prioritize mobile UX fixes.
 
@@ -152,5 +153,9 @@ The following items have been addressed in post-audit implementation (documentat
 | **Mobile nav background** | **Improved** | Nav surface uses **bg-white/80** and **dark:bg-slate-900/80** for slightly more transparency; blur (**backdrop-blur-md**), border, rounded shape, and safe-area handling unchanged. |
 | **Parcours mobile alignment** | **Improved** | Route module is a **centered compact block** on mobile: inner container uses **w-fit** (content-sized) on mobile and **md:w-full md:max-w-xs** on desktop so the timeline is visually centered; marker column left, labels right (single-row layout). |
 | **Main bottom padding** | **Addressed** | Main uses safe-area–aware bottom padding on mobile (`pb-[calc(6rem+env(safe-area-inset-bottom))]`); scroll-to-top button positioned above floating nav. |
+| **Parcours autoplay cadence** | **Improved** | Auto-rotation interval was softened for a calmer, easier-to-follow browsing pace. |
+| **Timeline interaction hint** | **Implemented** | A subtle one-line hint was added under the left route timeline to clarify the click interaction (pause + context). |
+| **Parcours right-side copy** | **Updated** | Right-side benefits are now semi-dynamic by active route point; the redundant shared note under bullets was removed. |
+| **Visibility estimation presentation** | **Improved** | The estimation block uses a more polished mini-card presentation for BASIC / PRO / EXCLUSIVE. |
 
 Historical audit sections (1–5) remain for context; the above reflects current implementation state.

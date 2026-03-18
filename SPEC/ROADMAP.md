@@ -1,8 +1,8 @@
-# ADMOVE Project Roadmap
+# SPM — Project Roadmap
 
 ## Current Status
 
-- **Current phase:** Phase 2A — UI / Visual MVP
+- **Current phase:** Skalevskyi publicite mobile (SPM) — Phase 2A — UI / Visual MVP
 - **Next focus:** Minor polish, final QA, optional branding refinement as needed. No new section scope in 2A.
 
 ---
@@ -16,15 +16,15 @@
 
 ## Phase 2A — UI / Visual MVP
 
-- ✓ Navbar (desktop: brand, support, Parcours, Offres, Contact; language/theme)
+- ✓ Navbar (desktop: brand, Process / Fonctionnement / Як працює, Parcours / Route, Offres / Offers, Contact / Контакт; language/theme)
 - ✓ Hero (real imagery, premium rotator, reduced motion support)
-- ✓ **Le support publicitaire / How the advertising works** section (id #support; UI titles per locale; medium concept, no route/format repetition)
-- ✓ Parcours section (route credibility block; id #parcours; schematic timeline with **live progress visualization** — ACTIVE/FILLED/MUTED; **semi-static right column**: dynamic location title + description, **static** three bullets + note; visibility block **BASIC / PRO / EXCLUSIVE** with localized placement; no map)
+- ✓ **Process / Fonctionnement / Як працює** section (id #support; UI titles per locale; concise 4-step explanatory flow; no route/format breakdown; no package numbers/pricing)
+- ✓ Parcours section (route credibility block; id #parcours; schematic timeline with **live progress visualization** — ACTIVE/FILLED/MUTED; **semi-static right column**: dynamic location title + description + compact icon/tag row; **three bullets are semi-dynamic** by active route point; previously repeated note under bullets is not shown; subtle timeline hint under the route module; calmer autoplay interval; visibility block **BASIC / PRO / EXCLUSIVE** with localized placement; no map)
 - ✓ Offres section (three packages; real mockups; **no fixed prices in UI**; “Calculer” expands calculator **placeholder** only)
 - ✓ Calculator placeholder UI inside Offres cards (expandable shell, static fields, CTA to #contact; no real logic)
 - ✓ Contact section (visual-only form; id #contact)
-- ✓ Footer (compact premium; links to support, Parcours, Offres, Contact)
-- ✓ Mobile bottom navigation (support, Parcours, Offres, Contact)
+- ✓ Footer (compact premium footer with brand/positioning; no duplicated navigation links)
+- ✓ Mobile bottom navigation (Process / Fonctionnement / Як працює, Parcours / Route, Offres / Offers / Пропозиції, Contact / Контакт)
 - ✓ **Floating actions: scroll-to-top only** (no floating contact button)
 - ✓ Reduced motion support (hero, Parcours, section entrances)
 - ✓ Responsive layout; main bottom padding for mobile nav

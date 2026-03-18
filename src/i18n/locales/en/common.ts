@@ -11,7 +11,7 @@ export const locations = {
 } as const;
 
 export const nav = {
-  support: 'The medium',
+  support: 'Process',
   parcours: 'Route',
   offres: 'Offers',
   contact: 'Contact',
@@ -20,7 +20,7 @@ export const nav = {
 
 export const footer = {
   links: {
-    support: 'The medium',
+    support: 'Process',
     parcours: 'Route',
     offres: 'Offers',
     contact: 'Contact',
@@ -37,7 +37,7 @@ export const floating = {
 
 export const mobileNav = {
   home: 'Home',
-  support: 'Media',
+  support: 'Process',
   parcours: 'Route',
   offres: 'Offers',
   contact: 'Contact',

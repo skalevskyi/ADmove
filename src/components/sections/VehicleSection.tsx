@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { Car, Repeat, MapPin } from 'lucide-react';
+import { Car, MapPin, MousePointerClick, Repeat, Route, Sun } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -15,7 +15,7 @@ const ROUTE_IDS = [
   'grandeMotte',
 ] as const;
 
-const ROUTE_AUTOPLAY_MS = 2400;
+const ROUTE_AUTOPLAY_MS = 5000;
 const PAUSE_AFTER_CLICK_MS = 5500;
 
 /** Parses "PACKAGE (placement) — metrics" into parts for metric row + legend. */
@@ -28,7 +28,9 @@ function parseVisibilityRow(
   const parenMatch = /^(.+?)\s*\((.+?)\)\s*$/.exec(left.trim());
   const pkg = parenMatch ? parenMatch[1].trim() : left.trim();
   const placement = parenMatch ? parenMatch[2].trim() : '';
-  const metrics = right.replace(/\s*,\s*/g, ' · ').trim();
+  // Replace only the separator comma between daily/monthly metrics (`, ~...`),
+  // not thousand separators like `5,000/day`.
+  const metrics = right.replace(/,\s*(?=~)/g, ' · ').trim();
   return { package: pkg, placement, metrics };
 }
 
@@ -79,7 +81,7 @@ export function VehicleSection() {
     <section id="parcours" className="py-16">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         {/* Shared section header */}
-        <header className="mx-auto mb-12 max-w-3xl text-center">
+        <header className="mx-auto mb-10 max-w-3xl text-center">
           <h2 className="text-2xl font-semibold text-slate-900 dark:text-white md:text-3xl">
             {t.parcours.title}
           </h2>
@@ -163,16 +165,21 @@ export function VehicleSection() {
                   </div>
                 );
               })}
+
+              <div className="mt-3 flex items-center gap-2 text-xs text-slate-500 dark:text-slate-400 whitespace-nowrap">
+                <MousePointerClick className="h-4 w-4 shrink-0 text-slate-500 dark:text-slate-400" strokeWidth={1.5} aria-hidden />
+                <span className="whitespace-nowrap">{t.parcours.timelineHint}</span>
+              </div>
             </div>
           </motion.div>
 
           {/* Right: dynamic title + description, then static bullets + note */}
-          <div className="flex max-w-xl flex-col space-y-6">
-            <div className="min-h-[120px] md:min-h-[140px]">
+          <div className="flex max-w-xl flex-col space-y-5">
+            <div className="min-h-[108px] md:min-h-[124px]">
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeLocationId}
-                  className="flex flex-col gap-4"
+                  className="flex flex-col gap-3"
                   initial={{ opacity: reducedMotion ? 1 : 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: reducedMotion ? 1 : 0 }}
@@ -184,57 +191,66 @@ export function VehicleSection() {
                   <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
                     {routePoints[activeIndex].label}
                   </h3>
+                  <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-400 leading-tight">
+                    {activeContent.icon === 'route' ? (
+                      <Route className="h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
+                    ) : activeContent.icon === 'coast' ? (
+                      <Sun className="h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
+                    ) : (
+                      <MapPin className="h-4 w-4 shrink-0" strokeWidth={1.5} aria-hidden />
+                    )}
+                    <span>{activeContent.tag}</span>
+                  </div>
                   <p className="text-sm leading-relaxed text-slate-700 dark:text-slate-300 md:text-base">
                     {activeContent.description}
                   </p>
                 </motion.div>
               </AnimatePresence>
             </div>
-            <ul className="space-y-4 text-sm text-slate-600 dark:text-slate-300">
+            <ul className="space-y-3 text-sm text-slate-600 dark:text-slate-300">
               <li className="flex gap-3 items-start">
                 <Car
                   className="mt-0.5 h-5 w-5 shrink-0 stroke-[2] text-sky-600 dark:text-sky-400"
                   aria-hidden
                 />
-                <span className="leading-snug">{t.parcours.sharedBullets.bullet1}</span>
+                <span className="leading-snug">{activeContent.bullet1}</span>
               </li>
               <li className="flex gap-3 items-start">
                 <Repeat
                   className="mt-0.5 h-5 w-5 shrink-0 stroke-[2] text-sky-600 dark:text-sky-400"
                   aria-hidden
                 />
-                <span className="leading-snug">{t.parcours.sharedBullets.bullet2}</span>
+                <span className="leading-snug">{activeContent.bullet2}</span>
               </li>
               <li className="flex gap-3 items-start">
                 <MapPin
                   className="mt-0.5 h-5 w-5 shrink-0 stroke-[2] text-sky-600 dark:text-sky-400"
                   aria-hidden
                 />
-                <span className="leading-snug">{t.parcours.sharedBullets.bullet3}</span>
+                <span className="leading-snug">{activeContent.bullet3}</span>
               </li>
             </ul>
-            <p className="pt-3 mt-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400 border-t border-slate-100 dark:border-slate-700/80">
-              {t.parcours.sharedBullets.note}
-            </p>
           </div>
         </div>
 
         {/* Visibility storytelling — part of Parcours, not a separate nav item */}
-        <div className="mx-auto mt-16 max-w-4xl">
+        <div className="mx-auto mt-12 max-w-4xl border-t border-slate-200/80 pt-6 dark:border-slate-700/80">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">
-            {t.parcours.visibilityTitle}
+            {t.parcours.visibilityBlockTitle}
           </h3>
           <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 md:text-base">
             {t.parcours.visibilityIntro}
           </p>
-          <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 md:text-base">
-            {t.parcours.visibilityIntro2}
-          </p>
-          <div className="mt-5 rounded-xl border border-slate-200 bg-slate-50/90 px-6 py-5 dark:border-slate-700 dark:bg-slate-800/60">
+          {t.parcours.visibilityIntro2 ? (
+            <p className="mt-2 text-sm text-slate-600 dark:text-slate-300 md:text-base">
+              {t.parcours.visibilityIntro2}
+            </p>
+          ) : null}
+          <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50/90 px-6 py-6 dark:border-slate-700 dark:bg-slate-800/60">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
               {t.parcours.visibilitySummary}
             </p>
-            <ul className="mt-3 space-y-2.5 text-sm font-medium leading-snug text-slate-700 dark:text-slate-300">
+            <div className="mt-4 grid gap-4 sm:grid-cols-3">
               {(
                 [
                   t.parcours.visibilityRear,
@@ -243,30 +259,37 @@ export function VehicleSection() {
                 ] as const
               ).map((raw) => {
                 const parsed = parseVisibilityRow(raw);
-                if (!parsed) return <li key={raw}>{raw}</li>;
+                if (!parsed) return null;
+                const metricParts = parsed.metrics.split(' · ').map((p) => p.trim());
+                const dailyPart = metricParts[0] ?? parsed.metrics;
+                const monthlyPart = metricParts[1] ?? parsed.metrics;
+
                 return (
-                  <li key={parsed.package}>
-                    {parsed.package} — {parsed.metrics}
-                  </li>
+                  <div
+                    key={parsed.package}
+                    className="rounded-xl border border-slate-200/80 bg-white/40 p-4 dark:border-slate-700/60 dark:bg-slate-900/20"
+                  >
+                    <p className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white">
+                      {parsed.package}
+                    </p>
+                    {parsed.placement ? (
+                      <p className="mt-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
+                        {parsed.placement}
+                      </p>
+                    ) : null}
+
+                    <div className="mt-3">
+                      <p className="text-xl font-bold leading-tight text-slate-900 dark:text-white">
+                        {monthlyPart}
+                      </p>
+                      <p className="mt-1 text-sm leading-relaxed text-slate-500 dark:text-slate-400">
+                        {dailyPart}
+                      </p>
+                    </div>
+                  </div>
                 );
               })}
-            </ul>
-            <p className="mt-3 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
-              {(
-                [
-                  t.parcours.visibilityRear,
-                  t.parcours.visibilitySide,
-                  t.parcours.visibilityFull,
-                ] as const
-              )
-                .map((raw) => {
-                  const parsed = parseVisibilityRow(raw);
-                  if (!parsed || !parsed.placement) return null;
-                  return `${parsed.package} : ${parsed.placement}`;
-                })
-                .filter(Boolean)
-                .join(' · ')}
-            </p>
+            </div>
           </div>
         </div>
       </div>

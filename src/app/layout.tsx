@@ -13,14 +13,17 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: 'ADMOVE — Publicité mobile Montpellier & Littoral',
+  title: 'SPM — Publicité mobile Montpellier',
   description:
     'Publicité sur véhicule à Montpellier, Port Marianne, Carnon, Palavas, La Grande-Motte. Formats Rear, Side, Full.',
   icons: {
     icon: [
       { url: `${BASE_PATH}/logo/favicon.ico` },
-      { url: `${BASE_PATH}/logo/favicon-16x16.png`, sizes: '16x16', type: 'image/png' },
-      { url: `${BASE_PATH}/logo/favicon-32x32.png`, sizes: '32x32', type: 'image/png' },
+      {
+        url: `${BASE_PATH}/logo/favicon-96x96.png`,
+        sizes: '96x96',
+        type: 'image/png',
+      },
     ],
     apple: [
       { url: `${BASE_PATH}/logo/apple-touch-icon.png`, sizes: '180x180', type: 'image/png' },
@@ -37,7 +40,7 @@ export const viewport: Viewport = {
 
 const themeScript = `
 (function(){
-  var s=localStorage.getItem('admove-theme');
+  var s=localStorage.getItem('spm-theme');
   var dark=s==='dark'||(!s&&window.matchMedia('(prefers-color-scheme: dark)').matches);
   document.documentElement.classList.toggle('dark',!!dark);
 })();

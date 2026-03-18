@@ -189,16 +189,24 @@ export function Navbar() {
       >
         <Link
           href="#hero"
-          className={`flex min-w-0 items-center justify-self-start ${linkClass}`}
+          className="flex min-w-0 items-center gap-2 rounded-lg px-1 py-1 focus:outline-none focus:ring-2 focus:ring-sky-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"
         >
           <Image
-            src={`${BASE_PATH}/vehicle/admove-logo.png`}
-            alt="ADMOVE"
-            width={140}
-            height={36}
+            src={`${BASE_PATH}/logo/web-app-manifest-192x192.png`}
+            alt="Skalevskyi — publicité mobile"
+            width={32}
+            height={32}
+            className="h-8 w-8 shrink-0 rounded-lg object-contain"
             priority
-            className="h-8 w-auto"
           />
+          <span className="flex min-w-0 flex-col leading-tight">
+            <span className="text-xs font-semibold tracking-[0.18em] text-slate-900 dark:text-white">
+              SKALEVSKYI
+            </span>
+            <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
+              publicite mobile
+            </span>
+          </span>
         </Link>
 
         <ul className="hidden items-center justify-center gap-8 md:flex">

@@ -1,6 +1,6 @@
-# ADMOVE Design System
+# SPM — Design System (Skalevskyi publicite mobile)
 
-Visual rules for the ADMOVE landing page. Style: **modern minimal B2B**, inspired by Stripe, Linear and Vercel. Clean, credible, low visual noise. The product uses a modern minimal B2B typography style.
+Visual rules for the Skalevskyi publicite mobile landing page. Style: **modern minimal B2B**, inspired by Stripe, Linear and Vercel. Clean, credible, low visual noise. The product uses a modern minimal B2B typography style.
 
 ---
 
@@ -160,7 +160,7 @@ Avoid mixing many radius sizes; stick to `lg` and `xl` for most UI.
 ### Structure
 
 - **Page:** Single column; sections stack vertically. No sidebar on landing.
-- **Content width:** `max-w-6xl` for full-width sections (navbar, footer, offres grid); `max-w-4xl` or `max-w-2xl` for text-heavy sections (hero, Le média, parcours, contact).
+- **Content width:** `max-w-6xl` for full-width sections (navbar, footer, offres grid); `max-w-4xl` or `max-w-2xl` for text-heavy sections (hero, Process / Support, parcours, contact).
 - **Centering:** `mx-auto` on constrained containers; `text-center` only where appropriate (hero, section titles).
 
 ### Grid
@@ -171,10 +171,11 @@ Avoid mixing many radius sizes; stick to `lg` and `xl` for most UI.
 
 ### Navbar
 
-- Sticky: `fixed top-0 left-0 right-0 z-50`.
-- Background: `bg-white/90` or `dark:bg-slate-900/90` with `backdrop-blur-sm`.
-- Border: `border-b border-slate-200` / `dark:border-slate-700`.
-- Content: same `max-w-6xl` as body; flex with space-between for logo, links, language/theme.
+- Sticky container: `fixed top-0 left-0 right-0 z-50`.
+- **Mobile:** full-width top bar with `bg-white/90` / `dark:bg-slate-900/90`, `backdrop-blur-sm` and subtle bottom border (`border-b border-slate-200` / `dark:border-slate-700`).
+- **Desktop:** floating, centered panel inside the sticky container — `max-w-6xl mx-auto`, `md:rounded-2xl`, thin border, soft shadow and `backdrop-blur-md`, with logo on the left, section nav in the center, language/theme controls on the right.
+- **Nav items (desktop):** inline-flex pill buttons with a small outline icon before the label (same icon set and semantics as mobile bottom nav: Support, Parcours, Offres, Contact). Active item uses a subtle sky-colored pill: `bg-sky-50 text-sky-700` in light mode and `dark:bg-sky-900/30 dark:text-sky-300` in dark mode; icons inherit the text color. Inactive items stay neutral and use soft hover states.
+- **Anchor scroll:** desktop anchor navigation is globally compensated using `scroll-padding-top` on `html` so that section headers are not hidden behind the floating navbar.
 
 ### Rules
 
@@ -193,8 +194,8 @@ Avoid mixing many radius sizes; stick to `lg` and `xl` for most UI.
 - **No:** Animation on every hover except where needed for primary CTAs.
 - **Reduced motion:** Respect `prefers-reduced-motion` (disable or simplify animations when set).
 - **Hero image rotation:** If the hero uses automatic rotation between vehicle visuals, keep it minimal, slow, and non-distracting. Transitions must remain premium and subtle (e.g. fade + slight scale). Use indicator-based controls only; no arrows, no swipe-heavy behavior, no flashy carousel patterns.
-- **Route-based UI (Parcours):** Route timeline uses **live progress visualization**: three marker/segment states — **ACTIVE** (current point, strongest), **FILLED** (path covered in current direction, medium contrast), **MUTED** (not yet covered, light). On forward motion the path fills progressively top to bottom; on backward motion it fades progressively bottom to top (ping-pong). No visited-history; visuals reflect current direction only. Right column is **semi-static**: only location title and short description are dynamic per active point; three bullets and the note are **static** shared content. Dynamic part transitions with Framer Motion + AnimatePresence (opacity + slight vertical translate); must be subtle and respect prefers-reduced-motion. Route must remain **schematic** (timeline, dots, line), not map-like. No real map UI in the current phase. Right-column bullet icons are slightly larger (e.g. h-5 w-5) for clearer row rhythm. Visibility estimation block: refined typography and spacing; title e.g. “Estimation de la visibilité”; examples use product names BASIC / PRO / EXCLUSIVE with localized placement in parentheses. Motion must stay subtle and purposeful; premium, minimal, calm.
-- **Section naming:** The section that explains the advertising medium (id `#support`) uses **UI titles**: FR “Le support publicitaire”, EN “How the advertising works”, UA equivalent explanatory phrasing. It explains the medium (mobile visibility, daily presence, simple message), not the route or the formats.
+- **Route-based UI (Parcours):** Route timeline uses **live progress visualization**: three marker/segment states — **ACTIVE** (current point, strongest), **FILLED** (path covered in current direction, medium contrast), **MUTED** (not yet covered, light). On forward motion the path fills progressively top to bottom; on backward motion it fades progressively bottom to top (ping-pong). No visited-history; visuals reflect current direction only. Right column is **semi-static**: location title and short description (plus a compact icon/tag row) are dynamic per active point; the **three bullets are semi-dynamic** (change with the active route point), and the previously repeated small note under the bullet list is **not shown** in the current UI. A subtle timeline hint under the left route module explains that clicking a route point pauses viewing and reveals its visibility context. Dynamic part transitions with Framer Motion + AnimatePresence use **opacity-only** swaps (no translate) and must respect prefers-reduced-motion. Route must remain **schematic** (timeline, dots, line), not map-like. No real map UI in the current phase. Right-column bullet icons are slightly larger (e.g. h-5 w-5) for clearer row rhythm. Visibility estimation block: refined typography and spacing; title e.g. “Estimation de la visibilité”; examples use product names BASIC / PRO / EXCLUSIVE with localized placement in parentheses. Motion must stay subtle and purposeful; premium, minimal, calm.
+- **Section naming:** The section that explains the advertising medium (id `#support`) uses **UI titles**: FR “Comment ça fonctionne”, EN “How it works”, UA “Як це працює”. Navigation label for this item is conversion-aligned (FR “Fonctionnement”, EN “Process”, UA “Як працює”). It explains the medium (mobile visibility, daily presence, simple message), not the route or the formats.
 
 ---
 
