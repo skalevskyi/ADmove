@@ -33,3 +33,6 @@ Thumbs.db
 
 # TypeScript
 next-env.d.ts
+
+# Specification / internal docs (not versioned)
+SPEC/
