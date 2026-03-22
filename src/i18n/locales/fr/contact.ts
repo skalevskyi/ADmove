@@ -19,4 +19,12 @@ export const contact = {
   reassurance:
     "Sans engagement. Estimation confirmée après échange. Vos informations ne sont pas utilisées à d'autres fins.",
   submit: 'Demander votre estimation',
+  submitLoading: 'Envoi en cours…',
+  submitSuccess: 'Merci. Votre demande a bien été envoyée.',
+  submitError: "Une erreur s'est produite. Réessayez ou contactez-nous autrement.",
+  validation: {
+    name: 'Indiquez un nom d’au moins 2 caractères.',
+    email: 'Indiquez une adresse e-mail valide.',
+    message: 'Indiquez un message d’au moins 5 caractères.',
+  },
 } as const;
