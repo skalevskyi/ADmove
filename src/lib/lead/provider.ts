@@ -1,9 +1,15 @@
 import type { Lead } from './types';
-import { sendLeadEmail } from './providers/email';
+import { sendLeadAutoReply, sendLeadNotification } from './providers/email';
 
 /**
- * Delivery entry point — email channel only for now.
+ * Delivery entry point — owner notification, then best-effort auto-reply to the lead.
  */
 export async function sendLead(lead: Lead): Promise<void> {
-  await sendLeadEmail(lead);
+  await sendLeadNotification(lead);
+
+  try {
+    await sendLeadAutoReply(lead);
+  } catch (error) {
+    console.error('Auto-reply failed', error);
+  }
 }
