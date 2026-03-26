@@ -1,0 +1,82 @@
+/**
+ * Phase 2B calculator — source-of-truth constants/config.
+ * Business constants only (no runtime business logic).
+ */
+
+import type { AddonId, DisplayMode, DurationMonths, PackageId } from './types';
+
+export const PACKAGE_IDS = ['BASIC', 'PRO', 'EXCLUSIVE'] as const satisfies PackageId[];
+
+export const DURATION_OPTIONS = [3, 6, 9, 12] as const satisfies DurationMonths[];
+
+export const DISPLAY_MODES = ['monthly', 'contract_total'] as const satisfies DisplayMode[];
+
+// ===== Base media fees (ex-tax / HT as per calculator spec) =====
+export const BASE_MONTHLY_MEDIA_EUR: Record<PackageId, number> = {
+  BASIC: 300,
+  PRO: 450,
+  EXCLUSIVE: 650,
+};
+
+// ===== Duration multipliers (applied to base media fee only) =====
+export const DURATION_MULTIPLIERS: Record<DurationMonths, number> = {
+  3: 1.0,
+  6: 0.95,
+  9: 0.92,
+  12: 0.88,
+};
+
+// ===== First month discount (base media fee only) =====
+export const FIRST_MONTH_DISCOUNT_EUR = 100;
+
+// ===== Add-ons: draft prices =====
+export const ADDON_PRICES: Record<
+  AddonId,
+  { eur: number; billing: 'monthly' | 'per_day' | 'one_time' }
+> = {
+  photo_reporting: { eur: 20, billing: 'monthly' },
+  video_reporting: { eur: 40, billing: 'monthly' },
+  extra_route_day: { eur: 15, billing: 'per_day' },
+  priority_booking: { eur: 30, billing: 'one_time' },
+  exclusivity: { eur: 50, billing: 'monthly' },
+};
+
+// ===== Monthly indicative contacts benchmark (UX-facing, fixed) =====
+export const INDICATIVE_MONTHLY_CONTACTS: Record<PackageId, number> = {
+  BASIC: 30000,
+  PRO: 45000,
+  EXCLUSIVE: 60000,
+};
+
+export const ADDON_AVAILABILITY = {
+  // BASIC:
+  videoAvailableOn: ['PRO', 'EXCLUSIVE'] as PackageId[],
+  exclusivitySelectableOn: ['BASIC', 'PRO'] as PackageId[],
+} as const;
+
+// ===== Inclusion matrix (definition) =====
+// includedByDefinition:
+// - photo_reporting included on PRO + EXCLUSIVE (no extra charge line)
+// - priority_booking included on EXCLUSIVE (no separate charge line)
+// - exclusivity included on EXCLUSIVE (no separate toggle/charge line)
+export const INCLUDED_BY_DEFINITION: Record<PackageId, Partial<Record<AddonId, boolean>>> = {
+  BASIC: {},
+  PRO: {
+    photo_reporting: true,
+  },
+  EXCLUSIVE: {
+    photo_reporting: true,
+    priority_booking: true,
+    exclusivity: true,
+  },
+};
+
+// ===== Guardrails: tier hierarchy protection =====
+// These checks exclude extra_route_day and one_time fees from tier-substitution intent.
+export const GUARDRAILS = {
+  // BASIC loadout uses photo_reporting + exclusivity (recurring monthly add-ons only).
+  basicUpperAdds: ['photo_reporting', 'exclusivity'] as AddonId[],
+  // PRO loadout uses video_reporting + exclusivity (recurring monthly add-ons only).
+  proUpperAdds: ['video_reporting', 'exclusivity'] as AddonId[],
+} as const;
+
