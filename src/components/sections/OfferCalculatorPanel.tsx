@@ -10,12 +10,17 @@ import { ADDON_PRICES, BASE_MONTHLY_MEDIA_EUR } from '@/lib/calculator/config';
 import type { AddonEligibility } from '@/lib/calculator/types';
 import type { AddonId, CalculatorResult, DisplayMode, DurationMonths, PackageId } from '@/lib/calculator/types';
 
+/** Matches OffresSection primary buttons (Calculer) for section-native focus. */
 const focusRing =
-  'focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-500/55 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-sky-400/50 dark:focus-visible:ring-offset-slate-900';
+  'focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70';
 
-/** Right-panel section labels (i18n strings; styling only). */
+/** Right-panel section labels (i18n strings; styling only). Slight weight for scan without dashboard stiffness. */
 const summarySectionHeading =
-  'mb-2 font-medium text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400';
+  'mb-1 text-[11px] font-semibold uppercase tracking-[0.05em] text-slate-600 dark:text-slate-300 md:mb-1.5 md:text-xs';
+
+/** Discount / savings amounts only — calmer premium success (not utility neon). */
+const summaryDiscountValueClass =
+  'tabular-nums text-sm font-normal text-emerald-900/88 dark:text-emerald-400/78';
 
 /** Hide UI rows when the rounded euro amount is zero (presentation-only). */
 function isNonZeroEur(eur: number): boolean {
@@ -140,10 +145,10 @@ function PaidAddonRow({ addon, label, priceLabel, tip, onToggle }: PaidAddonRowP
 
   const rowState =
     !canToggle
-      ? 'cursor-not-allowed border-slate-200 bg-transparent opacity-70 dark:border-slate-700'
+      ? 'cursor-not-allowed border-slate-100 bg-slate-50/70 text-slate-500 opacity-80 dark:border-slate-700/50 dark:bg-slate-800/40 dark:text-slate-400'
       : isActive
-        ? 'cursor-pointer border-sky-500 bg-sky-50 text-slate-900 hover:bg-sky-100/90 dark:border-sky-500 dark:bg-sky-900/20 dark:text-slate-50 dark:hover:bg-sky-900/30'
-        : 'cursor-pointer border-slate-300 bg-transparent text-slate-700 hover:bg-slate-100 dark:border-slate-600 dark:text-slate-300 dark:hover:bg-slate-700';
+        ? 'cursor-pointer border-sky-500 bg-sky-50 text-slate-900 hover:bg-sky-50/90 dark:border-sky-600/50 dark:bg-sky-950/30 dark:text-slate-50 dark:hover:bg-sky-950/42'
+        : 'cursor-pointer border-slate-100 bg-slate-50/70 text-slate-700 hover:border-slate-200 hover:bg-slate-100/70 dark:border-slate-700/50 dark:bg-slate-800/45 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800/65';
 
   return (
     <div className="flex w-full min-w-0 items-stretch gap-1.5">
@@ -156,14 +161,14 @@ function PaidAddonRow({ addon, label, priceLabel, tip, onToggle }: PaidAddonRowP
           if (!canToggle) return;
           onToggle();
         }}
-        className={`flex min-h-10 min-w-0 flex-1 items-center gap-3 rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition-colors duration-150 ${rowState} ${focusRing}`}
+        className={`flex min-h-8 min-w-0 flex-1 items-center gap-2 rounded-md border px-2.5 py-2 text-left text-sm font-medium transition-colors duration-150 md:min-h-9 md:gap-2.5 md:px-3 ${rowState} ${focusRing}`}
       >
         <Icon
           className={`size-4 shrink-0 stroke-[2] ${
             !canToggle
               ? 'text-slate-400 dark:text-slate-500'
               : isActive
-                ? 'text-sky-600 dark:text-sky-400'
+                ? 'text-sky-600 dark:text-sky-400/90'
                 : 'text-slate-500 dark:text-slate-400'
           }`}
           aria-hidden
@@ -200,7 +205,7 @@ function PaidAddonRow({ addon, label, priceLabel, tip, onToggle }: PaidAddonRowP
           noLeadingMargin
           triggerClassName={
             isActive && canToggle
-              ? '!text-sky-600/80 hover:!text-sky-700 dark:!text-sky-400/85 dark:hover:!text-sky-300'
+              ? '!text-sky-600/80 hover:!text-sky-700 dark:!text-sky-400/80 dark:hover:!text-sky-300'
               : '!text-slate-500 hover:!text-slate-700 dark:!text-slate-400 dark:hover:!text-slate-300'
           }
         />
@@ -219,18 +224,18 @@ function IncludedPackageBlock({
   if (addons.length === 0) return null;
 
   return (
-    <div className="rounded-xl border border-emerald-200/75 bg-emerald-50/80 px-3 py-2.5 dark:border-emerald-800/55 dark:bg-emerald-950/30">
-      <p className="flex items-center gap-2 text-xs font-semibold tracking-wide text-emerald-900 dark:text-emerald-100">
-        <CheckCircle2 className="size-4 shrink-0 text-emerald-600 dark:text-emerald-400" strokeWidth={2} aria-hidden />
+    <div className="rounded-lg border border-emerald-100/80 bg-emerald-50/35 px-2 py-2 dark:border-emerald-800/35 dark:bg-emerald-950/15 md:px-2.5 md:py-1.5">
+      <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-800/95 dark:text-emerald-100 md:text-xs">
+        <CheckCircle2 className="size-4 shrink-0 text-emerald-600/90 dark:text-emerald-300/95" strokeWidth={2} aria-hidden />
         {t.offres.calculatorIncludedBlockTitle}
       </p>
-      <ul className="mt-2 space-y-2">
+      <ul className="mt-1.5 space-y-1 md:mt-1.5 md:space-y-0.5">
         {addons.map((addon) => {
           const ItemIcon = addonPillIcon(addon.addonId);
           return (
-            <li key={addon.addonId} className="flex items-start gap-2.5 text-xs leading-snug text-emerald-900/90 dark:text-emerald-50/90">
+            <li key={addon.addonId} className="flex items-start gap-2 text-[11px] leading-snug text-emerald-900/85 dark:text-emerald-100/95 md:text-xs md:gap-2.5">
               <ItemIcon
-                className="mt-0.5 size-4 shrink-0 text-emerald-600/95 dark:text-emerald-400/90"
+                className="mt-0.5 size-4 shrink-0 text-emerald-600/85 dark:text-emerald-300/90"
                 strokeWidth={2}
                 aria-hidden
               />
@@ -240,7 +245,7 @@ function IncludedPackageBlock({
                   content={tooltipForAddonId(addon.addonId, t)}
                   placement="top-right"
                   noLeadingMargin
-                  triggerClassName="!text-emerald-700/85 hover:!text-emerald-900 dark:!text-emerald-300/90 dark:hover:!text-emerald-200"
+                  triggerClassName="!text-emerald-700/85 hover:!text-emerald-900 dark:!text-emerald-200/95 dark:hover:!text-emerald-100"
                 />
               </span>
             </li>
@@ -274,16 +279,16 @@ function addonLadderRow(
 ) {
   const RowIcon = addonPillIcon(addonId);
   return (
-    <div className="flex items-baseline justify-between gap-2 leading-snug">
-      <span className="flex min-w-0 flex-1 items-baseline gap-2">
+    <div className="flex items-center justify-between gap-2 leading-snug">
+      <span className="flex min-w-0 flex-1 items-center gap-2">
         <RowIcon
-          className="size-3.5 shrink-0 text-slate-400 dark:text-slate-500"
+          className="size-4 shrink-0 translate-y-[0.5px] text-slate-400 dark:text-slate-500"
           strokeWidth={2}
           aria-hidden
         />
-        <span className={`min-w-0 ${labelClassName}`}>{label}</span>
+        <span className={`min-w-0 leading-snug ${labelClassName}`}>{label}</span>
       </span>
-      <span className={`shrink-0 text-right ${valueClassName}`}>{value}</span>
+      <span className={`shrink-0 text-right leading-snug ${valueClassName}`}>{value}</span>
     </div>
   );
 }
@@ -306,8 +311,8 @@ export function OfferCalculatorPanel(props: Props) {
 
   if (!result.ok) {
     return (
-      <div className="mx-auto w-full max-w-6xl rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-600/80 dark:bg-slate-800/90 md:p-6">
-        <div className="border-b border-slate-100 pb-4 dark:border-slate-700/80">
+      <div className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-700 dark:bg-slate-800/55 md:p-6">
+        <div className="border-b border-slate-100 pb-4 dark:border-slate-700/60">
           <h4 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
             {t.offres.simTitle}
           </h4>
@@ -320,12 +325,12 @@ export function OfferCalculatorPanel(props: Props) {
           <p className="text-base font-semibold text-slate-900 dark:text-white">{selectedName}</p>
           <p className="text-xs text-slate-500 dark:text-slate-400">{selectedPositioning}</p>
         </div>
-        <p className="mt-5 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-500 dark:border-slate-700/80 dark:text-slate-400">
+        <p className="mt-5 border-t border-slate-100 pt-4 text-xs leading-relaxed text-slate-500 dark:border-slate-700/60 dark:text-slate-400">
           {t.offres.simDisclaimer}
         </p>
         <a
           href="#contact"
-          className={`mt-4 block w-full rounded-lg bg-gradient-to-b from-sky-600 to-sky-700 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-[filter] duration-150 hover:brightness-105 dark:from-sky-600 dark:to-sky-800 dark:hover:brightness-110 ${focusRing}`}
+          className={`mt-4 block w-full rounded-lg bg-gradient-to-b from-sky-500 to-sky-600 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm shadow-sky-950/10 transition-[transform,opacity] duration-150 ease-out hover:from-sky-600 hover:to-sky-700 active:from-sky-600 active:to-sky-700 active:translate-y-px active:opacity-[0.97] dark:bg-gradient-to-b dark:from-sky-500 dark:to-sky-400 dark:shadow-none dark:hover:from-sky-500 dark:hover:to-sky-300 dark:active:from-sky-500 dark:active:to-sky-600 ${focusRing}`}
         >
           {t.offres.ctaEstimation}
         </a>
@@ -347,6 +352,12 @@ export function OfferCalculatorPanel(props: Props) {
   const contractTotalEur = contractTotalView.contractTotalEur;
   const prepaidTotalEur = Math.round(contractTotalEur * (1 - prepaidRate) * 100) / 100;
   const prepaidSavingsEur = Math.round((contractTotalEur - prepaidTotalEur) * 100) / 100;
+
+  /** Presentation-only: base media over the contract period (no add-ons). Mirrors engine line items. */
+  const baseContractAmountEur =
+    Math.round(
+      (monthlyView.month1BaseMediaEur + (durationMonths - 1) * monthlyView.fromMonth2BaseMediaEur) * 100,
+    ) / 100;
 
   const getAddon = (id: AddonId) => addOnEligibility.find((a) => a.addonId === id);
 
@@ -393,53 +404,53 @@ export function OfferCalculatorPanel(props: Props) {
   };
 
   return (
-    <div className="mx-auto w-full max-w-6xl rounded-xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-600/80 dark:bg-slate-800/90 md:p-6">
-      <div className="border-b border-slate-100 pb-4 dark:border-slate-700/80">
-        <h4 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+    <div className="mx-auto w-full max-w-6xl rounded-2xl border border-slate-200 bg-white p-4 dark:border-slate-700 dark:bg-slate-800/55 md:p-5">
+      <div className="border-b border-slate-100 pb-3 dark:border-slate-700/60 md:pb-3">
+        <h4 className="text-lg font-semibold tracking-tight text-slate-900 dark:text-white md:text-xl">
           {t.offres.simTitle}
         </h4>
-        <p className="mt-1 text-sm leading-snug text-slate-600 dark:text-slate-400">{t.offres.hint}</p>
+        <p className="mt-0.5 text-sm leading-snug text-slate-600 dark:text-slate-400">{t.offres.hint}</p>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2 md:items-stretch md:gap-8">
-        <div className="flex min-h-0 min-w-0 flex-col gap-4">
-          <div className="rounded-xl border border-slate-200/90 bg-slate-50/70 p-4 dark:border-slate-700/70 dark:bg-slate-900/40">
+      <div className="mt-4 grid grid-cols-1 gap-5 md:mt-5 md:grid-cols-2 md:items-stretch md:gap-6 lg:gap-7">
+        <div className="flex min-h-0 min-w-0 flex-col gap-3 md:gap-2">
+          <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-3 dark:border-slate-700/40 dark:bg-slate-900/30 md:p-3">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 {t.offres.simFormatLabel}
               </p>
-              <p className="mt-0.5 text-base font-semibold text-slate-900 dark:text-white">
+              <p className="mt-0.5 text-base font-semibold leading-tight text-slate-900 dark:text-white">
                 {selectedName}
               </p>
-              <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+              <p className="mt-0.5 text-xs leading-snug text-slate-500 dark:text-slate-400">
                 {selectedPositioning}
               </p>
               {packageFeatured ? (
-                <span className="mt-2 inline-block rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700 dark:border-sky-800/60 dark:bg-sky-900/40 dark:text-sky-300">
+                <span className="mt-1 inline-block rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700 dark:border-sky-800/60 dark:bg-sky-900/40 dark:text-sky-300 md:text-xs">
                   {t.offres.badgeFeatured}
                 </span>
               ) : null}
             </div>
             {packageDescription ? (
-              <p className="mt-3 text-sm font-medium leading-relaxed text-slate-600 dark:text-slate-300">
+              <p className="mt-2 text-xs font-medium leading-snug text-slate-600 dark:text-slate-300 md:mt-1.5 md:line-clamp-2 md:text-sm">
                 {packageDescription}
               </p>
             ) : null}
-            <div className="mt-4 border-t border-slate-200/80 pt-3 dark:border-slate-600/60">
-              <p className="text-base font-medium tabular-nums tracking-tight text-slate-600 dark:text-slate-300">
+            <div className="mt-2 border-t border-slate-100 pt-2 dark:border-slate-700/40 md:mt-2 md:pt-2">
+              <p className="text-sm font-medium tabular-nums tracking-tight text-slate-600 dark:text-slate-300 md:text-base">
                 {indicativeMonthlyContacts.toLocaleString()}
               </p>
-              <p className="mt-0.5 text-xs font-medium text-slate-500 dark:text-slate-400">
+              <p className="mt-0 text-[11px] font-medium text-slate-500 dark:text-slate-400 md:text-xs">
                 {t.offres.calculatorContactsLabel}
               </p>
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-200/90 bg-white p-4 dark:border-slate-700/65 dark:bg-slate-900/35">
+          <div className="rounded-xl border border-slate-100 bg-white p-3 dark:border-slate-700/40 dark:bg-slate-900/25 md:p-3">
             <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
               {t.offres.simDuration}
             </p>
-            <div className="mt-2 grid grid-cols-2 gap-2 sm:grid-cols-4">
+            <div className="mt-1.5 grid grid-cols-2 gap-1.5 sm:grid-cols-4 md:gap-2">
               {([3, 6, 9, 12] as const).map((m) => {
                 const isActive = durationMonths === m;
                 return (
@@ -450,7 +461,7 @@ export function OfferCalculatorPanel(props: Props) {
                     className={`min-h-9 rounded-md border px-2 py-1.5 text-center text-sm font-medium transition-colors duration-150 ${
                       isActive
                         ? 'border-sky-500 bg-sky-50 text-slate-900 hover:bg-sky-50/90 dark:border-sky-500/80 dark:bg-sky-950/40 dark:text-white dark:hover:bg-sky-950/55'
-                        : 'border-slate-200 bg-slate-50/80 text-slate-700 hover:border-slate-300 hover:bg-slate-100/80 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800/70'
+                        : 'border-slate-100 bg-slate-50/70 text-slate-700 hover:border-slate-200 hover:bg-slate-100/70 dark:border-slate-700/50 dark:bg-slate-800/45 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800/65'
                     } ${focusRing}`}
                   >
                     {t.offres.calculatorDurationChip.replace('{n}', String(m))}
@@ -462,11 +473,11 @@ export function OfferCalculatorPanel(props: Props) {
 
           <IncludedPackageBlock addons={includedAddons} t={t} />
 
-          <div className="rounded-xl border border-slate-200/85 bg-slate-50/50 p-3 dark:border-slate-700/60 dark:bg-slate-900/30">
-            <p className="mb-3 font-medium text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400">
+          <div className="rounded-xl border border-slate-100 bg-slate-50/40 p-2.5 dark:border-slate-700/40 dark:bg-slate-900/25 md:p-2">
+            <p className="mb-2 font-medium text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 md:mb-1.5">
               {t.offres.calculatorAddonsTitle}
             </p>
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-1.5 md:gap-1">
               {packageId === 'EXCLUSIVE' ? (
                 <>
                   {extraRouteAddon ? renderPaidAddonRow(extraRouteAddon, extraRoutePillPriceEur) : null}
@@ -488,19 +499,19 @@ export function OfferCalculatorPanel(props: Props) {
           </div>
         </div>
 
-        <div className="flex h-full min-h-0 min-w-0 flex-col gap-3 rounded-xl border border-slate-200/95 bg-gradient-to-b from-slate-50 via-white to-slate-50/90 p-4 shadow-sm dark:border-slate-600/90 dark:bg-gradient-to-b dark:from-slate-950/90 dark:via-slate-900/85 dark:to-slate-950/80 dark:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.06)] md:min-h-[28rem]">
+        <div className="flex h-full min-h-0 min-w-0 flex-col gap-2 rounded-2xl border border-slate-100 bg-slate-50/40 p-3 dark:border-slate-700/50 dark:bg-slate-800/35 md:gap-2 md:p-3 lg:p-3.5">
           <div
-            className="flex max-w-full min-h-8 flex-shrink-0 flex-wrap items-center gap-0.5 rounded-lg border border-slate-200/80 bg-slate-100/80 p-0.5 dark:border-slate-600/70 dark:bg-slate-950/50"
+            className="mx-auto grid w-full max-w-md shrink-0 grid-cols-2 gap-2"
             role="group"
             aria-label={t.offres.calculatorPriceModeTitle}
           >
             <button
               type="button"
               onClick={() => setDisplayMode('monthly')}
-              className={`min-h-7 min-w-0 flex-1 rounded-[0.3125rem] px-2 py-1 text-center text-xs font-medium leading-snug transition-colors duration-150 sm:flex-none sm:px-2.5 sm:text-sm ${
+              className={`min-h-9 w-full rounded-md border px-2 py-1.5 text-center text-sm font-medium leading-snug transition-colors duration-150 ${
                 displayMode === 'monthly'
-                  ? 'bg-white text-slate-800 shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:shadow-none'
-                  : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+                  ? 'border-sky-500 bg-sky-50 text-slate-900 dark:border-sky-600/50 dark:bg-sky-950/30 dark:text-slate-50'
+                  : 'border-slate-100 bg-slate-50/70 text-slate-700 hover:border-slate-200 hover:bg-slate-100/70 dark:border-slate-700/50 dark:bg-slate-800/45 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800/65'
               } ${focusRing}`}
             >
               {t.offres.calculatorModeMonthly}
@@ -508,10 +519,10 @@ export function OfferCalculatorPanel(props: Props) {
             <button
               type="button"
               onClick={() => setDisplayMode('contract_total')}
-              className={`min-h-7 min-w-0 flex-1 rounded-[0.3125rem] px-2 py-1 text-center text-xs font-medium leading-snug transition-colors duration-150 sm:flex-none sm:px-2.5 sm:text-sm ${
+              className={`min-h-9 w-full rounded-md border px-2 py-1.5 text-center text-sm font-medium leading-snug transition-colors duration-150 ${
                 displayMode === 'contract_total'
-                  ? 'bg-white text-slate-800 shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:shadow-none'
-                  : 'text-slate-500 hover:text-slate-700 dark:text-slate-400 dark:hover:text-slate-200'
+                  ? 'border-sky-500 bg-sky-50 text-slate-900 dark:border-sky-600/50 dark:bg-sky-950/30 dark:text-slate-50'
+                  : 'border-slate-100 bg-slate-50/70 text-slate-700 hover:border-slate-200 hover:bg-slate-100/70 dark:border-slate-700/50 dark:bg-slate-800/45 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800/65'
               } ${focusRing}`}
             >
               {t.offres.calculatorModeContractTotal}
@@ -521,8 +532,8 @@ export function OfferCalculatorPanel(props: Props) {
           <div className="min-h-0 flex-1 text-slate-600 dark:text-slate-300">
             {displayMode === 'monthly' ? (
               <div className="space-y-0">
-                <div className="space-y-1.5 pb-3">
-                  <div className="space-y-1.5">
+                <div className="space-y-1 pb-2 md:space-y-1.5 md:pb-2">
+                  <div className="space-y-1 md:space-y-1.5">
                     {ladderRow(
                       t.offres.calculatorBlockBasePriceTitle,
                       <>
@@ -540,7 +551,7 @@ export function OfferCalculatorPanel(props: Props) {
                           ? ladderRow(
                               t.offres.calculatorDiscountFirstMonthLabel,
                               <>−{formatEur(monthlyView.month1BaseDiscountEur)}</>,
-                              'tabular-nums text-sm font-normal text-sky-800 dark:text-sky-400/95',
+                              summaryDiscountValueClass,
                               'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',
                             )
                           : null}
@@ -551,7 +562,7 @@ export function OfferCalculatorPanel(props: Props) {
                                 −{formatEur(periodDiscountEurOnBase)}
                                 {t.offres.calculatorPerMonthSuffix}
                               </>,
-                              'tabular-nums text-sm font-normal text-sky-800 dark:text-sky-400/95',
+                              summaryDiscountValueClass,
                               'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',
                             )
                           : null}
@@ -560,9 +571,9 @@ export function OfferCalculatorPanel(props: Props) {
                   </div>
                 </div>
 
-                <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-slate-600/50">
+                <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPaymentStructureBaseTitle}</p>
-                  <div className="mt-2 space-y-1.5">
+                  <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                     {ladderRow(
                       t.offres.calculatorPriceLineMonth1,
                       formatEur(monthlyView.month1BaseMediaEur),
@@ -582,9 +593,9 @@ export function OfferCalculatorPanel(props: Props) {
                 </div>
 
                 {hasPaidSelection ? (
-                  <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-slate-600/50">
+                  <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
                     <p className={summarySectionHeading}>{t.offres.calculatorAddonsTitle}</p>
-                    <div className="mt-2 space-y-1.5">
+                    <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                       {paidLineItems.map((a) => (
                         <div key={a.addonId}>
                           {addonLadderRow(
@@ -592,7 +603,7 @@ export function OfferCalculatorPanel(props: Props) {
                             labelForAddon(a, t),
                             formatPaidAddonLine(a),
                             'tabular-nums text-sm font-normal text-slate-600 dark:text-slate-300',
-                            'text-xs text-slate-500 dark:text-slate-400',
+                            'text-xs text-slate-600/95 dark:text-slate-300/90',
                           )}
                         </div>
                       ))}
@@ -603,7 +614,7 @@ export function OfferCalculatorPanel(props: Props) {
                               {formatEur(addonsMonthlyTotal)}
                               {t.offres.calculatorPerMonthSuffix}
                             </>,
-                            'tabular-nums text-sm font-medium text-slate-700 dark:text-slate-200',
+                            'tabular-nums text-sm font-medium text-slate-600 dark:text-slate-400',
                             'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',
                           )
                         : null}
@@ -611,13 +622,13 @@ export function OfferCalculatorPanel(props: Props) {
                   </div>
                 ) : null}
 
-                <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-slate-600/50">
+                <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPayableTitle}</p>
-                  <div className="mt-3 space-y-2.5">
+                  <div className="mt-2 space-y-1.5 md:mt-2 md:space-y-2">
                     {ladderRow(
                       t.offres.calculatorPayableFirstMonth,
                       formatEur(monthlyView.month1TotalEur),
-                      'tabular-nums text-lg font-semibold text-slate-900 dark:text-white',
+                      'tabular-nums text-base font-semibold text-slate-900 dark:text-white md:text-lg',
                       'min-w-0 text-left text-sm font-semibold text-slate-800 dark:text-slate-50',
                     )}
                     {ladderRow(
@@ -626,41 +637,41 @@ export function OfferCalculatorPanel(props: Props) {
                         {formatEur(monthlyView.fromMonth2TotalEur)}
                         {t.offres.calculatorPerMonthSuffix}
                       </>,
-                      'tabular-nums text-lg font-semibold text-slate-900 dark:text-white',
+                      'tabular-nums text-base font-semibold text-slate-900 dark:text-white md:text-lg',
                       'min-w-0 text-left text-sm font-semibold text-slate-800 dark:text-slate-50',
                     )}
                   </div>
                 </div>
 
-                <div className="mt-6 border-t border-slate-200/80 pt-4 dark:border-slate-600/50">
+                <div className="mt-3 border-t border-slate-100 pt-2.5 dark:border-slate-700/40 md:mt-4 md:pt-3">
                   {ladderRow(
                     t.offres.calculatorAvgOverContractLabel,
                     <>
                       {formatEur(avgMonthlyRounded)}
                       {t.offres.calculatorPerMonthSuffix}
                     </>,
-                    'tabular-nums text-xs font-normal text-slate-500 dark:text-slate-400',
-                    'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',
+                    'tabular-nums text-[11px] font-normal text-slate-500/80 dark:text-slate-500/85 md:text-xs',
+                    'min-w-0 text-left text-[11px] text-slate-500/80 dark:text-slate-500/85 md:text-xs',
                   )}
                 </div>
               </div>
             ) : (
               <div className="space-y-0">
-                <div className="space-y-1.5 pb-3">
+                <div className="space-y-1 pb-2.5 md:space-y-1.5 md:pb-3">
                   {ladderRow(
-                    t.offres.calculatorContractTotalLabel,
-                    formatEur(contractTotalView.contractTotalEur),
+                    t.offres.calculatorContractBaseTotalLabel,
+                    formatEur(baseContractAmountEur),
                     'tabular-nums text-sm font-semibold text-slate-800 dark:text-slate-100',
                     'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',
                   )}
-                  <p className="text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                  <p className="text-xs leading-snug text-slate-500 dark:text-slate-400">
                     {t.offres.calculatorResultHeroSubtitleContract.replace('{months}', String(durationMonths))}
                   </p>
                 </div>
 
-                <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-slate-600/50">
+                <div className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPaymentStructureTotalsTitle}</p>
-                  <div className="mt-2 space-y-1.5">
+                  <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                     {ladderRow(
                       t.offres.calculatorPriceLineMonth1,
                       formatEur(monthlyView.month1TotalEur),
@@ -680,9 +691,9 @@ export function OfferCalculatorPanel(props: Props) {
                 </div>
 
                 {hasPaidSelection ? (
-                  <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-slate-600/50">
+                  <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
                     <p className={summarySectionHeading}>{t.offres.calculatorAddonsTitle}</p>
-                    <div className="mt-2 space-y-1.5">
+                    <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                       {paidLineItems.map((a) => {
                         const line = Math.round(a.chargedMonthlyEur * durationMonths + a.chargedOneTimeEur);
                         return (
@@ -692,7 +703,7 @@ export function OfferCalculatorPanel(props: Props) {
                               labelForAddon(a, t),
                               formatEur(line),
                               'tabular-nums text-sm font-normal text-slate-600 dark:text-slate-300',
-                              'text-xs text-slate-500 dark:text-slate-400',
+                              'text-xs text-slate-600/95 dark:text-slate-300/90',
                             )}
                           </div>
                         );
@@ -701,21 +712,21 @@ export function OfferCalculatorPanel(props: Props) {
                         ? ladderRow(
                             t.offres.calculatorAddonsContractTotalLabel,
                             formatEur(addonsContractTotal),
-                            'tabular-nums text-sm font-medium text-slate-700 dark:text-slate-200',
-                            'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',
+                            'tabular-nums text-sm font-semibold text-slate-600 dark:text-slate-300',
+                            'min-w-0 text-left text-xs font-medium text-slate-500 dark:text-slate-400',
                           )
                         : null}
                     </div>
                   </div>
                 ) : null}
 
-                <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-slate-600/50">
+                <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPayableTitle}</p>
-                  <div className="mt-3 space-y-2.5">
+                  <div className="mt-2 space-y-1.5 md:mt-2 md:space-y-2">
                     {ladderRow(
                       t.offres.calculatorContractPayMonthlyLabel,
                       formatEur(contractTotalEur),
-                      'tabular-nums text-lg font-semibold text-slate-900 dark:text-white',
+                      'tabular-nums text-base font-semibold text-slate-900 dark:text-white md:text-lg',
                       'min-w-0 text-left text-sm font-semibold text-slate-800 dark:text-slate-50',
                     )}
                     {isNonZeroEur(prepaidSavingsEur)
@@ -724,14 +735,14 @@ export function OfferCalculatorPanel(props: Props) {
                             {t.offres.calculatorContractPrepaidDiscountLabel} (−{Math.round(prepaidRate * 100)}%)
                           </>,
                           <>−{formatEur(prepaidSavingsEur)}</>,
-                          'tabular-nums text-sm font-normal text-sky-800 dark:text-sky-400/95',
+                          summaryDiscountValueClass,
                           'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',
                         )
                       : null}
                     {ladderRow(
                       t.offres.calculatorContractPrepaidTotalLabel,
                       formatEur(prepaidTotalEur),
-                      'tabular-nums text-lg font-semibold text-slate-900 dark:text-white',
+                      'tabular-nums text-base font-semibold text-slate-900 dark:text-white md:text-lg',
                       'min-w-0 text-left text-sm font-semibold text-slate-800 dark:text-slate-50',
                     )}
                   </div>
@@ -742,14 +753,14 @@ export function OfferCalculatorPanel(props: Props) {
 
           <a
             href="#contact"
-            className={`mt-4 block w-full flex-shrink-0 rounded-lg bg-gradient-to-b from-sky-600 to-sky-700 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm transition-[filter] duration-150 hover:brightness-105 dark:from-sky-600 dark:to-sky-800 dark:hover:brightness-110 ${focusRing}`}
+            className={`mt-2 block w-full flex-shrink-0 rounded-lg bg-gradient-to-b from-sky-500 to-sky-600 px-4 py-2.5 text-center text-sm font-medium text-white shadow-sm shadow-sky-950/10 transition-[transform,opacity] duration-150 ease-out hover:from-sky-600 hover:to-sky-700 active:from-sky-600 active:to-sky-700 active:translate-y-px active:opacity-[0.97] dark:bg-gradient-to-b dark:from-sky-500 dark:to-sky-400 dark:shadow-none dark:hover:from-sky-500 dark:hover:to-sky-300 dark:active:from-sky-500 dark:active:to-sky-600 md:mt-2 ${focusRing}`}
           >
             {t.offres.ctaEstimation}
           </a>
         </div>
       </div>
 
-      <p className="mt-6 border-t border-slate-100/90 pt-4 text-xs leading-relaxed text-slate-500 dark:border-slate-700/60 dark:text-slate-400">
+      <p className="mt-4 border-t border-slate-100 pt-3 text-xs leading-relaxed text-slate-500 dark:border-slate-700/50 dark:text-slate-400 md:mt-5 md:pt-3.5">
         {t.offres.simDisclaimer}
       </p>
     </div>
