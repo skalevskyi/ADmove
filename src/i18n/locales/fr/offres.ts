@@ -124,7 +124,7 @@ export const offres = {
   calculatorAddonsMonthlyTotalLabel: 'Total options (mensuel)',
   calculatorAddonsContractTotalLabel: 'Total options (contrat)',
   calculatorPeriodDiscountEurLabel: 'Remise durée',
-  calculatorContractPayMonthlyLabel: 'Paiement mensuel (total sur la période)',
-  calculatorContractPrepaidDiscountLabel: 'Remise paiement anticipé intégral',
-  calculatorContractPrepaidTotalLabel: 'Paiement intégral anticipé',
+  calculatorContractPayMonthlyLabel: 'Montant total',
+  calculatorContractPrepaidDiscountLabel: 'Économie avec paiement anticipé',
+  calculatorContractPrepaidTotalLabel: 'À payer',
 } as const;

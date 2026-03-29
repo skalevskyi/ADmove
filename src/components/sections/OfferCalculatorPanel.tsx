@@ -766,9 +766,7 @@ export function OfferCalculatorPanel(props: Props) {
                     )}
                     {isNonZeroEur(prepaidSavingsEur)
                       ? ladderRow(
-                          <>
-                            {t.offres.calculatorContractPrepaidDiscountLabel} (−{Math.round(prepaidRate * 100)}%)
-                          </>,
+                          t.offres.calculatorContractPrepaidDiscountLabel,
                           <>−{formatEur(prepaidSavingsEur)}</>,
                           summaryDiscountValueClass,
                           'min-w-0 text-left text-xs text-slate-500 dark:text-slate-400',

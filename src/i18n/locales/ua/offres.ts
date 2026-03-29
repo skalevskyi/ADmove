@@ -123,7 +123,7 @@ export const offres = {
   calculatorAddonsMonthlyTotalLabel: 'Усього додатків (на місяць)',
   calculatorAddonsContractTotalLabel: 'Усього додатків за контракт',
   calculatorPeriodDiscountEurLabel: 'Знижка за тривалість',
-  calculatorContractPayMonthlyLabel: 'Оплата помісячно (сума за період)',
-  calculatorContractPrepaidDiscountLabel: 'Знижка за повну передплату',
-  calculatorContractPrepaidTotalLabel: 'Оплата за весь контракт (передплата)',
+  calculatorContractPayMonthlyLabel: 'Загальна вартість',
+  calculatorContractPrepaidDiscountLabel: 'Економія при передплаті',
+  calculatorContractPrepaidTotalLabel: 'До оплати',
 } as const;

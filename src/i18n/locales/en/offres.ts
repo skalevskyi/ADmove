@@ -122,7 +122,7 @@ export const offres = {
   calculatorAddonsMonthlyTotalLabel: 'Add-ons total (monthly)',
   calculatorAddonsContractTotalLabel: 'Add-ons total (contract)',
   calculatorPeriodDiscountEurLabel: 'Duration discount',
-  calculatorContractPayMonthlyLabel: 'Pay monthly (total over term)',
-  calculatorContractPrepaidDiscountLabel: 'Full prepayment discount',
-  calculatorContractPrepaidTotalLabel: 'Pay in full (prepaid)',
+  calculatorContractPayMonthlyLabel: 'Total amount',
+  calculatorContractPrepaidDiscountLabel: 'Savings with prepayment',
+  calculatorContractPrepaidTotalLabel: 'Amount due',
 } as const;
