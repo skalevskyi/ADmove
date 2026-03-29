@@ -24,18 +24,15 @@ export type CalculatorSelection = {
    *
    * - BASIC: photo, video, priority booking, exclusivity are selectable (photo/excl/priority optional; video not available).
    * - PRO: photo included by definition; video/priority/exclusivity selectable.
-   * - EXCLUSIVE: photo/priority/exclusivity included by definition; video/extra route days selectable.
+   * - EXCLUSIVE: photo/priority/exclusivity included by definition; video/weekend exposure selectable.
    */
   photoReporting?: boolean;
   videoReporting?: boolean;
   priorityBooking?: boolean;
   exclusivity?: boolean;
 
-  /**
-   * Extra route days quantity, applied with the same count for each contract month in calculator v1.
-   * Contacts benchmark remains unchanged (price only in v1).
-   */
-  extraRouteDays: number;
+  /** Weekend visibility add-on (extra_route_day): fixed monthly € when true. */
+  weekendExposure: boolean;
 
   /**
    * UI may choose to display only one mode, but engine should compute both.
@@ -61,7 +58,7 @@ export type AddonEligibility = {
   /**
    * Charged amounts for the active selection.
    * - monthly recurring add-ons: month1 + fromMonth2 recurring
-   * - per-day add-ons: recurring monthly derived from quantity
+   * - weekend (extra_route_day): fixed monthly when active
    * - one-time add-ons: charged once in month1
    */
   chargedMonthlyEur: MoneyEur;

@@ -22,6 +22,10 @@ export const offres = {
   noteSide:
     'Peut être combiné avec une autre campagne selon la compatibilité des secteurs.',
   noteFull: 'Marque unique visible sur le trajet',
+  competitionNote:
+    "Sans concurrence directe sur le parcours. D'autres formats peuvent être actifs, mais pas dans la même niche.",
+  exclusivityNote:
+    'Exclusivité totale sur le parcours. Aucune autre marque visible.',
   benefitsRear: [
     'Visibilité quotidienne dans le trafic local',
     'Format simple et direct',

@@ -9,6 +9,7 @@ import {
   ADDON_PRICES,
   BASE_MONTHLY_MEDIA_EUR,
   DURATION_MULTIPLIERS,
+  EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE,
   FIRST_MONTH_DISCOUNT_EUR,
   GUARDRAILS,
   INDICATIVE_MONTHLY_CONTACTS,
@@ -58,12 +59,8 @@ export function validateSelection(selection: CalculatorSelection): SelectionVali
     errors.push('Invalid durationMonths');
   }
 
-  if (!Number.isFinite(selection.extraRouteDays) || selection.extraRouteDays < DEFAULT_EXTRA_ROUTE_DAYS_MIN) {
-    errors.push('Invalid extraRouteDays (must be a non-negative number)');
-  }
-
-  if (!Number.isInteger(selection.extraRouteDays)) {
-    errors.push('Invalid extraRouteDays (must be an integer number of days)');
+  if (typeof selection.weekendExposure !== 'boolean') {
+    errors.push('Invalid weekendExposure (must be a boolean)');
   }
 
   // BASIC cannot select video_reporting.
@@ -96,13 +93,12 @@ export function validateSelection(selection: CalculatorSelection): SelectionVali
 export type ResolvedSelection = {
   packageId: PackageId;
   durationMonths: DurationMonths;
-  extraRouteDays: number;
+  weekendExposure: boolean;
 
   // Resolved add-on active state (included-by-definition are active as true but may have zero charge)
   photoReportingActive: boolean;
   videoReportingActive: boolean;
   exclusivityActive: boolean;
-  extraRouteDaysActive: boolean;
   priorityBookingActive: boolean;
 };
 
@@ -121,11 +117,10 @@ export function resolveSelection(selection: CalculatorSelection): ResolvedSelect
   return {
     packageId: selection.packageId,
     durationMonths: selection.durationMonths,
-    extraRouteDays: selection.extraRouteDays,
+    weekendExposure: selection.weekendExposure,
     photoReportingActive: photoActive,
     videoReportingActive: videoActive,
     exclusivityActive: exclusivityActive,
-    extraRouteDaysActive: selection.extraRouteDays > 0,
     priorityBookingActive: priorityActive,
   };
 }
@@ -152,15 +147,18 @@ export function computeRecurringAddonsMonthlyCents(resolved: ResolvedSelection):
   const videoChargeMonthlyEur =
     resolved.videoReportingActive && (resolved.packageId === 'PRO' || resolved.packageId === 'EXCLUSIVE') ? ADDON_PRICES.video_reporting.eur : 0;
   const exclusivityChargeMonthlyEur =
-    resolved.exclusivityActive && (resolved.packageId === 'BASIC' || resolved.packageId === 'PRO') ? ADDON_PRICES.exclusivity.eur : 0;
+    resolved.exclusivityActive && resolved.packageId === 'BASIC'
+      ? EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.BASIC
+      : resolved.exclusivityActive && resolved.packageId === 'PRO'
+        ? EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.PRO
+        : 0;
 
   total += toCents(photoChargeMonthlyEur);
   total += toCents(videoChargeMonthlyEur);
   total += toCents(exclusivityChargeMonthlyEur);
 
-  // Extra route day pricing is recurring monthly derived from quantity.
-  if (resolved.extraRouteDays > 0) {
-    total += toCents(ADDON_PRICES.extra_route_day.eur) * resolved.extraRouteDays;
+  if (resolved.weekendExposure) {
+    total += toCents(ADDON_PRICES.extra_route_day.eur);
   }
 
   return total;
@@ -192,11 +190,13 @@ export function buildAddOnEligibility(resolved: ResolvedSelection): AddonEligibi
   const videoChargeMonthlyEur = videoAvailable && resolved.videoReportingActive ? ADDON_PRICES.video_reporting.eur : 0;
   const exclusivityChargeMonthlyEur = exclusivityIncludedByDefinition
     ? 0
-    : resolved.exclusivityActive
-      ? ADDON_PRICES.exclusivity.eur
-      : 0;
+    : resolved.exclusivityActive && resolved.packageId === 'BASIC'
+      ? EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.BASIC
+      : resolved.exclusivityActive && resolved.packageId === 'PRO'
+        ? EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.PRO
+        : 0;
 
-  const extraRouteDaysChargeMonthlyEur = resolved.extraRouteDaysActive ? resolved.extraRouteDays * ADDON_PRICES.extra_route_day.eur : 0;
+  const extraRouteMonthlyEur = resolved.weekendExposure ? ADDON_PRICES.extra_route_day.eur : 0;
 
   const priorityChargeOneTimeEur =
     priorityIncludedByDefinition ? 0 : resolved.priorityBookingActive && priorityAvailable ? ADDON_PRICES.priority_booking.eur : 0;
@@ -222,8 +222,8 @@ export function buildAddOnEligibility(resolved: ResolvedSelection): AddonEligibi
       addonId: 'extra_route_day',
       available: true,
       includedByDefinition: false,
-      active: resolved.extraRouteDaysActive,
-      chargedMonthlyEur: extraRouteDaysChargeMonthlyEur,
+      active: resolved.weekendExposure,
+      chargedMonthlyEur: extraRouteMonthlyEur,
       chargedOneTimeEur: 0,
     },
     {
@@ -257,7 +257,8 @@ export function computeTierGuardrailsStatus(): TierGuardrailsStatus {
 
     // BASIC upper stack uses base + photo + exclusivity (recurring monthly add-ons only).
     const basicBase = toCents(BASE_MONTHLY_MEDIA_EUR.BASIC) * mult;
-    const basicUpperRecurring = basicBase + toCents(ADDON_PRICES.photo_reporting.eur) + toCents(ADDON_PRICES.exclusivity.eur);
+    const basicUpperRecurring =
+      basicBase + toCents(ADDON_PRICES.photo_reporting.eur) + toCents(EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.BASIC);
     const proBase = toCents(BASE_MONTHLY_MEDIA_EUR.PRO) * mult;
 
     if (!(basicUpperRecurring < proBase)) {
@@ -265,7 +266,10 @@ export function computeTierGuardrailsStatus(): TierGuardrailsStatus {
     }
 
     // PRO upper stack uses base + video + exclusivity (photo is included and 0-charge; extra route day excluded).
-    const proUpperRecurring = toCents(BASE_MONTHLY_MEDIA_EUR.PRO) * mult + toCents(ADDON_PRICES.video_reporting.eur) + toCents(ADDON_PRICES.exclusivity.eur);
+    const proUpperRecurring =
+      toCents(BASE_MONTHLY_MEDIA_EUR.PRO) * mult +
+      toCents(ADDON_PRICES.video_reporting.eur) +
+      toCents(EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.PRO);
     const exclusiveBase = toCents(BASE_MONTHLY_MEDIA_EUR.EXCLUSIVE) * mult;
 
     if (!(proUpperRecurring < exclusiveBase)) {

@@ -22,6 +22,10 @@ export const offres = {
   noteSide:
     'Can be combined with another campaign depending on sector compatibility.',
   noteFull: 'Single brand visibility on the route',
+  competitionNote:
+    'No direct competitors on the route. Other formats may be active, but not from the same niche.',
+  exclusivityNote:
+    'Full exclusivity on the route. No other brands are visible.',
   benefitsRear: [
     'Daily visibility in local traffic',
     'Simple, direct format',

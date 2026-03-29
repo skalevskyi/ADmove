@@ -7,7 +7,7 @@ test('base price + duration multiplier: BASIC / 3 months / no add-ons', () => {
   const result = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 3,
-    extraRouteDays: 0,
+    weekendExposure: false,
     photoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -28,7 +28,7 @@ test('first-month discount applies to base only (no add-ons): BASIC / 3 months',
   const result = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 3,
-    extraRouteDays: 0,
+    weekendExposure: false,
     photoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -46,7 +46,7 @@ test('included add-ons are free: PRO / 3 months / no optional toggles', () => {
   const result = calculateCalculator({
     packageId: 'PRO',
     durationMonths: 3,
-    extraRouteDays: 0,
+    weekendExposure: false,
     videoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -65,7 +65,7 @@ test('invalid: video must be unavailable on BASIC', () => {
   const result = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 3,
-    extraRouteDays: 0,
+    weekendExposure: false,
     photoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -82,7 +82,7 @@ test('invalid: EXCLUSIVE cannot stack separate exclusivity toggle', () => {
   const result = calculateCalculator({
     packageId: 'EXCLUSIVE',
     durationMonths: 9,
-    extraRouteDays: 0,
+    weekendExposure: false,
     // explicitly provided => invalid
     exclusivity: false,
     videoReporting: false,
@@ -96,11 +96,11 @@ test('invalid: EXCLUSIVE cannot stack separate exclusivity toggle', () => {
   );
 });
 
-test('extra route day affects price but not contacts: BASIC / 6 months', () => {
+test('weekend exposure add-on affects price but not contacts: BASIC / 6 months', () => {
   const resultNoExtras = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 6,
-    extraRouteDays: 0,
+    weekendExposure: false,
     photoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -109,7 +109,7 @@ test('extra route day affects price but not contacts: BASIC / 6 months', () => {
   const resultWithExtras = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 6,
-    extraRouteDays: 3,
+    weekendExposure: true,
     photoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -123,11 +123,10 @@ test('extra route day affects price but not contacts: BASIC / 6 months', () => {
   assert.equal(resultNoExtras.indicativeMonthlyContacts, 30000);
   assert.equal(resultWithExtras.indicativeMonthlyContacts, 30000);
 
-  // Extra route day price is €15/day per selected extra day, applied each month.
-  // For fromMonth2 monthly: + 3 * 15 = +45.
+  // Fixed €30/month when weekend exposure is on.
   assert.equal(
     resultWithExtras.monthlyView.fromMonth2TotalEur - resultNoExtras.monthlyView.fromMonth2TotalEur,
-    45,
+    30,
   );
 });
 
@@ -135,7 +134,7 @@ test('contract total formula: PRO / 3 months / one-time priority booking counted
   const result = calculateCalculator({
     packageId: 'PRO',
     durationMonths: 3,
-    extraRouteDays: 0,
+    weekendExposure: false,
     videoReporting: false,
     priorityBooking: true,
     exclusivity: false,
@@ -156,7 +155,7 @@ test('snapshot cases (rounded expectations): BASIC/6, PRO/12, EXCLUSIVE/9', () =
   const basic = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 6,
-    extraRouteDays: 1,
+    weekendExposure: true,
     photoReporting: true,
     priorityBooking: false,
     exclusivity: true,
@@ -164,15 +163,15 @@ test('snapshot cases (rounded expectations): BASIC/6, PRO/12, EXCLUSIVE/9', () =
   });
   assert.equal(basic.ok, true);
   if (basic.ok) {
-    assert.equal(basic.monthlyView.month1TotalEur, 270);
-    assert.equal(basic.monthlyView.fromMonth2TotalEur, 370);
-    assert.equal(basic.contractTotalView.contractTotalEur, 2120);
+    assert.equal(basic.monthlyView.month1TotalEur, 355);
+    assert.equal(basic.monthlyView.fromMonth2TotalEur, 455);
+    assert.equal(basic.contractTotalView.contractTotalEur, 2630);
   }
 
   const pro = calculateCalculator({
     packageId: 'PRO',
     durationMonths: 12,
-    extraRouteDays: 2,
+    weekendExposure: true,
     videoReporting: true,
     priorityBooking: true,
     exclusivity: false,
@@ -188,7 +187,7 @@ test('snapshot cases (rounded expectations): BASIC/6, PRO/12, EXCLUSIVE/9', () =
   const exclusive = calculateCalculator({
     packageId: 'EXCLUSIVE',
     durationMonths: 9,
-    extraRouteDays: 2,
+    weekendExposure: true,
     videoReporting: true,
     // no exclusivity toggle field allowed on EXCLUSIVE
   });
@@ -204,7 +203,7 @@ test('guardrails must pass for all durations', () => {
   const result = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 3,
-    extraRouteDays: 0,
+    weekendExposure: false,
     photoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -221,7 +220,7 @@ test('contacts remain monthly benchmark in both display preferences', () => {
   const monthly = calculateCalculator({
     packageId: 'PRO',
     durationMonths: 6,
-    extraRouteDays: 0,
+    weekendExposure: false,
     videoReporting: false,
     priorityBooking: false,
     exclusivity: false,
@@ -229,7 +228,7 @@ test('contacts remain monthly benchmark in both display preferences', () => {
   const contractTotal = calculateCalculator({
     packageId: 'PRO',
     durationMonths: 6,
-    extraRouteDays: 0,
+    weekendExposure: false,
     videoReporting: false,
     priorityBooking: false,
     exclusivity: false,

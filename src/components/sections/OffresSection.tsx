@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
+import { BadgeCheck } from 'lucide-react';
 
 import { OfferCalculatorPanel } from '@/components/sections/OfferCalculatorPanel';
 import { useLanguage } from '@/context/LanguageContext';
@@ -131,7 +132,7 @@ export function OffresSection() {
     const base: CalculatorSelection = {
       packageId: expandedPackage,
       durationMonths,
-      extraRouteDays: weekendExposure ? 2 : 0,
+      weekendExposure,
     };
 
     if (expandedPackage === 'BASIC') {
@@ -185,7 +186,7 @@ export function OffresSection() {
         >
           {t.offres.subtitle}
         </motion.p>
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3 items-start md:items-start">
+        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3 md:items-stretch">
           {OFFRES.map((offer, i) => {
             const name =
               offer.id === 'BASIC'
@@ -221,65 +222,80 @@ export function OffresSection() {
             return (
               <motion.article
                 key={offer.id}
-                className={`relative self-start flex flex-col rounded-2xl border bg-white dark:bg-slate-800/55 transition-shadow hover:shadow-md dark:hover:shadow-none ${
+                className={`relative flex h-full flex-col rounded-2xl border bg-white dark:bg-slate-800/55 transition-shadow hover:shadow-md dark:hover:shadow-none ${
                   isSelected
                     ? 'border-sky-300 ring-2 ring-sky-500/20 dark:border-sky-700 dark:ring-sky-400/25'
                     : offer.featured
-                      ? 'border-sky-200 ring-1 ring-sky-500/20 dark:border-sky-800/60 dark:ring-sky-400/20'
-                    : 'border-slate-200 dark:border-slate-700'
+                      ? 'z-10 border-sky-200/95 shadow-lg shadow-slate-300/50 hover:shadow-xl hover:shadow-slate-300/55 dark:border-sky-800/55 dark:shadow-lg dark:shadow-slate-950/40 dark:hover:shadow-xl dark:hover:shadow-slate-950/50'
+                      : 'border-slate-200 dark:border-slate-700'
                 }`}
                 initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : i * 0.08 }}
               >
-                <div className="flex min-h-[340px] flex-col p-6">
-                  <div className="flex items-start justify-between gap-4">
-                    <div className="min-w-0">
-                      <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
-                        {name}
-                      </h3>
-                      <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-300">
-                        {positioning}
-                      </p>
+                <div
+                  className={`flex min-h-0 flex-1 flex-col p-6 ${offer.featured ? 'md:p-7' : ''}`}
+                >
+                  <div className="flex min-h-0 flex-1 flex-col">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="min-w-0">
+                        <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
+                          {name}
+                        </h3>
+                        <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+                          {positioning}
+                        </p>
+                      </div>
+                      {offer.featured ? (
+                        <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700 dark:border-sky-800/60 dark:bg-sky-900/40 dark:text-sky-300">
+                          <BadgeCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={2} aria-hidden />
+                          {t.offres.badgeFeatured}
+                        </span>
+                      ) : null}
                     </div>
-                    {offer.featured ? (
-                      <span className="shrink-0 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700 dark:border-sky-800/60 dark:bg-sky-900/40 dark:text-sky-300">
-                        {t.offres.badgeFeatured}
-                      </span>
-                    ) : null}
+
+                    <div className="relative mt-6 flex h-40 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-100/70 px-4 dark:border-slate-600/80 dark:bg-slate-700/35">
+                      <Image
+                        src={offer.image}
+                        alt={alt}
+                        fill
+                        className="object-contain object-center"
+                        sizes="(min-width: 768px) 33vw, 100vw"
+                      />
+                    </div>
+
+                    <p className="mt-4 text-sm font-medium leading-relaxed text-slate-600 dark:text-slate-300">
+                      {description}
+                    </p>
+
+                    <ul className="mt-5 space-y-2">
+                      {benefits.map((benefit, bi) => (
+                        <li
+                          key={bi}
+                          className="flex gap-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300"
+                        >
+                          <span
+                            className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500 dark:bg-sky-400"
+                            aria-hidden
+                          />
+                          <span>{benefit}</span>
+                        </li>
+                      ))}
+                    </ul>
+
+                    {offer.id === 'EXCLUSIVE' ? (
+                      <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                        {t.offres.exclusivityNote}
+                      </p>
+                    ) : (
+                      <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">
+                        {t.offres.competitionNote}
+                      </p>
+                    )}
                   </div>
 
-                  <div className="relative mt-6 flex h-40 items-center justify-center rounded-xl border border-slate-200 bg-slate-100/70 px-4 dark:border-slate-600/80 dark:bg-slate-700/35">
-                    <Image
-                      src={offer.image}
-                      alt={alt}
-                      fill
-                      className="object-contain object-center"
-                      sizes="(min-width: 768px) 33vw, 100vw"
-                    />
-                  </div>
-
-                  <p className="mt-4 text-sm font-medium leading-relaxed text-slate-600 dark:text-slate-300">
-                    {description}
-                  </p>
-
-                  <ul className="mt-5 space-y-2">
-                    {benefits.map((benefit, bi) => (
-                      <li
-                        key={bi}
-                        className="flex gap-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300"
-                      >
-                        <span
-                          className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500 dark:bg-sky-400"
-                          aria-hidden
-                        />
-                        <span>{benefit}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <div className="mt-6">
+                  <div className="mt-auto pt-6">
                     <button
                       type="button"
                       onClick={() => toggleCalculator(offer.id)}

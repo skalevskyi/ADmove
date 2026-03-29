@@ -1,14 +1,14 @@
 'use client';
 
 import type { ReactNode } from 'react';
-import { Camera, CheckCircle2, Eye, Play, Shield } from 'lucide-react';
+import { BadgeCheck, Camera, CheckCircle2, Eye, Play, Shield } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 import { InfoIconTooltip } from '@/components/ui/Tooltip';
 import { useCalculatorContactPrefill } from '@/context/CalculatorContactPrefillContext';
 import { useLanguage } from '@/context/LanguageContext';
 import { buildCalculatorContactPayload } from '@/lib/contactPrefillMessage';
-import { ADDON_PRICES, BASE_MONTHLY_MEDIA_EUR } from '@/lib/calculator/config';
+import { ADDON_PRICES, BASE_MONTHLY_MEDIA_EUR, EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE } from '@/lib/calculator/config';
 import type { AddonEligibility } from '@/lib/calculator/types';
 import type { AddonId, CalculatorResult, DisplayMode, DurationMonths, PackageId } from '@/lib/calculator/types';
 
@@ -240,7 +240,7 @@ function IncludedPackageBlock({
   if (addons.length === 0) return null;
 
   return (
-    <div className="rounded-lg border border-emerald-100/80 bg-emerald-50/35 px-2 py-2 dark:border-emerald-800/35 dark:bg-emerald-950/15 md:px-2.5 md:py-1.5">
+    <div className="rounded-lg border border-emerald-200/90 bg-emerald-50/55 px-2 py-2 shadow-sm shadow-emerald-900/5 dark:border-emerald-700/45 dark:bg-emerald-950/30 dark:shadow-sm dark:shadow-black/20 md:px-2.5 md:py-1.5">
       <p className="flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wide text-emerald-800/95 dark:text-emerald-100 md:text-xs">
         <CheckCircle2 className="size-4 shrink-0 text-emerald-600/90 dark:text-emerald-300/95" strokeWidth={2} aria-hidden />
         {t.offres.calculatorIncludedBlockTitle}
@@ -406,7 +406,7 @@ export function OfferCalculatorPanel(props: Props) {
 
   const hasPaidSelection = paidLineItems.length > 0;
 
-  const extraRoutePillPriceEur = result.selection.extraRouteDays * ADDON_PRICES.extra_route_day.eur;
+  const extraRoutePillPriceEur = ADDON_PRICES.extra_route_day.eur;
 
   const formatPaidAddonLine = (a: AddonEligibility) => {
     if (a.chargedMonthlyEur > 0) return formatAddonPriceMo(a.chargedMonthlyEur, t);
@@ -439,29 +439,32 @@ export function OfferCalculatorPanel(props: Props) {
 
       <div className="mt-4 grid grid-cols-1 gap-5 md:mt-5 md:grid-cols-2 md:items-stretch md:gap-6 lg:gap-7">
         <div className="flex min-h-0 min-w-0 flex-col gap-3 md:gap-2">
-          <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-3 dark:border-slate-700/40 dark:bg-slate-900/30 md:p-3">
+          <div className="rounded-xl border border-slate-200/95 bg-slate-50 p-3 shadow-sm shadow-slate-200/60 dark:border-slate-600/55 dark:bg-slate-800 dark:shadow-sm dark:shadow-black/25 md:p-3">
             <div>
               <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
                 {t.offres.simFormatLabel}
               </p>
-              <p className="mt-0.5 text-base font-semibold leading-tight text-slate-900 dark:text-white">
-                {selectedName}
-              </p>
+              <div className="mt-0.5 flex items-start justify-between gap-2">
+                <p className="min-w-0 flex-1 text-base font-semibold leading-tight text-slate-900 dark:text-white">
+                  {selectedName}
+                </p>
+                {packageFeatured ? (
+                  <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-sky-200 bg-sky-50 px-2.5 py-0.5 text-xs font-medium text-sky-700 dark:border-sky-800/60 dark:bg-sky-900/40 dark:text-sky-300">
+                    <BadgeCheck className="h-3.5 w-3.5 shrink-0" strokeWidth={2} aria-hidden />
+                    {t.offres.badgeFeatured}
+                  </span>
+                ) : null}
+              </div>
               <p className="mt-0.5 text-xs leading-snug text-slate-500 dark:text-slate-400">
                 {selectedPositioning}
               </p>
-              {packageFeatured ? (
-                <span className="mt-1 inline-block rounded-full border border-sky-200 bg-sky-50 px-2 py-0.5 text-[11px] font-medium text-sky-700 dark:border-sky-800/60 dark:bg-sky-900/40 dark:text-sky-300 md:text-xs">
-                  {t.offres.badgeFeatured}
-                </span>
-              ) : null}
             </div>
             {packageDescription ? (
               <p className="mt-2 text-xs font-medium leading-snug text-slate-600 dark:text-slate-300 md:mt-1.5 md:line-clamp-2 md:text-sm">
                 {packageDescription}
               </p>
             ) : null}
-            <div className="mt-2 border-t border-slate-100 pt-2 dark:border-slate-700/40 md:mt-2 md:pt-2">
+            <div className="mt-2 border-t border-slate-200/90 pt-2 dark:border-slate-600/45 md:mt-2 md:pt-2">
               <p className="text-sm font-medium tabular-nums tracking-tight text-slate-600 dark:text-slate-300 md:text-base">
                 {contactsRangeLine(packageId, t)}
               </p>
@@ -471,7 +474,7 @@ export function OfferCalculatorPanel(props: Props) {
             </div>
           </div>
 
-          <div className="rounded-xl border border-slate-100 bg-white p-3 dark:border-slate-700/40 dark:bg-slate-900/25 md:p-3">
+          <div className="rounded-xl border border-slate-200/95 bg-white p-3 shadow-sm shadow-slate-200/50 dark:border-slate-600/55 dark:bg-slate-800/95 dark:shadow-sm dark:shadow-black/25 md:p-3">
             <p className="text-xs font-medium uppercase tracking-wide text-slate-500 dark:text-slate-400">
               {t.offres.simDuration}
             </p>
@@ -498,7 +501,7 @@ export function OfferCalculatorPanel(props: Props) {
 
           <IncludedPackageBlock addons={includedAddons} t={t} />
 
-          <div className="rounded-xl border border-slate-100 bg-slate-50/40 p-2.5 dark:border-slate-700/40 dark:bg-slate-900/25 md:p-2">
+          <div className="rounded-xl border border-slate-200/95 bg-slate-50 p-2.5 shadow-sm shadow-slate-200/55 dark:border-slate-600/55 dark:bg-slate-800 dark:shadow-sm dark:shadow-black/25 md:p-2">
             <p className="mb-2 font-medium text-xs uppercase tracking-wide text-slate-500 dark:text-slate-400 md:mb-1.5">
               {t.offres.calculatorAddonsTitle}
             </p>
@@ -517,14 +520,21 @@ export function OfferCalculatorPanel(props: Props) {
                   {packageId === 'PRO' && videoAddon
                     ? renderPaidAddonRow(videoAddon, ADDON_PRICES.video_reporting.eur)
                     : null}
-                  {exclusivityAddon ? renderPaidAddonRow(exclusivityAddon, ADDON_PRICES.exclusivity.eur) : null}
+                  {exclusivityAddon
+                    ? renderPaidAddonRow(
+                        exclusivityAddon,
+                        packageId === 'BASIC'
+                          ? EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.BASIC
+                          : EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.PRO,
+                      )
+                    : null}
                 </>
               )}
             </div>
           </div>
         </div>
 
-        <div className="flex h-full min-h-0 min-w-0 flex-col gap-2 rounded-2xl border border-slate-100 bg-slate-50/40 p-3 dark:border-slate-700/50 dark:bg-slate-800/35 md:gap-2 md:p-3 lg:p-3.5">
+        <div className="flex h-full min-h-0 min-w-0 flex-col gap-2 rounded-2xl border border-slate-200/95 bg-slate-50 p-3 shadow-sm shadow-slate-200/60 dark:border-slate-600/55 dark:bg-slate-800 dark:shadow-md dark:shadow-black/30 md:gap-2 md:p-3 lg:p-3.5">
           <div
             className="mx-auto grid w-full max-w-md shrink-0 grid-cols-2 gap-2"
             role="group"
@@ -596,7 +606,7 @@ export function OfferCalculatorPanel(props: Props) {
                   </div>
                 </div>
 
-                <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
+                <div className="mt-4 border-t border-slate-200/85 pt-3 dark:border-slate-600/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPaymentStructureBaseTitle}</p>
                   <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                     {ladderRow(
@@ -618,7 +628,7 @@ export function OfferCalculatorPanel(props: Props) {
                 </div>
 
                 {hasPaidSelection ? (
-                  <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
+                  <div className="mt-4 border-t border-slate-200/85 pt-3 dark:border-slate-600/40 md:mt-4 md:pt-3.5">
                     <p className={summarySectionHeading}>{t.offres.calculatorAddonsTitle}</p>
                     <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                       {paidLineItems.map((a) => (
@@ -647,7 +657,7 @@ export function OfferCalculatorPanel(props: Props) {
                   </div>
                 ) : null}
 
-                <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
+                <div className="mt-4 border-t border-slate-200/85 pt-3 dark:border-slate-600/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPayableTitle}</p>
                   <div className="mt-2 space-y-1.5 md:mt-2 md:space-y-2">
                     {ladderRow(
@@ -668,7 +678,7 @@ export function OfferCalculatorPanel(props: Props) {
                   </div>
                 </div>
 
-                <div className="mt-3 border-t border-slate-100 pt-2.5 dark:border-slate-700/40 md:mt-4 md:pt-3">
+                <div className="mt-3 border-t border-slate-200/85 pt-2.5 dark:border-slate-600/40 md:mt-4 md:pt-3">
                   {ladderRow(
                     t.offres.calculatorAvgOverContractLabel,
                     <>
@@ -694,7 +704,7 @@ export function OfferCalculatorPanel(props: Props) {
                   </p>
                 </div>
 
-                <div className="mt-3 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
+                <div className="mt-3 border-t border-slate-200/85 pt-3 dark:border-slate-600/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPaymentStructureTotalsTitle}</p>
                   <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                     {ladderRow(
@@ -716,7 +726,7 @@ export function OfferCalculatorPanel(props: Props) {
                 </div>
 
                 {hasPaidSelection ? (
-                  <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
+                  <div className="mt-4 border-t border-slate-200/85 pt-3 dark:border-slate-600/40 md:mt-4 md:pt-3.5">
                     <p className={summarySectionHeading}>{t.offres.calculatorAddonsTitle}</p>
                     <div className="mt-1.5 space-y-1 md:mt-2 md:space-y-1.5">
                       {paidLineItems.map((a) => {
@@ -745,7 +755,7 @@ export function OfferCalculatorPanel(props: Props) {
                   </div>
                 ) : null}
 
-                <div className="mt-4 border-t border-slate-100 pt-3 dark:border-slate-700/40 md:mt-4 md:pt-3.5">
+                <div className="mt-4 border-t border-slate-200/85 pt-3 dark:border-slate-600/40 md:mt-4 md:pt-3.5">
                   <p className={summarySectionHeading}>{t.offres.calculatorPayableTitle}</p>
                   <div className="mt-2 space-y-1.5 md:mt-2 md:space-y-2">
                     {ladderRow(

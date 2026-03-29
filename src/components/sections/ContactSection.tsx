@@ -211,7 +211,7 @@ export function ContactSection() {
       className="py-16"
     >
       <div className="mx-auto max-w-6xl px-4 md:px-6">
-        <div className="mx-auto max-w-xl">
+        <div className="mx-auto max-w-xl md:max-w-2xl">
           <motion.h2
             className="text-center text-3xl font-bold leading-tight text-slate-900 dark:text-white md:text-4xl"
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 }}
@@ -437,7 +437,7 @@ export function ContactSection() {
                         return next;
                       });
                     }}
-                    className={`${inputBase} ${fieldErrors.message ? inputError : inputNormal}`}
+                    className={`${inputBase} break-words md:min-h-[160px] ${fieldErrors.message ? inputError : inputNormal}`}
                     placeholder={t.contact.placeholderMessage}
                   />
                   <FieldError

@@ -30,15 +30,22 @@ export const DURATION_MULTIPLIERS: Record<DurationMonths, number> = {
 export const FIRST_MONTH_DISCOUNT_EUR = 100;
 
 // ===== Add-ons: draft prices =====
-export const ADDON_PRICES: Record<
-  AddonId,
-  { eur: number; billing: 'monthly' | 'per_day' | 'one_time' }
-> = {
+/** Monthly € when exclusivity is selected (BASIC / PRO). EXCLUSIVE: included by definition, no line item. */
+export const EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE: Record<'BASIC' | 'PRO', number> = {
+  BASIC: 120,
+  PRO: 100,
+};
+
+type StandardAddonPrice = { eur: number; billing: 'monthly' | 'per_day' | 'one_time' };
+
+export const ADDON_PRICES: Record<Exclude<AddonId, 'exclusivity'>, StandardAddonPrice> & {
+  exclusivity: { billing: 'monthly' };
+} = {
   photo_reporting: { eur: 20, billing: 'monthly' },
   video_reporting: { eur: 40, billing: 'monthly' },
-  extra_route_day: { eur: 15, billing: 'per_day' },
+  extra_route_day: { eur: 30, billing: 'monthly' },
   priority_booking: { eur: 30, billing: 'one_time' },
-  exclusivity: { eur: 50, billing: 'monthly' },
+  exclusivity: { billing: 'monthly' },
 };
 
 // ===== Monthly indicative contacts benchmark (UX-facing, fixed) =====
