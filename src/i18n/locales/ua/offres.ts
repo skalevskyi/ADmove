@@ -87,9 +87,10 @@ export const offres = {
   calculatorModeMonthly: 'Щомісячно',
   calculatorModeContractTotal: 'Загалом за контрактом',
   calculatorContactsLabel: 'Орієнтовні контакти / міс',
-  calculatorContactsRangeBasic: '60 000 – 100 000 контактів / місяць',
-  calculatorContactsRangePro: '100 000 – 150 000 контактів / місяць',
-  calculatorContactsRangeExclusive: '130 000 – 200 000 контактів / місяць',
+  calculatorContactsRangeBasic: '60 000 – 100 000',
+  calculatorContactsRangePro: '100 000 – 150 000',
+  calculatorContactsRangeExclusive: '130 000 – 200 000',
+  calculatorContactsUnit: 'контактів / місяць',
   calculatorContactsEstimateCaption:
     'Оцінка базується на реальному трафіку та маршруті',
   calculatorFromMonth2Label: 'З місяця 2',

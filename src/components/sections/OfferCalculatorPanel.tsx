@@ -116,7 +116,7 @@ function formatAddonPriceMo(amount: number, t: ReturnType<typeof useLanguage>['t
   return t.offres.calculatorAddonPriceFormat.replace('{amount}', String(Math.round(amount)));
 }
 
-function contactsRangeLine(
+function contactsRangeNumbers(
   packageId: PackageId,
   t: ReturnType<typeof useLanguage>['t'],
 ): string {
@@ -164,7 +164,7 @@ function PaidAddonRow({ addon, label, priceLabel, tip, onToggle }: PaidAddonRowP
       ? 'cursor-not-allowed border-slate-100 bg-slate-50/70 text-slate-500 opacity-80 dark:border-slate-700/50 dark:bg-slate-800/40 dark:text-slate-400'
       : isActive
         ? 'cursor-pointer border-sky-500 bg-sky-50 text-slate-900 hover:bg-sky-50/90 dark:border-sky-600/50 dark:bg-sky-950/30 dark:text-slate-50 dark:hover:bg-sky-950/42'
-        : 'cursor-pointer border-slate-100 bg-slate-50/70 text-slate-700 hover:border-slate-200 hover:bg-slate-100/70 dark:border-slate-700/50 dark:bg-slate-800/45 dark:text-slate-200 dark:hover:border-slate-600 dark:hover:bg-slate-800/65';
+        : 'cursor-pointer border-slate-200/95 bg-slate-100/85 text-slate-700 hover:border-slate-300 hover:bg-slate-100 dark:border-slate-600/75 dark:bg-slate-800/75 dark:text-slate-200 dark:hover:border-slate-500 dark:hover:bg-slate-800/95';
 
   return (
     <div className="flex w-full min-w-0 items-stretch gap-1.5">
@@ -391,7 +391,9 @@ export function OfferCalculatorPanel(props: Props) {
   const videoAddon = getAddon('video_reporting');
   const exclusivityAddon = getAddon('exclusivity');
 
-  const includedAddons = addOnEligibility.filter((a) => a.includedByDefinition);
+  const includedAddons = addOnEligibility.filter(
+    (a) => a.includedByDefinition && a.addonId !== 'priority_booking',
+  );
 
   const paidLineItems = addOnEligibility.filter(
     (a) => (a.chargedMonthlyEur > 0 || a.chargedOneTimeEur > 0) && !a.includedByDefinition,
@@ -465,8 +467,11 @@ export function OfferCalculatorPanel(props: Props) {
               </p>
             ) : null}
             <div className="mt-2 border-t border-slate-200/90 pt-2 dark:border-slate-600/45 md:mt-2 md:pt-2">
-              <p className="text-sm font-medium tabular-nums tracking-tight text-slate-600 dark:text-slate-300 md:text-base">
-                {contactsRangeLine(packageId, t)}
+              <p className="text-xl font-bold tabular-nums leading-tight tracking-tight text-slate-900 dark:text-white">
+                {contactsRangeNumbers(packageId, t)}
+              </p>
+              <p className="mt-0.5 text-xs leading-snug text-slate-500 dark:text-slate-400">
+                {t.offres.calculatorContactsUnit}
               </p>
               <p className="mt-1 text-[11px] leading-snug text-slate-500 dark:text-slate-400 md:text-xs">
                 {t.offres.calculatorContactsEstimateCaption}

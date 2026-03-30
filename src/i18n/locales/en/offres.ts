@@ -86,9 +86,10 @@ export const offres = {
   calculatorModeMonthly: 'Monthly',
   calculatorModeContractTotal: 'Contract total',
   calculatorContactsLabel: 'Indicative contacts / month',
-  calculatorContactsRangeBasic: '60,000 – 100,000 contacts / month',
-  calculatorContactsRangePro: '100,000 – 150,000 contacts / month',
-  calculatorContactsRangeExclusive: '130,000 – 200,000 contacts / month',
+  calculatorContactsRangeBasic: '60,000 – 100,000',
+  calculatorContactsRangePro: '100,000 – 150,000',
+  calculatorContactsRangeExclusive: '130,000 – 200,000',
+  calculatorContactsUnit: 'contacts / month',
   calculatorContactsEstimateCaption:
     'Estimate based on real traffic and route conditions',
   calculatorFromMonth2Label: 'From month 2',

@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import { useCalculatorContactPrefill } from '@/context/CalculatorContactPrefillContext';
@@ -109,12 +109,16 @@ export function ContactSection() {
   const [status, setStatus] = useState<SubmitStatus>('idle');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
   const [message, setMessage] = useState('');
+  /** True while the textarea still reflects the last calculator-generated prefill (not user-edited). */
+  const messageFromCalculatorRef = useRef(false);
 
   useEffect(() => {
     if (!calculatorPrefillPayload) return;
     setMessage((prev) => {
-      if (prev.trim() !== '') return prev;
-      return buildContactPrefillMessage(t, calculatorPrefillPayload, locale);
+      if (prev.trim() !== '' && !messageFromCalculatorRef.current) return prev;
+      const next = buildContactPrefillMessage(t, calculatorPrefillPayload, locale);
+      messageFromCalculatorRef.current = true;
+      return next;
     });
     setCalculatorPrefillPayload(null);
   }, [calculatorPrefillPayload, locale, setCalculatorPrefillPayload, t]);
@@ -197,6 +201,7 @@ export function ContactSection() {
 
       form.reset();
       setMessage('');
+      messageFromCalculatorRef.current = false;
       setStatus('success');
     } catch {
       setStatus('error');
@@ -426,6 +431,7 @@ export function ContactSection() {
                     aria-describedby={fieldErrors.message ? 'contact-message-error' : undefined}
                     onChange={(e) => {
                       setMessage(e.target.value);
+                      messageFromCalculatorRef.current = false;
                       clearFieldError('message');
                     }}
                     onBlur={(e) => {

@@ -34,22 +34,6 @@ function getRouteIds(direction: RouteDirection): readonly string[] {
 const ROUTE_AUTOPLAY_MS = 5000;
 const PAUSE_AFTER_CLICK_MS = 5500;
 
-/** Parses "PACKAGE (placement) — metrics" into parts for metric row + legend. */
-function parseVisibilityRow(
-  raw: string,
-): { package: string; placement: string; metrics: string } | null {
-  const dashMatch = /^(.+?)\s*—\s*(.+)$/.exec(raw.trim());
-  if (!dashMatch) return null;
-  const [, left, right] = dashMatch;
-  const parenMatch = /^(.+?)\s*\((.+?)\)\s*$/.exec(left.trim());
-  const pkg = parenMatch ? parenMatch[1].trim() : left.trim();
-  const placement = parenMatch ? parenMatch[2].trim() : '';
-  // Replace only the separator comma between daily/monthly metrics (`, ~...`),
-  // not thousand separators like `5,000/day`.
-  const metrics = right.replace(/,\s*(?=~)/g, ' · ').trim();
-  return { package: pkg, placement, metrics };
-}
-
 export function VehicleSection() {
   const [routeStep, setRouteStep] = useState<{ direction: RouteDirection; index: number }>({
     direction: 'aller',
@@ -72,12 +56,17 @@ export function VehicleSection() {
   const activeLocationId = routeIds[routeStep.index] as keyof typeof t.parcours.locationContent;
   const activeContent = t.parcours.locationContent[activeLocationId];
 
-  const isSegmentFilled = (displayIdx: number) => {
-    if (routeStep.direction === 'aller') {
-      return displayIdx < routeStep.index;
-    }
-    const lastDisplay = displayRows.length - 1;
-    return routeStep.index >= lastDisplay - displayIdx;
+  /** Aller: segment under row displayIdx fills after the path passes it (top → bottom). */
+  const isAllerSegmentFilled = (displayIdx: number) => displayIdx < routeStep.index;
+
+  /**
+   * Retour: display is reversed (bottom = leg start). activeDisplayIdx is the row of the current stop.
+   * Segments at or below that row on screen (higher displayIdx) are “behind” on the return — muted.
+   * Segments above stay dark — the path still reads as the same established route toward Montpellier.
+   */
+  const isRetourSegmentMuted = (displayIdx: number) => {
+    const activeDisplayIdx = displayRows.length - 1 - routeStep.index;
+    return displayIdx >= activeDisplayIdx;
   };
 
   useEffect(() => {
@@ -131,11 +120,14 @@ export function VehicleSection() {
             <div className="mx-auto flex w-fit flex-col md:w-full md:max-w-xs">
               {displayRows.map((point, displayIdx) => {
                 const isActive = routeStep.index === point.logicalIndex;
-                const isFilled = point.logicalIndex < routeStep.index;
-                const segmentAfterFilled =
-                  displayIdx < displayRows.length - 1 && isSegmentFilled(displayIdx);
-                /** Line only: passed segment = dark; not yet passed = light (same semantics for aller and retour). */
-                const segmentUseLightColor = !segmentAfterFilled;
+                /** Aller only: past stops on the outbound leg. */
+                const isAllerPastStop =
+                  routeStep.direction === 'aller' && point.logicalIndex < routeStep.index;
+                /** Retour: already visited on return — mute; upcoming stops stay filled. */
+                const isRetourPassedStop =
+                  routeStep.direction === 'retour' &&
+                  !isActive &&
+                  point.logicalIndex < routeStep.index;
                 return (
                   <div
                     key={`${routeStep.direction}-${point.logicalIndex}-${point.id}`}
@@ -157,18 +149,26 @@ export function VehicleSection() {
                           className={`block rounded-full transition-colors duration-150 ease-out ${
                             isActive
                               ? 'h-2.5 w-2.5 bg-slate-700 dark:bg-slate-200'
-                              : isFilled
-                                ? 'h-2 w-2 bg-sky-500 dark:bg-sky-400'
-                                : 'h-1.5 w-1.5 border border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-900 hover:border-slate-400 dark:hover:border-slate-500'
+                              : routeStep.direction === 'retour'
+                                ? isRetourPassedStop
+                                  ? 'h-2 w-2 bg-sky-500/45 dark:bg-sky-400/40'
+                                  : 'h-2 w-2 bg-sky-500 dark:bg-sky-400'
+                                : isAllerPastStop
+                                  ? 'h-2 w-2 bg-sky-500 dark:bg-sky-400'
+                                  : 'h-1.5 w-1.5 border border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-900 hover:border-slate-400 dark:hover:border-slate-500'
                           }`}
                         />
                       </button>
                       {displayIdx < displayRows.length - 1 && (
                         <div
                           className={`mx-auto mt-1.5 h-4 w-px flex-shrink-0 transition-colors duration-300 ${
-                            segmentUseLightColor
-                              ? 'bg-slate-300 dark:bg-slate-600'
-                              : 'bg-slate-500 dark:bg-slate-400'
+                            routeStep.direction === 'aller'
+                              ? isAllerSegmentFilled(displayIdx)
+                                ? 'bg-slate-500 dark:bg-slate-400'
+                                : 'bg-slate-300 dark:bg-slate-600'
+                              : isRetourSegmentMuted(displayIdx)
+                                ? 'bg-slate-300/75 dark:bg-slate-600/50 opacity-[0.55]'
+                                : 'bg-slate-500 dark:bg-slate-400'
                           }`}
                           aria-hidden
                         />
@@ -292,42 +292,46 @@ export function VehicleSection() {
             <div className="mt-4 grid gap-4 sm:grid-cols-3">
               {(
                 [
-                  t.parcours.visibilityRear,
-                  t.parcours.visibilitySide,
-                  t.parcours.visibilityFull,
+                  {
+                    key: 'basic',
+                    title: t.parcours.visibilityCardBasicTitle,
+                    placement: t.parcours.visibilityCardBasicPlacement,
+                    range: t.parcours.visibilityMetricBasic,
+                  },
+                  {
+                    key: 'pro',
+                    title: t.parcours.visibilityCardProTitle,
+                    placement: t.parcours.visibilityCardProPlacement,
+                    range: t.parcours.visibilityMetricPro,
+                  },
+                  {
+                    key: 'exclusive',
+                    title: t.parcours.visibilityCardExclusiveTitle,
+                    placement: t.parcours.visibilityCardExclusivePlacement,
+                    range: t.parcours.visibilityMetricExclusive,
+                  },
                 ] as const
-              ).map((raw) => {
-                const parsed = parseVisibilityRow(raw);
-                if (!parsed) return null;
-                const metricParts = parsed.metrics.split(' · ').map((p) => p.trim());
-                const dailyPart = metricParts[0] ?? parsed.metrics;
-                const monthlyPart = metricParts[1] ?? parsed.metrics;
-
-                return (
-                  <div
-                    key={parsed.package}
-                    className="rounded-xl border border-slate-200/90 bg-white/75 p-4 dark:border-slate-600/70 dark:bg-slate-700/30"
-                  >
-                    <p className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white">
-                      {parsed.package}
+              ).map((card) => (
+                <div
+                  key={card.key}
+                  className="rounded-xl border border-slate-200/90 bg-white/75 p-4 dark:border-slate-600/70 dark:bg-slate-700/30"
+                >
+                  <p className="text-sm font-semibold tracking-tight text-slate-900 dark:text-white">
+                    {card.title}
+                  </p>
+                  <p className="mt-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
+                    {card.placement}
+                  </p>
+                  <div className="mt-3">
+                    <p className="text-xl font-bold leading-tight text-slate-900 dark:text-white">
+                      {card.range}
                     </p>
-                    {parsed.placement ? (
-                      <p className="mt-1 text-[11px] leading-relaxed text-slate-500 dark:text-slate-400">
-                        {parsed.placement}
-                      </p>
-                    ) : null}
-
-                    <div className="mt-3">
-                      <p className="text-xl font-bold leading-tight text-slate-900 dark:text-white">
-                        {monthlyPart}
-                      </p>
-                      <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                        {dailyPart}
-                      </p>
-                    </div>
+                    <p className="mt-1 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
+                      {t.parcours.visibilityContactsUnit}
+                    </p>
                   </div>
-                );
-              })}
+                </div>
+              ))}
             </div>
             <p className="mt-4 text-xs leading-relaxed text-slate-500 dark:text-slate-400">
               {t.parcours.visibilityCaption}
