@@ -64,6 +64,12 @@ export const offres = {
   altRear: 'BASIC — local presence on an SPM vehicle',
   altSide: 'PRO — reinforced visibility on an SPM vehicle',
   altFull: 'EXCLUSIVE — max impact on an SPM vehicle',
+  imageCarouselLabel: 'Format images',
+  imageCarouselImage: 'Image',
+  openGallery: 'Open full-size gallery',
+  lightboxClose: 'Close gallery',
+  lightboxPrev: 'Previous image',
+  lightboxNext: 'Next image',
   // Calculator (Phase 2B) UI labels
   calculatorDurationUnit: 'months',
   calculatorDurationChip: '{n} mo',

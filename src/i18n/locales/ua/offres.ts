@@ -64,6 +64,12 @@ export const offres = {
   altRear: 'BASIC — локальна присутність на автомобілі SPM',
   altSide: 'PRO — підсилена видимість на автомобілі SPM',
   altFull: 'EXCLUSIVE — максимальний вплив на автомобілі SPM',
+  imageCarouselLabel: 'Зображення формату',
+  imageCarouselImage: 'Зображення',
+  openGallery: 'Відкрити галерею',
+  lightboxClose: 'Закрити галерею',
+  lightboxPrev: 'Попереднє зображення',
+  lightboxNext: 'Наступне зображення',
   // Calculator (Phase 2B) UI labels
   calculatorDurationUnit: 'місяців',
   /** Compact duration chips — avoids awkward "N місяців" next to other month copy */

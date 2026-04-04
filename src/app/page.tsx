@@ -9,9 +9,9 @@ import { OffresSection } from '@/components/sections/OffresSection';
 import { VehicleSection } from '@/components/sections/VehicleSection';
 
 /**
- * SPM landing page — UI-only phase.
- * Structure: Hero, Support, Parcours, Offres, Contact, Footer.
- * No form submission or calculator logic.
+ * SPM landing page (Phase 2B — functional).
+ * Main: Hero, Concept, Vehicle, Offres (estimation calculator + CTA), Contact (lead form → POST /api/lead).
+ * Shell: footer, mobile bottom nav, floating scroll-to-top.
  */
 export default function HomePage() {
   return (

@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
 import { AnimatePresence, motion } from 'framer-motion';
 import { BadgeCheck } from 'lucide-react';
 
+import { OffreImageCarousel } from '@/components/offres/OffreImageCarousel';
 import { OfferCalculatorPanel } from '@/components/sections/OfferCalculatorPanel';
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -13,9 +13,21 @@ import { calculateCalculator } from '@/lib/calculator';
 import type { CalculatorSelection, DisplayMode, DurationMonths } from '@/lib/calculator/types';
 
 const OFFRES = [
-  { id: 'BASIC' as const, image: `${BASE_PATH}/vehicle/BASIC.png`, featured: false },
-  { id: 'PRO' as const, image: `${BASE_PATH}/vehicle/PRO.png`, featured: true },
-  { id: 'EXCLUSIVE' as const, image: `${BASE_PATH}/vehicle/EXCLUSIVE.png`, featured: false },
+  {
+    id: 'BASIC' as const,
+    images: [`${BASE_PATH}/vehicle/basic-1.png`, `${BASE_PATH}/vehicle/basic-2.png`] as const,
+    featured: false,
+  },
+  {
+    id: 'PRO' as const,
+    images: [`${BASE_PATH}/vehicle/pro-1.png`, `${BASE_PATH}/vehicle/pro-2.png`] as const,
+    featured: true,
+  },
+  {
+    id: 'EXCLUSIVE' as const,
+    images: [`${BASE_PATH}/vehicle/exclusive-1.png`, `${BASE_PATH}/vehicle/exclusive-2.png`] as const,
+    featured: false,
+  },
 ];
 
 type OfferId = (typeof OFFRES)[number]['id'];
@@ -255,15 +267,15 @@ export function OffresSection() {
                       ) : null}
                     </div>
 
-                    <div className="relative mt-6 flex h-40 shrink-0 items-center justify-center rounded-xl border border-slate-200 bg-slate-100/70 px-4 dark:border-slate-600/80 dark:bg-slate-700/35">
-                      <Image
-                        src={offer.image}
-                        alt={alt}
-                        fill
-                        className="object-contain object-center"
-                        sizes="(min-width: 768px) 33vw, 100vw"
-                      />
-                    </div>
+                    <OffreImageCarousel
+                      packageId={offer.id}
+                      images={offer.images}
+                      alt={alt}
+                      imageCarouselLabel={t.offres.imageCarouselLabel}
+                      imageCarouselImage={t.offres.imageCarouselImage}
+                      openGallery={t.offres.openGallery}
+                      lightboxClose={t.offres.lightboxClose}
+                    />
 
                     <p className="mt-4 text-sm font-medium leading-relaxed text-slate-600 dark:text-slate-300">
                       {description}
