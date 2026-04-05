@@ -4,6 +4,16 @@
 
 export type LeadLocale = 'fr' | 'en' | 'ua';
 
+export type LeadOrigin = 'contact' | 'calculator';
+
+export type CalculatorSummary = {
+  packageLabel: string;
+  paymentMode: string;
+  durationMonths: number;
+  addons: string[];
+  totalPrice: number;
+};
+
 export type LeadInput = {
   name: string;
   company?: string;
@@ -13,6 +23,8 @@ export type LeadInput = {
   locale: LeadLocale;
   source: 'contact';
   packageId?: string | null;
+  leadOrigin?: LeadOrigin;
+  calculatorSummary?: CalculatorSummary;
 };
 
 export type Lead = {
@@ -25,6 +37,8 @@ export type Lead = {
   source: 'contact';
   packageId: string | null;
   createdAt: string;
+  leadOrigin: LeadOrigin;
+  calculatorSummary?: CalculatorSummary;
 };
 
 export type LeadApiResponse = {

@@ -5,9 +5,11 @@ import { motion } from 'framer-motion';
 
 import { useCalculatorContactPrefill } from '@/context/CalculatorContactPrefillContext';
 import { useLanguage } from '@/context/LanguageContext';
-import { buildContactPrefillMessage } from '@/lib/contactPrefillMessage';
+import type { TranslationKeys } from '@/i18n/types';
+import type { AddonId, PackageId } from '@/lib/calculator/types';
+import { buildContactPrefillMessage, type CalculatorContactPrefillPayload } from '@/lib/contactPrefillMessage';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import type { LeadApiResponse } from '@/lib/lead/types';
+import type { CalculatorSummary, LeadApiResponse } from '@/lib/lead/types';
 
 type SubmitStatus = 'idle' | 'loading' | 'success' | 'error';
 
@@ -67,6 +69,58 @@ function validatePhoneBlur(value: string): string | undefined {
   return undefined;
 }
 
+function packageLabelFromId(t: TranslationKeys, packageId: PackageId): string {
+  switch (packageId) {
+    case 'BASIC':
+      return t.offres.rear;
+    case 'PRO':
+      return t.offres.side;
+    case 'EXCLUSIVE':
+      return t.offres.full;
+    default:
+      return packageId;
+  }
+}
+
+function addonLabelFromId(t: TranslationKeys, id: AddonId): string {
+  switch (id) {
+    case 'extra_route_day':
+      return t.offres.calculatorAddonWeekendExposure;
+    case 'photo_reporting':
+      return t.offres.calculatorAddonPhotoReporting;
+    case 'video_reporting':
+      return t.offres.calculatorAddonVideoReporting;
+    case 'exclusivity':
+      return t.offres.calculatorAddonExclusivity;
+    case 'priority_booking':
+      return t.offres.calculatorOneTimeFeesLabel;
+    default:
+      return '';
+  }
+}
+
+function buildCalculatorSummaryFromPayload(
+  t: TranslationKeys,
+  payload: CalculatorContactPrefillPayload,
+): CalculatorSummary {
+  const packageLabel = packageLabelFromId(t, payload.packageId);
+  const paymentMode: string =
+    payload.displayMode === 'monthly'
+      ? t.offres.calculatorModeMonthly
+      : t.offres.calculatorModeContractTotal;
+  const addons = payload.activeAddonIds.map((id) => {
+    const label = addonLabelFromId(t, id);
+    return label.trim() !== '' ? label : id;
+  });
+  return {
+    packageLabel,
+    paymentMode,
+    durationMonths: payload.durationMonths,
+    addons,
+    totalPrice: payload.totalPriceEur,
+  };
+}
+
 const inputBase =
   'mt-1 w-full rounded-lg px-4 py-2 text-slate-900 placeholder-slate-400 transition-all duration-200 ease-out focus:outline-none dark:text-white dark:placeholder-slate-500';
 const inputNormal =
@@ -111,6 +165,8 @@ export function ContactSection() {
   const [message, setMessage] = useState('');
   /** True while the textarea still reflects the last calculator-generated prefill (not user-edited). */
   const messageFromCalculatorRef = useRef(false);
+  /** Last calculator payload applied to the form (context clears after prefill). */
+  const lastCalculatorPayloadRef = useRef<CalculatorContactPrefillPayload | null>(null);
 
   useEffect(() => {
     if (!calculatorPrefillPayload) return;
@@ -118,6 +174,7 @@ export function ContactSection() {
       if (prev.trim() !== '' && !messageFromCalculatorRef.current) return prev;
       const next = buildContactPrefillMessage(t, calculatorPrefillPayload, locale);
       messageFromCalculatorRef.current = true;
+      lastCalculatorPayloadRef.current = calculatorPrefillPayload;
       return next;
     });
     setCalculatorPrefillPayload(null);
@@ -153,6 +210,8 @@ export function ContactSection() {
     setFieldErrors({});
     setStatus('idle');
     setMessage('');
+    lastCalculatorPayloadRef.current = null;
+    messageFromCalculatorRef.current = false;
   }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -162,6 +221,10 @@ export function ContactSection() {
 
     const form = e.currentTarget;
     const fd = new FormData(form);
+    const lastCalc = lastCalculatorPayloadRef.current;
+    const leadOrigin = lastCalc ? ('calculator' as const) : ('contact' as const);
+    const calculatorSummary = lastCalc ? buildCalculatorSummaryFromPayload(t, lastCalc) : undefined;
+
     const payload = {
       name: String(fd.get('name') ?? ''),
       company: String(fd.get('company') ?? ''),
@@ -171,6 +234,8 @@ export function ContactSection() {
       locale,
       source: 'contact' as const,
       packageId: null as string | null,
+      leadOrigin,
+      ...(calculatorSummary ? { calculatorSummary } : {}),
     };
 
     try {
@@ -202,6 +267,7 @@ export function ContactSection() {
       form.reset();
       setMessage('');
       messageFromCalculatorRef.current = false;
+      lastCalculatorPayloadRef.current = null;
       setStatus('success');
     } catch {
       setStatus('error');
@@ -432,6 +498,7 @@ export function ContactSection() {
                     onChange={(e) => {
                       setMessage(e.target.value);
                       messageFromCalculatorRef.current = false;
+                      lastCalculatorPayloadRef.current = null;
                       clearFieldError('message');
                     }}
                     onBlur={(e) => {
