@@ -261,13 +261,13 @@ export function OffreLightbox({
     }
 
     if (pointersRef.current.size === 0) {
-      const couldSwipe =
+      const startX = swipeStartXRef.current;
+      if (
         !pinchSessionRef.current &&
         scaleRef.current <= MIN_SCALE &&
-        swipeStartXRef.current != null;
-
-      if (couldSwipe) {
-        const dx = e.clientX - swipeStartXRef.current;
+        startX !== null
+      ) {
+        const dx = e.clientX - startX;
         if (Math.abs(dx) >= SWIPE_THRESHOLD_PX) {
           if (dx < 0) goNext();
           else goPrev();
