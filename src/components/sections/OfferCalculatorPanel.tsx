@@ -584,6 +584,12 @@ export function OfferCalculatorPanel(props: Props) {
                       'tabular-nums text-sm font-medium text-slate-700 dark:text-slate-200',
                       'min-w-0 text-left text-xs font-medium text-slate-500 dark:text-slate-400',
                     )}
+                    {ladderRow(
+                      t.offres.calculatorEstimatedCostCpmLabel,
+                      t.offres.calculatorEstimatedCostCpmValue,
+                      'text-[11px] md:text-xs text-slate-500/80 dark:text-slate-400/80 text-right',
+                      'text-[11px] md:text-xs text-slate-500 dark:text-slate-400',
+                    )}
                     {isNonZeroEur(monthlyView.month1BaseDiscountEur) ||
                     isNonZeroEur(periodDiscountEurOnBase) ? (
                       <div className="space-y-1 pt-1">

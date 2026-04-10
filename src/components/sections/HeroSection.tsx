@@ -114,7 +114,7 @@ export function HeroSection() {
           </motion.p>
 
           <motion.div
-            className="md:col-start-1 md:row-start-4"
+            className="md:col-start-1 md:row-start-4 md:hidden"
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.16 }}
@@ -124,6 +124,26 @@ export function HeroSection() {
               className={`inline-block w-full min-w-0 flex-1 rounded-2xl bg-gradient-to-b from-sky-500 to-sky-600 px-6 py-4 text-center text-base font-medium text-white transition-colors duration-150 ease-out hover:from-sky-600 hover:to-sky-700 active:from-sky-600 active:to-sky-700 dark:bg-gradient-to-b dark:from-sky-500 dark:to-sky-400 dark:hover:from-sky-500 dark:hover:to-sky-300 dark:active:from-sky-500 dark:active:to-sky-600 md:w-auto md:rounded-lg md:py-3 ${focusRing}`}
             >
               {t.hero.ctaPrimary}
+            </a>
+          </motion.div>
+
+          <motion.div
+            className="hidden md:flex md:min-w-0 md:flex-row md:items-stretch md:gap-4 md:col-start-1 md:row-start-4 md:w-full"
+            initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.16 }}
+          >
+            <a
+              href="#contact"
+              className={`inline-block w-full min-w-0 flex-1 rounded-2xl bg-gradient-to-b from-sky-500 to-sky-600 px-6 py-4 text-center text-base font-medium text-white transition-colors duration-150 ease-out hover:from-sky-600 hover:to-sky-700 active:from-sky-600 active:to-sky-700 dark:bg-gradient-to-b dark:from-sky-500 dark:to-sky-400 dark:hover:from-sky-500 dark:hover:to-sky-300 dark:active:from-sky-500 dark:active:to-sky-600 md:flex-1 md:min-w-0 md:rounded-lg md:py-3 ${focusRing}`}
+            >
+              {t.hero.ctaPrimary}
+            </a>
+            <a
+              href="#parcours"
+              className={`inline-block w-full min-w-0 flex-1 text-center ${ctaShapeBase} border border-slate-300 bg-white text-slate-700 transition-colors duration-150 ease-out hover:bg-slate-50 active:bg-slate-100 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-800 md:flex-1 md:min-w-0 ${focusRing}`}
+            >
+              {t.hero.ctaSecondary}
             </a>
           </motion.div>
 
@@ -202,7 +222,7 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div
-            className="md:col-start-1 md:row-start-7"
+            className="md:col-start-1 md:row-start-7 md:hidden"
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.18 }}

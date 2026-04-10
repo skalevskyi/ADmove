@@ -119,6 +119,8 @@ export const offres = {
   calculatorResultHeroSubtitleMonthly: 'Prix indicatif / mois',
   calculatorResultHeroSubtitleContract: 'Sur {months} mois · base média uniquement',
   calculatorBlockBasePriceTitle: 'Prix de base',
+  calculatorEstimatedCostCpmLabel: 'Coût estimé (CPM)',
+  calculatorEstimatedCostCpmValue: '≈ 4 € pour 1000 contacts',
   calculatorDiscountFirstMonthLabel: 'Remise 1er mois',
   calculatorDiscountFirstMonthNote:
     'Compensation des frais de conception et de pose de la publicité',

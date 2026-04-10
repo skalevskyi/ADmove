@@ -118,6 +118,8 @@ export const offres = {
   calculatorResultHeroSubtitleMonthly: 'Орієнтовна ціна / міс',
   calculatorResultHeroSubtitleContract: 'За {months} міс. · лише база медіа',
   calculatorBlockBasePriceTitle: 'Базова ціна',
+  calculatorEstimatedCostCpmLabel: 'Орієнтовна вартість (CPM)',
+  calculatorEstimatedCostCpmValue: '≈ 4 € за 1000 контактів',
   calculatorDiscountFirstMonthLabel: 'Знижка за перший місяць',
   calculatorDiscountFirstMonthNote:
     'Компенсація витрат на розробку та монтаж реклами',
