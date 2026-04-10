@@ -6,11 +6,21 @@ Mobile advertising SaaS landing platform based on a real-world OOH model: vehicl
 
 ## 👀 Preview
 
-![Desktop](./public/readme/desktop.png)
-![Mobile](./public/readme/mobile.png)
-![Combined](./public/readme/combined.png)
+<p align="center">
+  <img src="./public/readme/desktop.png" width="900"/>
+</p>
 
-Add screenshots under `public/readme/` for the images above to render on GitHub.
+## 📱 Responsive Experience
+
+<p align="center">
+  <img src="./public/readme/laptop.png" width="60%"/>
+  <img src="./public/readme/mobile.png" width="30%"/>
+</p>
+
+<p align="center">
+  <i>Fully responsive SaaS landing — desktop & mobile optimized</i>
+</p>
+
 
 ---
 
