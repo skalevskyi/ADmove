@@ -1,7 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Car, MapPin, Repeat, BarChart3 } from 'lucide-react';
+import { CircleCheck, Layers, Route, Sparkles } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -60,7 +60,13 @@ export function ConceptSection() {
           <div className="grid gap-6 text-slate-600 dark:text-slate-300 md:grid-cols-2 md:gap-8">
             {steps.map((step, index) => {
               const Icon =
-                index === 0 ? Car : index === 1 ? MapPin : index === 2 ? Repeat : BarChart3;
+                index === 0
+                  ? Layers
+                  : index === 1
+                    ? CircleCheck
+                    : index === 2
+                      ? Route
+                      : Sparkles;
               return (
                 <motion.div
                   key={index}
@@ -73,6 +79,9 @@ export function ConceptSection() {
                   />
                   <div className="min-w-0 space-y-1.5">
                     <h3 className="text-sm font-semibold leading-snug text-slate-900 dark:text-white">
+                      <span className="mr-1.5 inline-block font-tabular-nums text-sky-600 dark:text-sky-400">
+                        {index + 1}.
+                      </span>
                       {step.title}
                     </h3>
                     <p className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 break-words">

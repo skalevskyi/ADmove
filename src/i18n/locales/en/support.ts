@@ -1,30 +1,30 @@
 /**
- * EN — Le média section. Explains the medium; no route names, no formats, no numbers.
+ * EN — How it works section.
  */
 
 export const support = {
   title: 'How it works',
   subtitle:
-    'One vehicle follows the same route every day to create repeated local visibility.',
+    'One vehicle, a fixed route between Montpellier and the coast — four steps.',
   steps: [
     {
-      title: 'Daily route',
-      text: 'The vehicle drives each day on a fixed route between Montpellier and the coast.',
+      title: 'Choose a format',
+      text: 'BASIC, PRO, or EXCLUSIVE — three levels of presence on the route.',
     },
     {
-      title: 'Real exposure',
-      text: 'The message is seen in traffic, during stops, and while parked.',
+      title: 'Format validation',
+      text: 'We validate the format and provide the vehicle. You handle creative and installation with your supplier.',
     },
     {
-      title: 'Repetition',
-      text: 'The same route is repeated regularly, reinforcing message recall.',
+      title: 'Daily circulation',
+      text: 'The car drives the same route every day.',
     },
     {
-      title: 'Accumulation',
-      text: 'Visibility builds progressively through daily repetition.',
+      title: 'Outcome',
+      text: 'People see you again and again — and start to remember you.',
     },
   ],
-  methodologyTitle: 'How visibility is built',
+  methodologyTitle: 'Why it works',
   methodologyText:
-    'The estimate depends on the route, local traffic, and daily repetition.',
+    'Real traffic, same route, day after day — your message starts to feel familiar on the route.',
 } as const;

@@ -3,9 +3,8 @@
  */
 
 export const parcours = {
-  title: 'Parcours et zones de visibilité',
-  subtitle:
-    'Présence quotidienne sur un trajet entre Montpellier et La Grande-Motte, avec des passages réguliers via Pérols, Carnon, Palavas et Port Marianne.',
+  title: 'Un parcours réel, visible chaque jour',
+  subtitle: 'Le même trajet, le même trafic, chaque jour.',
   timelineHint:
     'Cliquez sur une étape pour mettre en pause et voir les détails.',
   descriptors: {
@@ -23,7 +22,7 @@ export const parcours = {
       tag: 'Centre de flux',
       icon: 'city',
       bullet1: 'Visibilité dans les flux urbains quotidiens',
-      bullet2: 'Contacts répétés avec une audience locale active',
+      bullet2: 'Vues répétées par une audience locale active',
       bullet3: 'Présence visible dans les zones de circulation et d’arrêt',
     },
     perols: {
@@ -32,7 +31,7 @@ export const parcours = {
       tag: 'Axe vers la mer',
       icon: 'district',
       bullet1: 'Visibilité lors des passages vers le littoral',
-      bullet2: 'Contacts répétés pendant les flux réguliers en semaine',
+      bullet2: 'Vues répétées pendant les flux réguliers en semaine',
       bullet3: 'Visibilité favorable près des zones de circulation et d’arrêt',
     },
     portMarianne: {
@@ -41,7 +40,7 @@ export const parcours = {
       tag: 'Quartier actif',
       icon: 'district',
       bullet1: 'Visibilité dans un quartier à forte activité locale',
-      bullet2: 'Contacts fréquents avec une audience urbaine régulière',
+      bullet2: 'Vues fréquentes par une audience urbaine régulière',
       bullet3: 'Présence renforcée lors des ralentissements et arrêts',
     },
     carnon: {
@@ -59,7 +58,7 @@ export const parcours = {
       tag: 'Points d’arrêt',
       icon: 'stop',
       bullet1: 'Présence visible dans les flux vers le front de mer',
-      bullet2: 'Contacts répétés avec une audience locale et de passage',
+      bullet2: 'Vues répétées par une audience locale et de passage',
       bullet3: 'Bonne visibilité dans les zones d’arrêt et de parking',
     },
     grandeMotte: {
@@ -68,27 +67,27 @@ export const parcours = {
       tag: 'Zone animée',
       icon: 'coast',
       bullet1: 'Visibilité dans une zone côtière animée',
-      bullet2: 'Contacts réguliers avec une audience mobile et locale',
+      bullet2: 'Vues régulières par une audience mobile et locale',
       bullet3: 'Présence renforcée dans les zones de circulation et de stationnement',
     },
   },
   sharedBullets: {
     bullet1:
       "Exposition directe dans les flux quotidiens (automobilistes et piétons)",
-    bullet2: 'Contacts répétés avec une audience locale stable',
+    bullet2: 'Vues répétées par une audience locale stable',
     bullet3: 'Visibilité renforcée lors des arrêts et stationnements',
     note: 'Visibilité indicative basée sur les flux locaux.',
   },
-  visibilityTitle: 'Estimation de la visibilité',
-  visibilityBlockTitle: 'Estimation de visibilité sur ce parcours',
+  visibilityTitle: 'Estimation de visibilité locale',
+  visibilityBlockTitle: 'Estimation de visibilité locale',
   visibilityIntro:
-    'Estimations basées sur les flux locaux et la répétition quotidienne.',
+    'Basée sur le trajet réel et le trafic quotidien.',
   visibilityIntro2: '',
   visibilitySummary: 'Exemples indicatifs par format',
   visibilityMetricBasic: '60 000 – 100 000',
   visibilityMetricPro: '100 000 – 150 000',
   visibilityMetricExclusive: '130 000 – 200 000',
-  visibilityContactsUnit: 'contacts / mois',
+  visibilityContactsUnit: 'vues locales / mois',
   visibilityCardBasicTitle: 'BASIC',
   visibilityCardBasicPlacement: 'arrière',
   visibilityCardProTitle: 'PRO',
@@ -96,6 +95,6 @@ export const parcours = {
   visibilityCardExclusiveTitle: 'EXCLUSIVE',
   visibilityCardExclusivePlacement: 'habillage complet',
   visibilityCaption:
-    'Estimation indicative selon le format, le parcours et les conditions de trafic',
+    'Estimation basée sur le trajet réel et le trafic quotidien',
   visibilityIndicative: '· visibilité indicative',
 } as const;

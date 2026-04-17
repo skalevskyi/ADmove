@@ -2,7 +2,7 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import { BadgeCheck } from 'lucide-react';
+import { BadgeCheck, Megaphone } from 'lucide-react';
 
 import { OffreImageCarousel } from '@/components/offres/OffreImageCarousel';
 import { OfferCalculatorPanel } from '@/components/sections/OfferCalculatorPanel';
@@ -210,7 +210,31 @@ export function OffresSection() {
         >
           {t.offres.subtitle}
         </motion.p>
-        <div className="mt-12 grid grid-cols-1 gap-6 md:grid-cols-3 md:items-stretch">
+        <motion.div
+          role="note"
+          className="mx-auto mt-6 mb-6 flex max-w-sm items-center gap-4 rounded-xl border border-sky-200/70 bg-sky-50/95 px-5 py-4 shadow-md dark:border-sky-800/45 dark:bg-sky-950/40 dark:shadow-[0_2px_12px_rgba(0,0,0,0.35)]"
+          initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: reducedMotion ? 0 : 0.35, delay: reducedMotion ? 0 : 0.08 }}
+        >
+          <div className="flex shrink-0 items-center self-center">
+            <Megaphone
+              className="h-6 w-6 text-sky-600 dark:text-sky-400"
+              strokeWidth={2}
+              aria-hidden
+            />
+          </div>
+          <div className="min-w-0 flex-1 text-left">
+            <p className="text-sm font-medium text-slate-500 dark:text-slate-400">
+              {t.offres.pricingFirstMonthPromoLead}
+            </p>
+            <p className="mt-0.5 text-base font-semibold leading-snug text-slate-900 md:text-lg dark:text-white">
+              {t.offres.pricingFirstMonthPromo}
+            </p>
+          </div>
+        </motion.div>
+        <div className="mt-10 grid grid-cols-1 gap-6 md:grid-cols-3 md:items-stretch">
           {OFFRES.map((offer, i) => {
             const name =
               offer.id === 'BASIC'
@@ -269,6 +293,13 @@ export function OffresSection() {
                         </h3>
                         <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-300">
                           {positioning}
+                        </p>
+                        <p className="mt-2 whitespace-nowrap text-base font-semibold tabular-nums text-slate-900 dark:text-white">
+                          {offer.id === 'BASIC'
+                            ? t.offres.priceFromBasic
+                            : offer.id === 'PRO'
+                              ? t.offres.priceFromPro
+                              : t.offres.priceFromExclusive}
                         </p>
                       </div>
                       {offer.featured ? (

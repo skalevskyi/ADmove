@@ -1,30 +1,30 @@
 /**
- * FR — Le média section. Explains the medium; no route names, no formats, no numbers.
+ * FR — Comment ça fonctionne.
  */
 
 export const support = {
   title: 'Comment ça fonctionne',
   subtitle:
-    'Un véhicule circule chaque jour sur le même parcours pour créer une visibilité locale répétée.',
+    'Un véhicule, un trajet fixe entre Montpellier et le littoral — quatre étapes.',
   steps: [
     {
-      title: 'Parcours quotidien',
-      text: 'Le véhicule circule chaque jour sur un itinéraire fixe entre Montpellier et le littoral.',
+      title: 'Choisir un format',
+      text: 'BASIC, PRO ou EXCLUSIVE : trois niveaux de présence sur le parcours.',
     },
     {
-      title: 'Visibilité réelle',
-      text: 'Le message est vu dans le trafic, pendant les arrêts et lors du stationnement.',
+      title: 'Validation du format',
+      text: 'Nous validons le format et le véhicule. Vous gérez le visuel et la pose avec votre prestataire.',
     },
     {
-      title: 'Répétition',
-      text: 'Le même parcours revient régulièrement, ce qui renforce la mémorisation du message.',
+      title: 'Circulation quotidienne',
+      text: 'La voiture circule chaque jour sur le même trajet.',
     },
     {
-      title: 'Accumulation',
-      text: 'La visibilité se construit progressivement grâce à la répétition quotidienne.',
+      title: 'Résultat',
+      text: 'On vous voit encore et encore — et on commence à vous mémoriser.',
     },
   ],
-  methodologyTitle: 'Comment la visibilité se construit',
+  methodologyTitle: 'Pourquoi ça fonctionne',
   methodologyText:
-    "L’estimation dépend du parcours, du trafic local et de la répétition du trajet.",
+    'Trafic réel, même trajet, jour après jour — votre message devient familier sur le trajet.',
 } as const;

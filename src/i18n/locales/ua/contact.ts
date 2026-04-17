@@ -1,11 +1,10 @@
 /**
- * UA — Contact section. Translated from FR.
+ * UA — Contact section. Translated from FR; structure matches exactly.
  */
 
 export const contact = {
-  title: 'Контакт',
-  subtitle:
-    'Залиште запит, і ми зв’яжемося з вами, щоб підтвердити оцінку під вашу мету.',
+  title: 'Отримайте оцінку для вашої компанії',
+  subtitle: 'Без зобов’язань. Швидка відповідь.',
   name: "Ім'я",
   company: 'Компанія',
   email: 'Email',
@@ -15,9 +14,10 @@ export const contact = {
   placeholderCompany: 'Ваша компанія',
   placeholderEmail: 'email@example.com',
   placeholderPhone: '+33 6 00 00 00 00',
-  placeholderMessage: 'Ваше повідомлення або запит пропозиції...',
-  reassurance: 'Без зобов’язань. Ваші дані конфіденційні.',
-  submit: 'Запросити оцінку',
+  placeholderMessage: 'Ваше повідомлення або уточнення щодо потреби…',
+  reassurance: 'Без зобов’язань. Ваші дані залишаються конфіденційними.',
+  submit: 'Отримати мою оцінку',
+  submitMicrocopy: 'Відповідь протягом 24 год',
   submitLoading: 'Надсилання…',
   submitSuccess: 'Дякуємо. Ваш запит надіслано.',
   submitError: 'Сталася помилка. Спробуйте ще раз.',
@@ -33,11 +33,11 @@ export const contact = {
   success: {
     title: 'Запит надіслано',
     description: 'Дякуємо — ми отримали ваш запит.',
-    responseTime: 'Ми відповімо протягом 24 годин.',
+    responseTime: 'Зазвичай відповідаємо протягом 24 годин.',
     reassurance: 'Без зобов’язань. Ваші дані нікому не передаються.',
     resetButton: 'Надіслати ще один запит',
   },
   prefillMessageTemplate:
-    'Добрий день,\n\nМене цікавить розміщення реклами:\n\nПакет: {package}\nФормат оплати: {billing}\nТривалість: {duration}\nОбрані опції:\n{addons}\n\nЗагальна вартість: {total}\n\nПрошу зв’язатися зі мною для узгодження деталей.',
+    'Добрий день,\n\nПрошу оцінку для присутності на маршруті:\n\nПакет: {package}\nРежим оплати: {billing}\nТривалість: {duration}\nОбрані опції:\n{addons}\n\nЗагальна вартість: {total}\n\nБудь ласка, зв’яжіться зі мною для уточнення умов.',
   prefillNoAddons: 'без додаткових опцій',
 } as const;

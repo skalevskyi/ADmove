@@ -3,9 +3,8 @@
  */
 
 export const parcours = {
-  title: 'Route & Visibility Zones',
-  subtitle:
-    'Daily presence on a route between Montpellier and La Grande-Motte, with regular passages via Pérols, Carnon, Palavas and Port Marianne.',
+  title: 'A real route, seen every day',
+  subtitle: 'The same route, the same traffic, every day.',
   timelineHint:
     'Click a route point to pause and view details.',
   descriptors: {
@@ -23,7 +22,7 @@ export const parcours = {
       tag: 'Traffic hub',
       icon: 'city',
       bullet1: 'Visibility in daily urban traffic flows',
-      bullet2: 'Repeated contact with an active local audience',
+      bullet2: 'Repeated views from an active local audience',
       bullet3: 'Visible presence in circulation and stopping areas',
     },
     perols: {
@@ -32,7 +31,7 @@ export const parcours = {
       tag: 'Outbound corridor',
       icon: 'district',
       bullet1: 'Visibility in pass-by moments toward the coast',
-      bullet2: 'Repeated contact during recurring weekday flows',
+      bullet2: 'Repeated views during recurring weekday flows',
       bullet3: 'Good visibility near traffic and stop areas',
     },
     portMarianne: {
@@ -41,7 +40,7 @@ export const parcours = {
       tag: 'Active district',
       icon: 'district',
       bullet1: 'Visibility in a district with strong local activity',
-      bullet2: 'Frequent contact with a regular urban audience',
+      bullet2: 'Frequent views from a regular urban audience',
       bullet3: 'Stronger presence during slowdowns and stops',
     },
     carnon: {
@@ -59,7 +58,7 @@ export const parcours = {
       tag: 'Stop points',
       icon: 'stop',
       bullet1: 'Visible presence in traffic flows toward the seafront',
-      bullet2: 'Repeated contact with local and passing audiences',
+      bullet2: 'Repeated views from local and passing audiences',
       bullet3: 'Good visibility in stop and parking areas',
     },
     grandeMotte: {
@@ -68,26 +67,26 @@ export const parcours = {
       tag: 'Busy zone',
       icon: 'coast',
       bullet1: 'Visibility in a lively coastal area',
-      bullet2: 'Regular contact with a mobile local audience',
+      bullet2: 'Regular views from a mobile local audience',
       bullet3: 'Stronger presence in circulation and parking zones',
     },
   },
   sharedBullets: {
     bullet1: 'Direct exposure in daily traffic (drivers and pedestrians)',
-    bullet2: 'Repeated contact with a stable local audience',
+    bullet2: 'Repeated views from a stable local audience',
     bullet3: 'High visibility during stops and parking',
     note: 'Indicative visibility based on local traffic flows.',
   },
-  visibilityTitle: 'Visibility estimation',
+  visibilityTitle: 'Local visibility estimate',
   visibilityIntro:
-    'Estimates based on local traffic and daily repetition.',
+    'Based on the real route and daily traffic.',
   visibilityIntro2: '',
-  visibilityBlockTitle: 'Visibility estimation on this route',
+  visibilityBlockTitle: 'Local visibility estimate',
   visibilitySummary: 'Indicative examples by format',
   visibilityMetricBasic: '60,000 – 100,000',
   visibilityMetricPro: '100,000 – 150,000',
   visibilityMetricExclusive: '130,000 – 200,000',
-  visibilityContactsUnit: 'contacts / month',
+  visibilityContactsUnit: 'local views / month',
   visibilityCardBasicTitle: 'BASIC',
   visibilityCardBasicPlacement: 'rear',
   visibilityCardProTitle: 'PRO',
@@ -95,6 +94,6 @@ export const parcours = {
   visibilityCardExclusiveTitle: 'EXCLUSIVE',
   visibilityCardExclusivePlacement: 'full vehicle wrap',
   visibilityCaption:
-    'Indicative estimate depending on format, route and traffic conditions',
+    'Estimate based on the real route and daily traffic',
   visibilityIndicative: '· indicative visibility',
 } as const;

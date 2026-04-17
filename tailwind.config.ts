@@ -10,6 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
+        /** Dark surfaces (e.g. promo mini-cards) — slate-900 */
+        darkBg: 'rgb(15 23 42)',
         // SPM brand — adjust as needed
         spm: {
           primary: '#0f172a',

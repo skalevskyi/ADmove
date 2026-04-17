@@ -96,7 +96,7 @@ export function HeroSection() {
             {t.hero.headline}
           </motion.h1>
           <motion.p
-            className="max-w-2xl break-words text-lg leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 md:row-start-2"
+            className="max-w-2xl whitespace-pre-line break-words text-lg leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 md:row-start-2"
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.08 }}
@@ -140,23 +140,27 @@ export function HeroSection() {
               {t.hero.ctaPrimary}
             </a>
             <a
-              href="#parcours"
+              href="#support"
               className={`inline-block w-full min-w-0 flex-1 text-center ${ctaShapeBase} border border-slate-300 bg-white text-slate-700 transition-colors duration-150 ease-out hover:bg-slate-50 active:bg-slate-100 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-800 md:flex-1 md:min-w-0 ${focusRing}`}
             >
               {t.hero.ctaSecondary}
             </a>
           </motion.div>
 
+          {t.hero.scaleSupporting ? (
+            <motion.p
+              className="max-w-2xl break-words text-xs leading-relaxed text-slate-500 dark:text-slate-400 md:col-start-1 md:row-start-5"
+              initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.11 }}
+            >
+              {t.hero.scaleSupporting}
+            </motion.p>
+          ) : null}
           <motion.p
-            className="max-w-2xl break-words text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 md:row-start-5"
-            initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.11 }}
-          >
-            {t.hero.scaleSupporting}
-          </motion.p>
-          <motion.p
-            className="max-w-2xl break-words text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 md:row-start-6"
+            className={`max-w-2xl break-words text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 ${
+              t.hero.scaleSupporting ? 'md:row-start-6' : 'md:row-start-5'
+            }`}
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.12 }}
@@ -166,7 +170,9 @@ export function HeroSection() {
 
           {/* Premium visual area: after primary CTA + supporting copy; desktop: col 2 */}
           <motion.div
-            className="relative md:col-start-2 md:row-start-1 md:row-span-6 md:self-center"
+            className={`relative md:col-start-2 md:row-start-1 md:self-center ${
+              t.hero.scaleSupporting ? 'md:row-span-6' : 'md:row-span-5'
+            }`}
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.06 }}
@@ -222,13 +228,15 @@ export function HeroSection() {
           </motion.div>
 
           <motion.div
-            className="md:col-start-1 md:row-start-7 md:hidden"
+            className={`md:col-start-1 md:hidden ${
+              t.hero.scaleSupporting ? 'md:row-start-7' : 'md:row-start-6'
+            }`}
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.18 }}
           >
             <a
-              href="#parcours"
+              href="#support"
               className={`inline-block w-full min-w-0 flex-1 text-center ${ctaShapeBase} border border-slate-300 bg-white text-slate-700 transition-colors duration-150 ease-out hover:bg-slate-50 active:bg-slate-100 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-800 md:w-auto ${focusRing}`}
             >
               {t.hero.ctaSecondary}

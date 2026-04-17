@@ -580,6 +580,9 @@ export function ContactSection() {
                     t.contact.submit
                   )}
                 </button>
+                <p className="mt-2 text-center text-xs text-slate-600 dark:text-slate-400">
+                  {t.contact.submitMicrocopy}
+                </p>
                 <p className="mt-3 text-center text-xs leading-relaxed text-slate-500 dark:text-slate-400">
                   {t.contact.reassurance}
                 </p>

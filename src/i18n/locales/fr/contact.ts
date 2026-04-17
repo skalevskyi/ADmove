@@ -3,9 +3,9 @@
  */
 
 export const contact = {
-  title: 'Contact',
+  title: 'Recevez une estimation pour votre entreprise',
   subtitle:
-    'Laissez votre demande et nous vous recontactons pour confirmer une estimation adaptée à votre objectif.',
+    'Sans engagement. Réponse rapide.',
   name: 'Nom',
   company: 'Société',
   email: 'Email',
@@ -15,9 +15,10 @@ export const contact = {
   placeholderCompany: 'Votre société',
   placeholderEmail: 'email@exemple.fr',
   placeholderPhone: '06 00 00 00 00',
-  placeholderMessage: 'Votre message ou demande de devis...',
+  placeholderMessage: 'Votre message ou précisions sur votre besoin…',
   reassurance: 'Sans engagement. Vos données restent confidentielles.',
-  submit: 'Demander votre estimation',
+  submit: 'Obtenir mon estimation',
+  submitMicrocopy: 'Réponse sous 24h',
   submitLoading: 'Envoi en cours…',
   submitSuccess: 'Merci. Votre demande a bien été envoyée.',
   submitError: "Une erreur s'est produite. Réessayez ou contactez-nous autrement.",
@@ -33,12 +34,12 @@ export const contact = {
   success: {
     title: 'Demande envoyée',
     description: 'Merci, votre demande a bien été reçue.',
-    responseTime: 'Nous vous répondrons sous 24h.',
+    responseTime: 'Réponse sous 24 h en général.',
     reassurance: 'Sans engagement. Vos données ne sont jamais partagées.',
     resetButton: 'Envoyer une autre demande',
   },
   /** Calculator → contact prefill ({package}, {billing}, {duration}, {addons}, {total}) */
   prefillMessageTemplate:
-    'Bonjour,\n\nJe suis intéressé par une campagne publicitaire :\n\nOffre : {package}\nMode de paiement : {billing}\nDurée : {duration}\nOptions sélectionnées :\n{addons}\n\nPrix total : {total}\n\nMerci de me contacter pour convenir des détails.',
+    'Bonjour,\n\nJe souhaite une estimation pour une présence sur le parcours :\n\nOffre : {package}\nMode de paiement : {billing}\nDurée : {duration}\nOptions sélectionnées :\n{addons}\n\nPrix total : {total}\n\nMerci de me recontacter pour préciser les modalités.',
   prefillNoAddons: 'aucune option supplémentaire',
 } as const;
