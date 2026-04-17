@@ -26,12 +26,8 @@ export const DURATION_MULTIPLIERS: Record<DurationMonths, number> = {
   12: 0.88,
 };
 
-// ===== First month discount (base media fee only; per package) =====
-export const FIRST_MONTH_DISCOUNT_EUR_BY_PACKAGE: Record<PackageId, number> = {
-  BASIC: 100,
-  PRO: 100,
-  EXCLUSIVE: 200,
-};
+// ===== First month: base media is charged at this fraction of effective monthly base (after duration multiplier) =====
+export const FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION = 0.5;
 
 // ===== Add-ons: draft prices =====
 /** Monthly € when exclusivity is selected (BASIC / PRO). EXCLUSIVE: included by definition, no line item. */

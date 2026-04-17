@@ -125,7 +125,7 @@ export const offres = {
   calculatorEstimatedCostCpmValue: '≈ 4 € за 1000 переглядів',
   calculatorDiscountFirstMonthLabel: 'Знижка за перший місяць',
   calculatorDiscountFirstMonthNote:
-    'Компенсація витрат на розробку та монтаж реклами',
+    'Знижка 50 % на базовий медіапакет у перший місяць (додатки окремо).',
   calculatorAdjustmentsTitle: 'Коригування',
   calculatorPaymentStructureBaseTitle: 'Структура оплати (лише база)',
   calculatorPaymentStructureTotalsTitle: 'Структура оплати (база, орієнтовно)',

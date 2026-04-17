@@ -127,7 +127,7 @@ export const offres = {
   calculatorEstimatedCostCpmValue: '≈ 4 € pour 1000 vues',
   calculatorDiscountFirstMonthLabel: 'Remise 1er mois',
   calculatorDiscountFirstMonthNote:
-    'Compensation des frais de conception et de pose de la publicité',
+    '50 % sur le forfait média de base le 1er mois (hors options payantes).',
   calculatorAdjustmentsTitle: 'Ajustements',
   calculatorPaymentStructureBaseTitle: 'Structure de paiement (base seule)',
   calculatorPaymentStructureTotalsTitle: 'Structure de paiement (base indicative)',

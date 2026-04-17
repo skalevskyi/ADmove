@@ -10,7 +10,7 @@ import {
   BASE_MONTHLY_MEDIA_EUR,
   DURATION_MULTIPLIERS,
   EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE,
-  FIRST_MONTH_DISCOUNT_EUR_BY_PACKAGE,
+  FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION,
   GUARDRAILS,
   INDICATIVE_MONTHLY_CONTACTS,
   INCLUDED_BY_DEFINITION,
@@ -135,13 +135,9 @@ export function computeEffectiveBaseMonthlyMediaCents(selection: ResolvedSelecti
   return Math.round(toCents(baseEur) * mult);
 }
 
-export function computeBaseMonth1AfterDiscountCents(
-  effectiveBaseMonthlyCents: number,
-  packageId: PackageId,
-): number {
-  const discountEur = FIRST_MONTH_DISCOUNT_EUR_BY_PACKAGE[packageId];
-  // Discount applies to base only; constants guarantee non-negative in approved ranges.
-  return effectiveBaseMonthlyCents - toCents(discountEur);
+/** Month 1 base media amount (cents): 50% of effective monthly base after duration multiplier. */
+export function computeBaseMonth1AfterDiscountCents(effectiveBaseMonthlyCents: number): number {
+  return Math.round(effectiveBaseMonthlyCents * FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION);
 }
 
 export function computeRecurringAddonsMonthlyCents(resolved: ResolvedSelection): number {

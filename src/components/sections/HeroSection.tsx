@@ -75,7 +75,7 @@ export function HeroSection() {
   return (
     <section
       id="hero"
-      className="relative overflow-hidden px-4 py-20 md:px-6 md:py-24"
+      className="relative overflow-hidden px-4 pt-12 pb-20 md:px-6 md:py-24"
     >
       {/* Premium minimal background: subtle gradient + optional soft radial glow */}
       <div
@@ -170,7 +170,7 @@ export function HeroSection() {
 
           {/* Premium visual area: after primary CTA + supporting copy; desktop: col 2 */}
           <motion.div
-            className={`relative md:col-start-2 md:row-start-1 md:self-center ${
+            className={`relative max-md:-mt-2 max-md:-mb-2 md:col-start-2 md:row-start-1 md:self-center ${
               t.hero.scaleSupporting ? 'md:row-span-6' : 'md:row-span-5'
             }`}
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 20 }}

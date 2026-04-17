@@ -19,12 +19,14 @@ test('base price + duration multiplier: BASIC / 3 months / no add-ons', () => {
 
   assert.equal(result.indicativeMonthlyContacts, 30000);
   assert.equal(result.effectiveBaseMonthlyMediaEur, 300);
-  assert.equal(result.monthlyView.month1TotalEur, 200);
+  assert.equal(result.monthlyView.month1BaseMediaEur, 150);
+  assert.equal(result.monthlyView.month1BaseDiscountEur, 150);
+  assert.equal(result.monthlyView.month1TotalEur, 150);
   assert.equal(result.monthlyView.fromMonth2TotalEur, 300);
-  assert.equal(result.contractTotalView.contractTotalEur, 800);
+  assert.equal(result.contractTotalView.contractTotalEur, 750);
 });
 
-test('first-month discount applies to base only (no add-ons): BASIC / 3 months', () => {
+test('first-month discount is 50% of effective base media only (no add-ons): BASIC / 3 months', () => {
   const result = calculateCalculator({
     packageId: 'BASIC',
     durationMonths: 3,
@@ -38,8 +40,11 @@ test('first-month discount applies to base only (no add-ons): BASIC / 3 months',
   assert.equal(result.ok, true);
   if (!result.ok) return;
 
-  // From month 2: 300; month 1 base discount is 100 => 200.
-  assert.equal(result.monthlyView.month1TotalEur, result.monthlyView.fromMonth2TotalEur - 100);
+  assert.equal(result.monthlyView.month1BaseDiscountEur, result.effectiveBaseMonthlyMediaEur / 2);
+  assert.equal(
+    result.monthlyView.month1TotalEur,
+    result.monthlyView.fromMonth2TotalEur - result.monthlyView.month1BaseDiscountEur,
+  );
 });
 
 test('included add-ons are free: PRO / 3 months / no optional toggles', () => {
@@ -57,8 +62,11 @@ test('included add-ons are free: PRO / 3 months / no optional toggles', () => {
   if (!result.ok) return;
 
   assert.equal(result.indicativeMonthlyContacts, 45000);
+  assert.equal(result.effectiveBaseMonthlyMediaEur, 490);
+  assert.equal(result.monthlyView.month1BaseMediaEur, 245);
+  assert.equal(result.monthlyView.month1BaseDiscountEur, 245);
   assert.equal(result.monthlyView.fromMonth2TotalEur, 490);
-  assert.equal(result.monthlyView.month1TotalEur, 390);
+  assert.equal(result.monthlyView.month1TotalEur, 245);
 });
 
 test('invalid: video must be unavailable on BASIC', () => {
@@ -123,7 +131,6 @@ test('weekend exposure add-on affects price but not contacts: BASIC / 6 months',
   assert.equal(resultNoExtras.indicativeMonthlyContacts, 30000);
   assert.equal(resultWithExtras.indicativeMonthlyContacts, 30000);
 
-  // Fixed €30/month when weekend exposure is on.
   assert.equal(
     resultWithExtras.monthlyView.fromMonth2TotalEur - resultNoExtras.monthlyView.fromMonth2TotalEur,
     30,
@@ -163,9 +170,9 @@ test('snapshot cases (rounded expectations): BASIC/6, PRO/12, EXCLUSIVE/9', () =
   });
   assert.equal(basic.ok, true);
   if (basic.ok) {
-    assert.equal(basic.monthlyView.month1TotalEur, 355);
+    assert.equal(basic.monthlyView.month1TotalEur, 312.5);
     assert.equal(basic.monthlyView.fromMonth2TotalEur, 455);
-    assert.equal(basic.contractTotalView.contractTotalEur, 2630);
+    assert.equal(basic.contractTotalView.contractTotalEur, 2587.5);
   }
 
   const pro = calculateCalculator({
@@ -179,9 +186,9 @@ test('snapshot cases (rounded expectations): BASIC/6, PRO/12, EXCLUSIVE/9', () =
   });
   assert.equal(pro.ok, true);
   if (pro.ok) {
-    assert.equal(pro.monthlyView.month1TotalEur, 431.2);
+    assert.equal(pro.monthlyView.month1TotalEur, 315.6);
     assert.equal(pro.monthlyView.fromMonth2TotalEur, 501.2);
-    assert.equal(pro.contractTotalView.contractTotalEur, 5944.4);
+    assert.equal(pro.contractTotalView.contractTotalEur, 5828.8);
   }
 
   const exclusive = calculateCalculator({
@@ -193,9 +200,9 @@ test('snapshot cases (rounded expectations): BASIC/6, PRO/12, EXCLUSIVE/9', () =
   });
   assert.equal(exclusive.ok, true);
   if (exclusive.ok) {
-    assert.equal(exclusive.monthlyView.month1TotalEur, 504.8);
+    assert.equal(exclusive.monthlyView.month1TotalEur, 387.4);
     assert.equal(exclusive.monthlyView.fromMonth2TotalEur, 704.8);
-    assert.equal(exclusive.contractTotalView.contractTotalEur, 6143.2);
+    assert.equal(exclusive.contractTotalView.contractTotalEur, 6025.8);
   }
 });
 
@@ -242,4 +249,3 @@ test('contacts remain monthly benchmark in both display preferences', () => {
   assert.equal(monthly.indicativeMonthlyContacts, contractTotal.indicativeMonthlyContacts);
   assert.equal(monthly.indicativeMonthlyContacts, 45000);
 });
-

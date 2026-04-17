@@ -25,11 +25,11 @@ export function Footer() {
               </span>
             </div>
           </div>
-          <p className="max-w-xs text-sm text-slate-600 dark:text-slate-400">
+          <p className="max-w-xs text-sm text-slate-600 dark:text-slate-400 md:max-w-none">
             {t.footer.positioning}
           </p>
         </div>
-        <p className="mt-6 border-t border-slate-200/80 pt-6 text-xs text-slate-500 dark:border-slate-700/80 dark:text-slate-400">
+        <p className="mt-6 border-t border-slate-200/80 pt-6 text-xs text-slate-500 dark:border-slate-700/80 dark:text-slate-400 md:whitespace-nowrap">
           {t.footer.copyright}
           {' · '}
           {t.footer.tagline}

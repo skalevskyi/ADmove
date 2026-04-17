@@ -67,7 +67,7 @@ export const viewport: Viewport = {
 };
 
 /**
- * Mirrors `ThemeContext` resolution: `spm-theme` → legacy `*-theme` → `prefers-color-scheme`.
+ * Mirrors `ThemeContext` resolution: `spm-theme` (`light`|`dark`|`auto`) → legacy `*-theme` → `prefers-color-scheme`.
  * In standalone (installed PWA), skip toggling `dark` here so the first paint can match the white
  * manifest launch contract; `ThemeProvider` applies the class in `useLayoutEffect` on the client.
  */
@@ -78,6 +78,9 @@ const themeScript = `
   var dark;
   if(s==='dark'){dark=true;}
   else if(s==='light'){dark=false;}
+  else if(s==='auto'){
+    dark=window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }
   else{
     var legacy=null;
     for(var i=0;i<localStorage.length;i++){

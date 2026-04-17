@@ -125,7 +125,7 @@ export const offres = {
   calculatorEstimatedCostCpmValue: '≈ €4 per 1000 views',
   calculatorDiscountFirstMonthLabel: 'First month discount',
   calculatorDiscountFirstMonthNote:
-    'Compensation for advertising design and installation costs',
+    '50% off the base media package in month 1 (paid add-ons separate).',
   calculatorAdjustmentsTitle: 'Adjustments',
   calculatorPaymentStructureBaseTitle: 'Payment structure (base only)',
   calculatorPaymentStructureTotalsTitle: 'Payment structure (base, indicative)',

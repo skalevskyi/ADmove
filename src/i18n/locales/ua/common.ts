@@ -50,6 +50,10 @@ export const mobileNav = {
 export const theme = {
   light: 'Світла тема',
   dark: 'Темна тема',
+  auto: 'Системна тема',
+  ariaLight: 'Тема: світла',
+  ariaDark: 'Тема: темна',
+  ariaAuto: 'Тема: системна',
 } as const;
 
 export const language = {

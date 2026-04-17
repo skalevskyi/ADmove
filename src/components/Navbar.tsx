@@ -2,8 +2,8 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Globe, Layers, Mail, Moon, Package, Route, Sun } from 'lucide-react';
-import { useRef, useState, useEffect } from 'react';
+import { Globe, Layers, Mail, Monitor, Moon, Package, Route, Smartphone, Sun } from 'lucide-react';
+import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
@@ -123,21 +123,45 @@ function LanguageSwitcher() {
 }
 
 function ThemeToggle() {
-  const { theme, toggleTheme } = useTheme();
+  const { themeMode, toggleTheme } = useTheme();
   const { t } = useLanguage();
+  const [isCoarsePointer, setIsCoarsePointer] = useState(false);
+
+  useLayoutEffect(() => {
+    const mq = window.matchMedia('(pointer: coarse)');
+    const sync = () => setIsCoarsePointer(mq.matches);
+    sync();
+    mq.addEventListener('change', sync);
+    return () => mq.removeEventListener('change', sync);
+  }, []);
+
+  const ariaLabel =
+    themeMode === 'light'
+      ? t.theme.ariaLight
+      : themeMode === 'dark'
+        ? t.theme.ariaDark
+        : t.theme.ariaAuto;
+
+  const icon =
+    themeMode === 'light' ? (
+      <Sun className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+    ) : themeMode === 'dark' ? (
+      <Moon className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+    ) : isCoarsePointer ? (
+      <Smartphone className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+    ) : (
+      <Monitor className="h-4 w-4" strokeWidth={1.5} aria-hidden />
+    );
 
   return (
     <button
       type="button"
       onClick={toggleTheme}
+      title={ariaLabel}
       className="rounded-lg p-2 text-slate-600 transition hover:bg-slate-100 hover:text-slate-900 dark:text-slate-300 dark:hover:bg-slate-800 dark:hover:text-white focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70"
-      aria-label={theme === 'dark' ? t.theme.light : t.theme.dark}
+      aria-label={ariaLabel}
     >
-      {theme === 'dark' ? (
-        <Sun className="h-4 w-4" strokeWidth={1.5} aria-hidden />
-      ) : (
-        <Moon className="h-4 w-4" strokeWidth={1.5} aria-hidden />
-      )}
+      {icon}
     </button>
   );
 }

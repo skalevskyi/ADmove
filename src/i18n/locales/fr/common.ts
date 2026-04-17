@@ -49,6 +49,10 @@ export const mobileNav = {
 export const theme = {
   light: 'Mode clair',
   dark: 'Mode sombre',
+  auto: 'Thème système',
+  ariaLight: 'Thème : clair',
+  ariaDark: 'Thème : sombre',
+  ariaAuto: 'Thème : système',
 } as const;
 
 export const language = {

@@ -7,100 +7,101 @@ import {
   useEffect,
   useLayoutEffect,
   useMemo,
+  useRef,
   useState,
 } from 'react';
 
 const THEME_KEY = 'spm-theme';
 
-export type Theme = 'light' | 'dark';
+export type ThemeMode = 'light' | 'dark' | 'auto';
+
+/** Resolved appearance applied to `html` — `html.dark` when `'dark'`. */
+export type ResolvedTheme = 'light' | 'dark';
 
 type ThemeContextValue = {
-  theme: Theme;
-  setTheme: (next: Theme) => void;
+  themeMode: ThemeMode;
+  resolvedTheme: ResolvedTheme;
+  setThemeMode: (next: ThemeMode) => void;
   toggleTheme: () => void;
 };
 
 const ThemeContext = createContext<ThemeContextValue | null>(null);
 
-/** Returns `light` / `dark` from `spm-theme` or a legacy `*-theme` key; `null` if none — follow system. */
-function readStoredTheme(): Theme | null {
+/** Reads `spm-theme` (`light` | `dark` | `auto`) or legacy `*-theme` (`light` | `dark` only). `null` = treat as `auto`. */
+function readStoredMode(): ThemeMode | null {
   if (typeof window === 'undefined') return null;
-  const stored = localStorage.getItem(THEME_KEY) as Theme | null;
-  if (stored === 'dark' || stored === 'light') return stored;
+  const stored = localStorage.getItem(THEME_KEY);
+  if (stored === 'light' || stored === 'dark' || stored === 'auto') return stored;
 
   for (let i = 0; i < localStorage.length; i += 1) {
     const key = localStorage.key(i);
     if (!key || key === THEME_KEY) continue;
     if (!key.endsWith('-theme')) continue;
-    const legacyStored = localStorage.getItem(key) as Theme | null;
+    const legacyStored = localStorage.getItem(key);
     if (legacyStored === 'dark' || legacyStored === 'light') return legacyStored;
   }
   return null;
 }
 
-function hasManualPersistence(): boolean {
-  return readStoredTheme() !== null;
-}
-
-function resolveTheme(): Theme {
+function getResolvedTheme(mode: ThemeMode): ResolvedTheme {
+  if (mode === 'light') return 'light';
+  if (mode === 'dark') return 'dark';
   if (typeof window === 'undefined') return 'light';
-  const stored = readStoredTheme();
-  if (stored !== null) return stored;
   return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
 }
 
-function applyTheme(theme: Theme) {
-  const root = document.documentElement;
-  if (theme === 'dark') {
-    root.classList.add('dark');
-  } else {
-    root.classList.remove('dark');
-  }
+function applyTheme(resolved: ResolvedTheme) {
+  document.documentElement.classList.toggle('dark', resolved === 'dark');
 }
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>('light');
-  /** Bumps when `spm-theme` is written so the system-preference listener is dropped after manual toggle. */
-  const [themeEpoch, setThemeEpoch] = useState(0);
+  const [themeMode, setThemeModeState] = useState<ThemeMode>('auto');
+  const [resolvedTheme, setResolvedTheme] = useState<ResolvedTheme>('light');
+  const themeModeRef = useRef(themeMode);
+  themeModeRef.current = themeMode;
 
   useLayoutEffect(() => {
-    const initial = resolveTheme();
-    setThemeState(initial);
-    applyTheme(initial);
+    const mode = readStoredMode() ?? 'auto';
+    const resolved = getResolvedTheme(mode);
+    setThemeModeState(mode);
+    setResolvedTheme(resolved);
+    applyTheme(resolved);
   }, []);
 
-  const setTheme = useCallback((next: Theme) => {
-    setThemeState(next);
-    applyTheme(next);
+  const setThemeMode = useCallback((next: ThemeMode) => {
+    const resolved = getResolvedTheme(next);
+    setThemeModeState(next);
+    setResolvedTheme(resolved);
+    applyTheme(resolved);
     if (typeof window !== 'undefined') {
       localStorage.setItem(THEME_KEY, next);
     }
-    setThemeEpoch((e) => e + 1);
   }, []);
 
   const toggleTheme = useCallback(() => {
-    setTheme(theme === 'light' ? 'dark' : 'light');
-  }, [theme, setTheme]);
+    const prev = themeModeRef.current;
+    const next: ThemeMode = prev === 'light' ? 'dark' : prev === 'dark' ? 'auto' : 'light';
+    setThemeMode(next);
+  }, [setThemeMode]);
 
   useEffect(() => {
     if (typeof window === 'undefined') return undefined;
-    if (hasManualPersistence()) return undefined;
+    if (themeMode !== 'auto') return undefined;
 
     const mq = window.matchMedia('(prefers-color-scheme: dark)');
     const onChange = () => {
-      if (hasManualPersistence()) return;
-      const next = mq.matches ? 'dark' : 'light';
-      setThemeState(next);
+      const next: ResolvedTheme = mq.matches ? 'dark' : 'light';
+      setResolvedTheme(next);
       applyTheme(next);
     };
 
     mq.addEventListener('change', onChange);
     return () => mq.removeEventListener('change', onChange);
-  }, [themeEpoch]);
+  }, [themeMode]);
 
   const value = useMemo<ThemeContextValue>(
-    () => ({ theme, setTheme, toggleTheme }),
-    [theme, setTheme, toggleTheme],
+    () => ({ themeMode, resolvedTheme, setThemeMode, toggleTheme }),
+    [themeMode, resolvedTheme, setThemeMode, toggleTheme],
   );
 
   return (
