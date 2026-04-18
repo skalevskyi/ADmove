@@ -123,36 +123,56 @@ export async function POST(request: Request): Promise<NextResponse<LeadApiRespon
 
   const backup = await persistLeadBackup(lead, requestId);
   if (!backup.ok) {
-    logLeadLine(requestId, 'backup_failed', {
+    logLeadLine(requestId, 'backup_failed_non_blocking', {
       code: backup.code,
       locale: lead.locale,
       leadOrigin,
       hasCalculatorSummary,
     });
-    return NextResponse.json({ ok: false, error: 'backup_failed' }, { status: 503 });
+  } else {
+    logLeadLine(requestId, 'backup_persisted', {
+      skipped: backup.skipped,
+      locale: lead.locale,
+      leadOrigin,
+      hasCalculatorSummary,
+    });
   }
 
-  logLeadLine(requestId, 'backup_persisted', {
-    skipped: backup.skipped,
-    locale: lead.locale,
-    leadOrigin,
-    hasCalculatorSummary,
+  const emailResult = await deliverLeadEmails(lead).catch((err: unknown) => {
+    const message = err instanceof Error ? err.message : String(err);
+    logLeadLine(requestId, 'email_failed_non_blocking', {
+      error: message.slice(0, 300),
+      locale: lead.locale,
+      leadOrigin,
+      hasCalculatorSummary,
+    });
+    return null;
   });
 
-  const emailResult = await deliverLeadEmails(lead);
+  if (emailResult) {
+    logLeadLine(requestId, 'lead_processing_complete', {
+      backupOk: backup.ok,
+      backupSkipped: backup.ok ? backup.skipped : false,
+      ownerEmailOk: emailResult.ownerNotificationOk,
+      autoReplyOk: emailResult.autoReplyOk,
+      locale: lead.locale,
+      leadOrigin,
+      hasCalculatorSummary,
+    });
 
-  logLeadLine(requestId, 'lead_processing_complete', {
-    backupOk: true,
-    backupSkipped: backup.skipped,
-    ownerEmailOk: emailResult.ownerNotificationOk,
-    autoReplyOk: emailResult.autoReplyOk,
-    locale: lead.locale,
-    leadOrigin,
-    hasCalculatorSummary,
-  });
-
-  if (!emailResult.ownerNotificationOk) {
-    logLeadLine(requestId, 'owner_email_failed_after_backup', {
+    if (!emailResult.ownerNotificationOk) {
+      logLeadLine(requestId, 'owner_email_failed_after_backup', {
+        locale: lead.locale,
+        leadOrigin,
+        hasCalculatorSummary,
+      });
+    }
+  } else {
+    logLeadLine(requestId, 'lead_processing_complete', {
+      backupOk: backup.ok,
+      backupSkipped: backup.ok ? backup.skipped : false,
+      ownerEmailOk: false,
+      autoReplyOk: null,
       locale: lead.locale,
       leadOrigin,
       hasCalculatorSummary,

@@ -165,7 +165,7 @@ export function ContactSection() {
   } = useCalculatorContactPrefill();
   const [status, setStatus] = useState<SubmitStatus>('idle');
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({});
-  const [submitErrorKind, setSubmitErrorKind] = useState<'generic' | 'rateLimited' | 'backup'>('generic');
+  const [submitErrorKind, setSubmitErrorKind] = useState<'generic' | 'rateLimited'>('generic');
   const [message, setMessage] = useState('');
   /** True while the textarea still reflects the last calculator-generated prefill (not user-edited). */
   const messageFromCalculatorRef = useRef(false);
@@ -274,29 +274,23 @@ export function ContactSection() {
         return;
       }
 
-      if (res.status === 503 || data.error === 'backup_failed') {
-        setSubmitErrorKind('backup');
-        setStatus('error');
+      if (res.ok && data.ok) {
+        trackSpmEvent('lead_submitted', {
+          locale,
+          leadOrigin,
+          hasCalculatorSummary: calculatorSummary !== undefined,
+        });
+
+        form.reset();
+        setMessage('');
+        messageFromCalculatorRef.current = false;
+        lastCalculatorPayloadRef.current = null;
+        setStatus('success');
         return;
       }
 
-      if (!res.ok || !data.ok) {
-        setSubmitErrorKind('generic');
-        setStatus('error');
-        return;
-      }
-
-      trackSpmEvent('lead_submitted', {
-        locale,
-        leadOrigin,
-        hasCalculatorSummary: calculatorSummary !== undefined,
-      });
-
-      form.reset();
-      setMessage('');
-      messageFromCalculatorRef.current = false;
-      lastCalculatorPayloadRef.current = null;
-      setStatus('success');
+      setSubmitErrorKind('generic');
+      setStatus('error');
     } catch {
       setSubmitErrorKind('generic');
       setStatus('error');
@@ -390,11 +384,7 @@ export function ContactSection() {
                     className="rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-900 dark:border-red-800/60 dark:bg-red-950/40 dark:text-red-100"
                     role="alert"
                   >
-                    {submitErrorKind === 'rateLimited'
-                      ? t.contact.submitErrorRateLimited
-                      : submitErrorKind === 'backup'
-                        ? t.contact.submitErrorBackup
-                        : t.contact.submitError}
+                    {submitErrorKind === 'rateLimited' ? t.contact.submitErrorRateLimited : t.contact.submitError}
                   </p>
                 ) : null}
                 <div>
