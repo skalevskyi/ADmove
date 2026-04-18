@@ -26,6 +26,10 @@ export const footer = {
     offres: 'Offres',
     contact: 'Contact',
   },
+  footerExploreLabel: 'Pages',
+  footerExploreLink1: 'Publicité sur voiture',
+  footerExploreLink2: 'Publicité mobile',
+  footerExploreLink3: 'Publicité locale',
   positioning: 'Publicité mobile locale entre Montpellier et le littoral.',
   tagline:
     'Publicité mobile Montpellier & Littoral — Pérols, Carnon, Palavas, La Grande-Motte, Port Marianne.',

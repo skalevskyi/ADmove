@@ -27,4 +27,7 @@ export const support = {
   methodologyTitle: 'Pourquoi ça fonctionne',
   methodologyText:
     'Trafic réel, même trajet, jour après jour — votre message devient familier sur le trajet.',
+  conceptExploreLabel: 'Explorer aussi',
+  conceptExploreLink1: 'Comment fonctionne la publicité mobile',
+  conceptExploreLink2: 'Comment fonctionne la publicité locale',
 } as const;

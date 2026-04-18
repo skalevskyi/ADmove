@@ -7,8 +7,8 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
-import { BASE_PATH } from '@/lib/base-path';
 import type { Locale } from '@/i18n';
+import { BASE_PATH, withBasePath } from '@/lib/base-path';
 
 const linkClass =
   'text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70 rounded px-1';
@@ -166,7 +166,11 @@ function ThemeToggle() {
   );
 }
 
-export function Navbar() {
+type NavbarProps = {
+  useHomeAnchorHref?: boolean;
+};
+
+export function Navbar({ useHomeAnchorHref = false }: NavbarProps = {}) {
   const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -212,7 +216,7 @@ export function Navbar() {
       >
         <div className="flex min-w-0 items-center md:contents">
           <Link
-            href="#hero"
+            href={useHomeAnchorHref ? withBasePath('/#hero') : '#hero'}
             className="flex min-w-0 items-center gap-2 rounded-lg px-1 py-1 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70"
           >
             <img
@@ -234,7 +238,9 @@ export function Navbar() {
 
         <ul className="hidden min-w-0 items-center justify-center md:gap-4 lg:gap-8 md:flex">
           {DESKTOP_ITEMS.map(({ key, href, icon: Icon }) => {
-            const isActive = mounted && activeSection === href.slice(1);
+            const sectionId = href.slice(1);
+            const resolvedHref = useHomeAnchorHref ? withBasePath(`/${href}`) : href;
+            const isActive = mounted && activeSection === sectionId;
             const label =
               key === 'support'
                 ? t.nav.support
@@ -246,8 +252,8 @@ export function Navbar() {
             return (
               <li key={href}>
                 <a
-                  href={href}
-                  onClick={() => setActiveSection(href.slice(1))}
+                  href={resolvedHref}
+                  onClick={() => setActiveSection(sectionId)}
                   className={`${desktopNavLinkBaseClass} ${
                     isActive
                       ? 'bg-sky-50 text-sky-700 dark:bg-sky-900/30 dark:text-sky-300'

@@ -27,4 +27,7 @@ export const support = {
   methodologyTitle: 'Чому це працює',
   methodologyText:
     'Реальний рух, той самий маршрут щодня — ваше повідомлення стає знайомим на трасі.',
+  conceptExploreLabel: 'Також переглянути',
+  conceptExploreLink1: 'Як працює мобільна реклама',
+  conceptExploreLink2: 'Як працює локальна реклама',
 } as const;

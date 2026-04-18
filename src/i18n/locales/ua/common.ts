@@ -26,6 +26,10 @@ export const footer = {
     offres: 'Пропозиції',
     contact: 'Контакт',
   },
+  footerExploreLabel: 'Сторінки',
+  footerExploreLink1: 'Реклама на авто',
+  footerExploreLink2: 'Мобільна реклама',
+  footerExploreLink3: 'Локальна реклама',
   positioning:
     'Локальна мобільна реклама між Монпельє та узбережжям.',
   tagline:

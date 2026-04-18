@@ -27,4 +27,7 @@ export const support = {
   methodologyTitle: 'Why it works',
   methodologyText:
     'Real traffic, same route, day after day — your message starts to feel familiar on the route.',
+  conceptExploreLabel: 'Explore also',
+  conceptExploreLink1: 'How mobile advertising works',
+  conceptExploreLink2: 'How local advertising works',
 } as const;

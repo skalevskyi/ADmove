@@ -17,6 +17,9 @@ import { parcours } from './parcours';
 import { offres } from './offres';
 import { contact } from './contact';
 import { tooltips } from './tooltips';
+import { seoPubliciteVoiture } from './seoPubliciteVoiture';
+import { seoAffichageMobile } from './seoAffichageMobile';
+import { seoPubliciteLocale } from './seoPubliciteLocale';
 
 export const en = {
   locations,
@@ -27,6 +30,9 @@ export const en = {
   offres,
   tooltips,
   contact,
+  seoPubliciteVoiture,
+  seoAffichageMobile,
+  seoPubliciteLocale,
   footer,
   floating,
   mobileNav,

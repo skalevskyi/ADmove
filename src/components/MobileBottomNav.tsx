@@ -4,6 +4,7 @@ import { Layers, Mail, Package, Route } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { useLanguage } from '@/context/LanguageContext';
+import { withBasePath } from '@/lib/base-path';
 
 const ITEMS = [
   { key: 'support' as const, href: '#support', icon: Layers },
@@ -38,7 +39,11 @@ function getActiveSectionFromScroll(): string | null {
   return active;
 }
 
-export function MobileBottomNav() {
+type MobileBottomNavProps = {
+  useHomeAnchorHref?: boolean;
+};
+
+export function MobileBottomNav({ useHomeAnchorHref = false }: MobileBottomNavProps = {}) {
   const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
   const [activeSection, setActiveSection] = useState<string | null>(null);
@@ -78,12 +83,14 @@ export function MobileBottomNav() {
     >
       <div className="mx-auto grid h-[var(--shell-mobile-nav-pill-height)] w-full max-w-lg shrink-0 grid-cols-4 items-center rounded-3xl border border-slate-200/90 bg-white/80 px-2 py-3 shadow-lg shadow-slate-200/50 backdrop-blur-md dark:border-slate-700/90 dark:bg-slate-900/95 dark:shadow-slate-950/60">
         {ITEMS.map(({ key, href, icon: Icon }) => {
-          const isActive = mounted && activeSection === href.slice(1);
+          const sectionId = href.slice(1);
+          const resolvedHref = useHomeAnchorHref ? withBasePath(`/${href}`) : href;
+          const isActive = mounted && activeSection === sectionId;
           return (
             <a
               key={href}
-              href={href}
-              onClick={() => setActiveSection(href.slice(1))}
+              href={resolvedHref}
+              onClick={() => setActiveSection(sectionId)}
               className={`flex min-h-[44px] w-full min-w-0 flex-col items-center justify-center gap-1 border border-transparent px-2 py-2 text-[11px] font-medium leading-tight transition-colors duration-150 ease-out ${interactionReset} ${
                 isActive
                   ? 'rounded-3xl bg-sky-50 text-sky-600 dark:bg-sky-900/30 dark:text-sky-400'

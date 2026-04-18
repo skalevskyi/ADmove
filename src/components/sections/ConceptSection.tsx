@@ -1,10 +1,18 @@
 'use client';
 
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { CircleCheck, Layers, Route, Sparkles } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
+import { withBasePath } from '@/lib/base-path';
+
+const focusRing =
+  'focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70';
+
+const exploreLinkClass =
+  'inline-flex w-full items-center justify-center rounded-xl border border-slate-200 bg-white/60 px-4 py-3 text-center text-sm font-medium text-slate-900 transition-colors hover:border-slate-300 hover:bg-slate-50/80 dark:border-slate-700 dark:bg-slate-800/55 dark:text-slate-100 dark:hover:border-slate-600 dark:hover:bg-slate-800/80 md:flex-1';
 
 export function ConceptSection() {
   const reducedMotion = useReducedMotion();
@@ -102,6 +110,26 @@ export function ConceptSection() {
             </p>
           </div>
         </motion.div>
+
+        <div className="mt-10">
+          <p className="text-xs font-medium text-slate-500 dark:text-slate-400">
+            {t.support.conceptExploreLabel}
+          </p>
+          <div className="mt-3 flex flex-col gap-3 md:flex-row md:gap-4">
+            <Link
+              href={withBasePath('/affichage-mobile-montpellier')}
+              className={`${exploreLinkClass} ${focusRing}`}
+            >
+              {t.support.conceptExploreLink1}
+            </Link>
+            <Link
+              href={withBasePath('/publicite-locale-montpellier')}
+              className={`${exploreLinkClass} ${focusRing}`}
+            >
+              {t.support.conceptExploreLink2}
+            </Link>
+          </div>
+        </div>
         </div>
       </div>
     </section>

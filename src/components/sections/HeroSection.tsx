@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import Link from 'next/link';
 import { AnimatePresence, motion } from 'framer-motion';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { BASE_PATH } from '@/lib/base-path';
+import { BASE_PATH, withBasePath } from '@/lib/base-path';
 import { ctaShapeBase } from '@/lib/cta-shape';
 
 const HERO_IMAGES = [
@@ -90,10 +91,15 @@ export function HeroSection() {
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-x-16 md:gap-y-6 lg:gap-x-20 lg:items-center">
           <motion.h1
-            className="max-w-3xl break-words text-4xl font-bold leading-tight tracking-tight text-slate-900 dark:text-white md:col-start-1 md:row-start-1 md:text-6xl"
+            className="max-w-3xl break-words text-4xl leading-tight tracking-tight md:col-start-1 md:row-start-1 md:text-6xl"
             {...motionOpts}
           >
-            {t.hero.headline}
+            <span className="block text-2xl md:text-4xl font-normal text-slate-600 dark:text-slate-400 tracking-tight mb-2 md:mb-3">
+              {t.hero.headline_line1}
+            </span>
+            <span className="block text-4xl md:text-6xl font-bold text-slate-900 dark:text-white">
+              {t.hero.headline_line2}
+            </span>
           </motion.h1>
           <motion.p
             className="max-w-2xl whitespace-pre-line break-words text-lg leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 md:row-start-2"
@@ -110,7 +116,7 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.1 }}
           >
-            {t.hero.scale}
+            {t.hero.proof}
           </motion.p>
 
           <motion.div
@@ -147,19 +153,19 @@ export function HeroSection() {
             </a>
           </motion.div>
 
-          {t.hero.scaleSupporting ? (
+          {t.hero.support ? (
             <motion.p
               className="max-w-2xl break-words text-xs leading-relaxed text-slate-500 dark:text-slate-400 md:col-start-1 md:row-start-5"
               initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.11 }}
             >
-              {t.hero.scaleSupporting}
+              {t.hero.support}
             </motion.p>
           ) : null}
           <motion.p
             className={`max-w-2xl break-words text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 ${
-              t.hero.scaleSupporting ? 'md:row-start-6' : 'md:row-start-5'
+              t.hero.support ? 'md:row-start-6' : 'md:row-start-5'
             }`}
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 }}
             animate={{ opacity: 1, y: 0 }}
@@ -168,10 +174,31 @@ export function HeroSection() {
             {t.hero.trust}
           </motion.p>
 
+          <motion.div
+            className={`max-w-2xl break-words space-y-1 text-sm leading-relaxed text-slate-600 dark:text-slate-300 md:col-start-1 ${
+              t.hero.support ? 'md:row-start-7' : 'md:row-start-6'
+            }`}
+            initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.13 }}
+          >
+            <p>{t.hero.heroSeoLine1}</p>
+            <p>
+              {t.hero.heroSeoLine2Before}
+              <Link
+                href={withBasePath('/publicite-voiture-montpellier')}
+                className={`text-slate-600 underline decoration-slate-400/70 underline-offset-2 transition-colors hover:text-sky-600 hover:decoration-sky-500 dark:text-slate-400 dark:decoration-slate-500/80 dark:hover:text-sky-400 dark:hover:decoration-sky-500/80 ${focusRing} rounded-sm`}
+              >
+                {t.hero.heroSeoLine2Link}
+              </Link>
+              {t.hero.heroSeoLine2After}
+            </p>
+          </motion.div>
+
           {/* Premium visual area: after primary CTA + supporting copy; desktop: col 2 */}
           <motion.div
             className={`relative max-md:-mt-2 max-md:-mb-2 md:col-start-2 md:row-start-1 md:self-center ${
-              t.hero.scaleSupporting ? 'md:row-span-6' : 'md:row-span-5'
+              t.hero.support ? 'md:row-span-7' : 'md:row-span-6'
             }`}
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -229,7 +256,7 @@ export function HeroSection() {
 
           <motion.div
             className={`md:col-start-1 md:hidden ${
-              t.hero.scaleSupporting ? 'md:row-start-7' : 'md:row-start-6'
+              t.hero.support ? 'md:row-start-8' : 'md:row-start-7'
             }`}
             initial={{ opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 }}
             animate={{ opacity: 1, y: 0 }}
