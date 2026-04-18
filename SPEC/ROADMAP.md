@@ -1,18 +1,69 @@
 # SPM — Project Roadmap
 
+## SEO STATUS (as of 2026-04-18 21:08)
+
+State:
+- Phase: Phase 2 — Implemented
+- Status: Indexing in progress
+
+Details:
+- 3 SEO pages deployed:
+  /publicite-voiture-montpellier
+  /affichage-mobile-montpellier
+  /publicite-locale-montpellier
+
+- Sitemap:
+  https://www.spmads.fr/sitemap.xml → submitted to Google Search Console
+
+- Indexing:
+  All 3 URLs manually submitted via GSC
+
+- Internal linking:
+  Implemented via Footer + Hero + Concept + cross-links
+
+- Technical readiness:
+  robots.txt + sitemap + canonical OK
+
+Important:
+Indexing is NOT yet confirmed.
+Next SEO steps depend on indexing results.
+
+## SEO PROGRESSION RULE
+
+Current state: indexing in progress.
+
+Rules:
+- DO NOT start blog / long-tail SEO (Phase 3)
+- DO NOT expand SEO pages
+- DO NOT change SEO copy
+
+Allowed:
+- UI/UX improvements (non-SEO)
+- technical fixes
+
+Next step:
+Wait for indexing confirmation in Google Search Console.
+
 ## Current Status
 
 - **Phase 2A (UI / Visual MVP):** **Completed**
-- **Phase 2B (functionality):** **Substantially complete** for implemented runtime features (contact lead API, emails, calculator engine + UI, structured lead fields `leadOrigin` / `calculatorSummary` where applicable — see `/SPEC/CALCULATOR_CURRENT_STATE.md` §13). **Remaining** roadmap scope: FAQ, coverage map, media kit (below); optional **pricing calibration** / calculator UX polish.
+- **Phase 2B (functionality):** **Substantially complete** for implemented runtime features (contact lead API, emails, calculator engine + UI, structured lead fields `leadOrigin` / `calculatorSummary` where applicable — see `/SPEC/CALCULATOR_CURRENT_STATE.md` §13).
+- **Landing (`/`):** **Conversion-first** homepage — primary funnel (Hero → Offres estimator → Contact); unchanged as the core conversion layer.
+- **SEO page layer (v1) — shipped:** three App Router routes (search-intent entry pages; i18n body copy; shared shell; internal links between those pages; metadata + canonical + `sitemap.xml` entries). See **Phase 3** below for what remains outside that layer.
+- **Remaining** roadmap scope: FAQ, coverage map, media kit; optional **pricing calibration** / calculator UX polish.
 - **Next focus:** FAQ, map, media kit per priority; production hosted on **Vercel**.
 
 ### Shipped UX / platform polish (since prior roadmap revision)
 
 Documented here so roadmap status matches the repo; all items are **implemented in code** (verify in `src/` before changing).
 
+- **SEO page layer (v1) — shipped — entry pages (marketing / acquisition):** `/publicite-voiture-montpellier`, `/affichage-mobile-montpellier`, `/publicite-locale-montpellier` — `page.tsx` per route, content components, locale-specific copy under `src/i18n/locales/{fr,en,ua}` (`seo*` keys), `metadata` + canonical per route, URLs in `src/app/sitemap.ts`; Navbar / MobileBottomNav use `useHomeAnchorHref` so section links target the **homepage** anchors (`/#support`, `/#parcours`, `/#offres`, `/#contact`); cross-links between SEO pages plus a **quiet** secondary nav block (soft bordered controls) before the shared SEO CTA; conversion CTAs still point to `/#offres` and `/#contact` on the home page.
 - **Hero conversion order:** primary CTA immediately after the scale line; supporting copy + trust; carousel; secondary CTA below — see `HeroSection.tsx`.
 - **Shared CTA shape:** `src/lib/cta-shape.ts` (`ctaShapeBase`) aligned across Hero (secondary), Contact, Offres card CTAs, calculator panel links; Hero primary uses equivalent dimensions + gradient.
 - **PWA / launch alignment:** `site.webmanifest` theme/background `#ffffff`; `layout.tsx` **`viewport.themeColor`**; inline theme script skips sync `dark` class in **standalone**; `globals.css` explicit `html` backgrounds — reduces splash/first-frame mismatch for installed PWAs.
+- **Theme modes:** **`light` / `dark` / `auto`** with **`spm-theme`** persistence (`ThemeContext`); **auto** follows **`prefers-color-scheme`**; navbar cycles modes; **auto** uses **coarse vs fine pointer** icon hint (`Navbar.tsx`).
+- **Landing polish:** Hero **mobile** vertical spacing tuning (`HeroSection.tsx`); footer **desktop** single-line copyright row + positioning width behavior (`Footer.tsx`).
+- **Calculator:** first-month base media priced at **50%** of effective monthly base (after duration multiplier), per **`FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION`** — see **`/SPEC/CALCULATOR_CURRENT_STATE.md`**.
 
 ---
 
@@ -62,8 +113,9 @@ Documented here so roadmap status matches the repo; all items are **implemented 
 
 ## Phase 3 — Marketing
 
-- ⬜ media kit
-- ⬜ SEO pages
+- ✓ **SEO page layer (v1) — shipped** — three routes; see **Current Status** and **Shipped UX** above.
+- **SEO integration into landing — COMPLETE**
+- ⬜ Media kit download (not part of current landing architecture)
 - ⬜ Google Business profile
 
 ## Phase 4 — Sales

@@ -19,6 +19,15 @@ En cas de tension sur le **comportement** (prix, API, écran) : **l’implément
 
 **Référence :** plages affichées, règle produit visibilité, contact→lead — **`/SPEC/CALCULATOR_CURRENT_STATE.md`** ; détail technique config — `src/lib/calculator/config.ts`. Ce fichier reste **méthodologique**.
 
+### 1.b Méthodologie vs libellés produit (site)
+
+| Couche | Rôle | Source de vérité |
+|--------|------|------------------|
+| **Méthodologie interne** (ce document) | Raisonner sur **contacts**, **contacts visibles**, **OTS**, CPM explicatif, défense prix — langage **professionnel OOH** et vente. | Non normatif pour le runtime. |
+| **Copy / UI du site** | Ce que voit l’utilisateur : **plages corridor** + **libellés i18n** (FR/EN/UA). Les clés actuelles peuvent dire **« vues »**, **« views »**, **« перегляди »** là où implémenté (`offres`, `parcours`) tout en gardant les **mêmes fourchettes numériques**. | **`/SPEC/CALCULATOR_CURRENT_STATE.md`** §6 + fichiers **`src/i18n/locales/*`**. |
+
+**Règle :** en cas de tension entre une formulation **méthodologique** (éviter « vues » non qualifiée en audit interne) et le **texte publié** sur le site, **le site / i18n** font foi pour la **communication utilisateur** ; ce document reste le cadre **interne** pour négociation et cohérence avec les bonnes pratiques OOH, sans imposer une réécriture du copy tant que les **chiffres** restent ceux du corridor.
+
 ---
 
 ## 2. Canonical operating scenario
@@ -51,9 +60,9 @@ Ces paramètres servent à raisonner sur l’exposition ; ils ne sont pas des ga
 | **Estimation indicative** | Fourchette ou ordre de grandeur communiqué avec transparence sur les hypothèses ; **pas** un engagement chiffré. |
 | **Estimation conservative** | Choix de paramètres **prudents** (visibilité, répétition, couverture) pour limiter le sur-promesse. |
 | **Conditions de pointe (peak conditions)** | Scénarios (trafic dense, météo favorable, format maximal, répétition forte) qui **majorent** l’exposition possible ; à cadrer explicitement comme plafond, pas comme défaut. |
-| **CPM** | Métrique **explicative** alignée sur le **corridor** et les plages affichées : `CPM = (prix mensuel / contacts mensuels) × 1000` en ne retenant pour le **discours produit** que des **contacts** cohérents avec ce corridor — **pas** dérivés des seules constantes moteur internes. Sur le site, la ligne CPM du calculateur est une **copie statique** (ex. ≈ 4 € / 1000 contacts), contrôlée comme le corridor, **non** recalculée dynamiquement à partir du moteur. |
+| **CPM** | Métrique **explicative** alignée sur le **corridor** et les plages affichées : `CPM = (prix mensuel / contacts mensuels) × 1000` en ne retenant pour le **discours produit** que des **contacts** cohérents avec ce corridor — **pas** dérivés des seules constantes moteur internes. **Sur le site**, la ligne CPM du calculateur est une **copie statique** par locale (ex. FR **≈ 4 € pour 1000 vues** — voir `calculatorEstimatedCostCpmValue` dans `offres.ts`), **non** recalculée dynamiquement à partir du moteur. |
 
-**Principe rédactionnel.** SPM doit parler en termes de **contacts estimés**, **contacts visibles**, **OTS**, et éviter le mot **« vues »** seul comme métrique brute non qualifiée.
+**Principe rédactionnel (méthodologie interne).** Pour les **documents internes** et la **vente**, privilégier **contacts estimés**, **contacts visibles**, **OTS**, et qualifier toute métrique de type « vue ». **Sur le landing**, les **libellés publiés** suivent l’**i18n** actuelle (voir §1.b) : l’écart de vocabulaire **ne** contredit **pas** le corridor tant que les **plages chiffrées** et le **prix** restent alignés sur le runtime.
 
 ---
 
@@ -166,7 +175,7 @@ Exemples **non exhaustifs** en raisonnant au **milieu de corridor** défendable 
 | PRO, milieu ~125k | 125 000 | 490 | ~3,92 |
 | EXCLUSIVE, milieu ~165k | 165 000 | 690 | ~4,18 |
 
-Le calculateur affiche une **ligne CPM statique** (copy, ex. ≈ 4 € / 1000 contacts), **alignée** sur cette logique corridor — **non** calculée à partir de constantes internes 30k/45k/60k.
+Le calculateur affiche une **ligne CPM statique** (copy par locale, ex. FR ≈ 4 € pour 1000 vues), **alignée** sur cette logique corridor — **non** calculée à partir de constantes internes 30k/45k/60k.
 
 Le **CPM baisse** si les contacts retenus augmentent **à prix fixe**. L’objectif n’est pas de « vendre » le CPM le plus bas, mais d’**expliciter** que le chiffre repose sur le **corridor** et des hypothèses de contacts cohérentes avec les plages affichées.
 

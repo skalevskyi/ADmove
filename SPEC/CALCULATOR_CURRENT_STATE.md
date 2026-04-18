@@ -6,14 +6,14 @@ This document describes the **actual implemented behavior** of the SPM calculato
 
 **Canonical hierarchy:** (1) **Code / runtime** is always authoritative for **behavior, pricing logic, and API contracts**. (2) **This file** is the **canonical runtime-facing spec** for calculator behavior and calculator-related lead payload behavior — update it when implementation changes. (3) Product context: `PROJECT_CONTEXT.md`. (4) Roadmap: `ROADMAP.md`. (5) AI guardrails: `AI_RULES.md`. (6) `AUDIENCE_PRICING_METHOD.md` is **non-normative** methodology.
 
-**Product visibility rule:** For **contacts / audience reach**, the **product truth** is defined **exclusively** by **corridor ranges** implemented in **i18n** (calculator + Parcours + approved copy). **Internal** numeric constants (`INDICATIVE_MONTHLY_CONTACTS` in `config.ts`) may exist for technical purposes but are **not** used in user-facing explanation, messaging, or product narrative.
+**Product visibility rule:** For **audience / reach**, the **product truth** is defined **exclusively** by **corridor ranges** implemented in **i18n** (calculator + Parcours + approved copy). **On-screen labels** may use locale-specific wording such as **views / vues / перегляди** (see current `offres.ts` / `parcours.ts` keys — e.g. `calculatorContactsLabel`, `visibilityContactsUnit`). **Internal** numeric constants (`INDICATIVE_MONTHLY_CONTACTS` in `config.ts`) may exist for technical purposes but are **not** used in user-facing explanation, messaging, or product narrative.
 
 If any conflict exists between marketing copy and **pricing/UI behavior**:
 → **implementation (code + UI) wins**; then align this document. For **visibility messaging**, corridor + i18n define the product story even if internal constants differ.
 
 ### Product Visibility Rule (summary)
 
-All user-facing statements about audience size must use **corridor ranges** (i18n). Internal numeric constants are **not** considered product truth and must **not** appear in UI, copy, or explanatory logic for reach.
+All user-facing **numeric** audience brackets must use **corridor ranges** (i18n). **Wording** of labels/units follows current **`offres` / `parcours`** keys (may say *views* / *vues* / *перегляди* per locale). Internal numeric constants are **not** considered product truth and must **not** appear in UI, copy, or explanatory logic for reach.
 
 ---
 
@@ -50,7 +50,7 @@ Contains:
 * base prices
 * add-on prices
 * optional **internal** field `INDICATIVE_MONTHLY_CONTACTS` (technical only; **not** the product definition of visibility — see §6)
-* **per-package** first-month discount on base media (`FIRST_MONTH_DISCOUNT_EUR_BY_PACKAGE`)
+* **first month base-media price fraction:** `FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION` in `config.ts` (currently **0.5** — month 1 base media is **50%** of the **effective** monthly base after the duration multiplier; **all packages**; base media only — see §4.2)
 
 ---
 
@@ -106,36 +106,41 @@ Applied ONLY to base media price:
 
 # 💰 4. CORE CALCULATIONS (ENGINE)
 
-## 4.1 Effective monthly base
+## 4.1 Effective monthly base (base media)
+
+The duration multiplier applies **only** to base media. In code, **`computeEffectiveBaseMonthlyMediaCents`**:
 
 ```
-effectiveBase = basePrice × durationMultiplier
+effectiveBaseMonthly = basePrice × durationMultiplier
 ```
+
+(Engine works in **cents**; amounts are rounded per `rules.ts`.)
 
 ---
 
-## 4.2 First month discount
+## 4.2 First month — base media charge
 
-Package-specific (source of truth: `FIRST_MONTH_DISCOUNT_EUR_BY_PACKAGE` in `config.ts`):
+**Source of truth:** `FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION` in `config.ts` (currently **0.5**). Implemented in **`computeBaseMonth1AfterDiscountCents`** (`rules.ts`).
 
-| Package   | First month discount (base media only) |
-| --------- | -------------------------------------- |
-| BASIC     | €100                                   |
-| PRO       | €100                                   |
-| EXCLUSIVE | €200                                   |
+**Rule (all packages, base media only):**
 
-Applied ONLY to base:
+* After the duration multiplier is applied, **month 1** charges **50%** of **effective** monthly base media (not a fixed € amount).
+* Add-ons are **not** discounted by this rule; they stack on month 1 at full configured rates as computed by the engine.
 
 ```
-month1Base = effectiveBase − FIRST_MONTH_DISCOUNT_EUR_BY_PACKAGE[packageId]
+month1BaseMedia = effectiveBaseMonthly × FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION
 ```
+
+Equivalently, the **discount** on base media in month 1 equals the other **50%** of `effectiveBaseMonthly` (surfaced in UI as `month1BaseDiscountEur` in `engine.ts`).
 
 ---
 
-## 4.3 Recurring months
+## 4.3 Recurring months (from month 2)
+
+Base media from month 2 onward uses the **full** effective monthly base:
 
 ```
-fromMonth2Base = effectiveBase
+fromMonth2BaseMedia = effectiveBaseMonthly
 ```
 
 ---
@@ -155,9 +160,11 @@ Engine supports one-time fees via `chargedOneTimeEur` where rules apply (value m
 ## 4.5 Total per month
 
 ```
-month1Total = month1Base + add-ons
-fromMonth2Total = effectiveBase + add-ons
+month1Total = month1BaseMedia + recurring add-ons (monthly) + one-time fees (as applicable)
+fromMonth2Total = effectiveBaseMonthly + recurring add-ons (monthly)
 ```
+
+(Exact line items: see `engine.ts` / `CalculatorMonthlyView`.)
 
 ---
 
@@ -203,15 +210,15 @@ Availability per package is enforced in `rules.ts` / UI (e.g. which toggles appe
 
 # 👁 6. VISIBILITY MODEL
 
-**User-facing visibility** is defined by **corridor ranges** (single product-facing model):
+**User-facing visibility** is defined by **corridor ranges** (single product-facing model for **numeric** reach):
 
-| Package   | Monthly contacts (corridor, product-facing) |
+| Package   | Monthly range (corridor, product-facing) |
 | --------- | ------------------------------------------- |
 | BASIC     | 60k–100k                                    |
 | PRO       | 100k–150k                                   |
 | EXCLUSIVE | 130k–200k                                   |
 
-These values are implemented via **i18n** (`calculatorContactsRange*` in Offres calculator panel; `visibilityMetric*` in Parcours) plus a **separate unit line** (e.g. `contacts / month`). They represent the **only** product-facing description of audience reach. There is **no** separate UI prefix row like “Range / Fourchette / Діапазон” before the numbers.
+These values are implemented via **i18n** (`calculatorContactsRange*` in Offres calculator panel; Parcours visibility block) plus **separate label / unit lines**. **Label keys** (e.g. `calculatorContactsLabel`, `calculatorContactsUnit`, `visibilityContactsUnit`) use **locale-appropriate** copy — including **views / vues / перегляди** where implemented — while the **numeric corridor** above stays the canonical bracket. They represent the **only** product-facing description of audience reach. There is **no** separate UI prefix row like “Range / Fourchette / Діапазон” before the numbers.
 
 Add-ons and duration selection do **not** change these displayed ranges (ranges are copy/corridor-based, not dynamically recalculated per selection in the UI).
 
@@ -258,25 +265,25 @@ Base price (package list / nominal)
 Immediately after the base price line, a **static** explanatory row is shown (not computed dynamically by the engine):
 
 * **Label:** `calculatorEstimatedCostCpmLabel` (i18n)
-* **Value:** `calculatorEstimatedCostCpmValue` — corridor-aligned copy (e.g. **≈ 4 € / 1000 contacts** in FR), consistent with the **corridor** model and approved messaging — **not** derived from `INDICATIVE_MONTHLY_CONTACTS` or a live CPM calculation in code.
+* **Value:** `calculatorEstimatedCostCpmValue` — corridor-aligned **static** copy per locale (e.g. FR **≈ 4 € pour 1000 vues** — see `offres.ts`), consistent with the **corridor** model — **not** derived from `INDICATIVE_MONTHLY_CONTACTS` or a live CPM calculation in code.
 
 ---
 
 ## 7.2 Adjustments
 
-* First month discount (amount from `FIRST_MONTH_DISCOUNT_EUR_BY_PACKAGE` in `config.ts`: BASIC/PRO −€100, EXCLUSIVE −€200; base media only)
-* Period discount (UI-derived, not engine)
+* **First month base media:** −50% of **effective** monthly base (after duration multiplier), via `FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION` — **base media only**; see §4.2.
+* Period discount (UI-derived, not engine — where shown as presentation)
 
 ---
 
 ## 7.3 Payment structure
 
 ```
-Month 1 → month1Base
-From month 2 → fromMonth2Base
+Month 1 → month1 base media (discounted per §4.2) + add-ons
+From month 2 → effective monthly base media + add-ons
 ```
 
-(no add-ons included here)
+(Structure mirrors `CalculatorMonthlyView` / engine output.)
 
 ---
 

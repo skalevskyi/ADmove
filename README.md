@@ -32,6 +32,7 @@ SPM is a mobile outdoor advertising platform designed for local B2B businesses.
 - 📍 Fixed daily route (Montpellier → Littoral)
 - 🎯 Local audience targeting
 - 📊 Predictable visibility model (corridor-based, i18n)
+- 🔍 SEO-driven acquisition layer (search-intent pages)
 
 ---
 
@@ -44,6 +45,26 @@ SPM is a mobile outdoor advertising platform designed for local B2B businesses.
 - 🌍 Multi-language support (FR / EN / UA)
 - ✨ Motion with Framer Motion (reduced-motion aware)
 - 🚀 Production deployment on Vercel
+
+## 🔍 SEO Layer
+
+- 3 search-intent pages:
+  - /publicite-voiture-montpellier
+  - /affichage-mobile-montpellier
+  - /publicite-locale-montpellier
+
+- Internal linking:
+  - homepage → SEO pages (Hero, Concept, Footer)
+  - cross-links between SEO pages
+
+- Technical:
+  - dynamic sitemap (`/sitemap.xml`)
+  - robots.txt
+  - canonical per route
+
+- Google Search Console:
+  - sitemap submitted
+  - indexing requested
 
 ---
 
@@ -128,7 +149,9 @@ npm start
 ## 📊 Status
 
 - ✅ Core landing, calculator, and lead pipeline implemented
-- 🎯 Ongoing UI/UX and copy polish
+- ✅ SEO layer (3 pages + internal linking + sitemap)
+- ⏳ Indexing in progress (Google Search Console)
+- 🎯 UI/UX and copy polish ongoing
 - ⏳ Roadmap: FAQ, coverage map, media kit
 
 ---
