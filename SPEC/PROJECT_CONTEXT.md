@@ -2,11 +2,11 @@
 
 **Documentation hierarchy (canonical):** (1) **Code / runtime** — source of truth for **behavior, pricing logic, and API contracts**. (2) **Corridor (i18n ranges)** — source of truth for **product-facing visibility numbers**; **labels** (e.g. views / vues / перегляди) follow **`offres` / `parcours`** i18n — see **`/SPEC/CALCULATOR_CURRENT_STATE.md`** §6. (3) **`/SPEC/CALCULATOR_CURRENT_STATE.md`** — runtime-facing behavior for the calculator and contact→lead integration (including structured fields). (4) This file — product/project context. (5) **`/SPEC/ROADMAP.md`** — status and pending scope. (6) **`/SPEC/AI_RULES.md`** — guardrails for tooling. (7) **`/SPEC/AUDIENCE_PRICING_METHOD.md`** — methodology, non-normative for runtime. (8) **`/SPEC/DESIGN_SYSTEM.md`** — design guidance.
 
-## SEO STATUS (as of 2026-04-18 21:08)
+## SEO STATUS (as of 2026-04-19)
 
 State:
 - Phase: Phase 2 — Implemented
-- Status: Indexing in progress
+- Status: Indexing confirmed
 
 Details:
 - 3 SEO pages deployed:
@@ -18,7 +18,10 @@ Details:
   https://www.spmads.fr/sitemap.xml → submitted to Google Search Console
 
 - Indexing:
-  All 3 URLs manually submitted via GSC
+  All 3 URLs are indexed in Google
+
+- Search presence:
+  All 3 SEO pages already appear in Google search results
 
 - Internal linking:
   Implemented via Footer + Hero + Concept + cross-links
@@ -27,8 +30,8 @@ Details:
   robots.txt + sitemap + canonical OK
 
 Important:
-Indexing is NOT yet confirmed.
-Next SEO steps depend on indexing results.
+Indexing is confirmed.
+The next SEO phase is ranking improvement and authority building.
 
 ## Project Overview
 

@@ -1,71 +1,20 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
-import { BASE_PATH, withBasePath } from '@/lib/base-path';
+import { withBasePath } from '@/lib/base-path';
 import { ctaShapeBase } from '@/lib/cta-shape';
-
-const HERO_IMAGES = [
-  `${BASE_PATH}/vehicle/hero-car-1.png`,
-  `${BASE_PATH}/vehicle/hero-car-2.png`,
-  `${BASE_PATH}/vehicle/hero-car-3.png`,
-] as const;
-
-const CAROUSEL_INTERVAL_MS = 5000;
-
-/** Schematic route hint: line + points only (not a map). */
-function RouteHint() {
-  return (
-    <div
-      className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-[0.07] dark:opacity-[0.12]"
-      aria-hidden
-    >
-      <svg
-        viewBox="0 0 200 80"
-        className="h-full max-h-32 w-full max-w-[280px]"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      >
-        <path
-          d="M 10 40 Q 50 20, 100 40 T 190 40"
-          className="text-slate-600 dark:text-slate-400"
-        />
-        {[10, 50, 100, 150, 190].map((x, i) => (
-          <circle
-            key={i}
-            cx={x}
-            cy={40}
-            r={i === 0 || i === 4 ? 4 : 3}
-            className="fill-slate-500 dark:fill-slate-400"
-          />
-        ))}
-      </svg>
-    </div>
-  );
-}
+import { HeroRouteVisual } from './HeroRouteVisual';
 
 const focusRing =
   'focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70';
 
 export function HeroSection() {
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const reducedMotion = useReducedMotion();
   const { t } = useLanguage();
-
-  useEffect(() => {
-    if (reducedMotion) return;
-    const id = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % HERO_IMAGES.length);
-    }, CAROUSEL_INTERVAL_MS);
-    return () => clearInterval(id);
-  }, [reducedMotion]);
 
   const motionOpts = {
     initial: { opacity: reducedMotion ? 1 : 0, y: reducedMotion ? 0 : 16 },
@@ -204,54 +153,13 @@ export function HeroSection() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, delay: reducedMotion ? 0 : 0.06 }}
           >
-            <div className="relative mx-auto aspect-[4/3] w-full max-w-xl">
-              <RouteHint />
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentImageIndex}
-                  className="absolute inset-0"
-                  initial={{
-                    opacity: reducedMotion ? 1 : 0,
-                    scale: reducedMotion ? 1 : 0.985,
-                  }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{
-                    opacity: reducedMotion ? 1 : 0,
-                    scale: reducedMotion ? 1 : 0.99,
-                  }}
-                  transition={{ duration: reducedMotion ? 0 : 0.45 }}
-                >
-                  <Image
-                    src={HERO_IMAGES[currentImageIndex]}
-                    alt={t.hero.imageAlt}
-                    fill
-                    className="object-contain"
-                    priority={currentImageIndex === 0}
-                  />
-                </motion.div>
-              </AnimatePresence>
-            </div>
-            <div
-              className="mt-4 flex items-center justify-center gap-2"
-              role="tablist"
-              aria-label={t.hero.carouselLabel}
-            >
-              {HERO_IMAGES.map((_, i) => (
-                <button
-                  key={i}
-                  type="button"
-                  role="tab"
-                  aria-label={`${t.hero.carouselImage} ${i + 1}`}
-                  aria-selected={currentImageIndex === i}
-                  onClick={() => setCurrentImageIndex(i)}
-                  className={`rounded-full transition-colors duration-150 ease-out ${focusRing} ${
-                    currentImageIndex === i
-                      ? 'h-2 w-6 bg-slate-600 dark:bg-slate-200'
-                      : 'h-2 w-2 bg-slate-300 dark:bg-slate-600 hover:bg-slate-400 active:bg-slate-500 dark:hover:bg-slate-500 dark:active:bg-slate-400'
-                  }`}
-                />
-              ))}
-            </div>
+            <HeroRouteVisual
+              reducedMotion={reducedMotion}
+              imageAlt={t.hero.imageAlt}
+              routeAriaLabel={t.hero.routeVisualAriaLabel}
+              vehicleAriaLabel={t.hero.routeVisualVehicleAriaLabel}
+              locations={t.locations}
+            />
           </motion.div>
 
           <motion.div

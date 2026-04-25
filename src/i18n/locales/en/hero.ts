@@ -17,6 +17,6 @@ export const hero = {
   ctaPrimary: 'Get an estimate',
   ctaSecondary: 'How it works',
   imageAlt: 'Vehicle on the route between Montpellier and the coast',
-  carouselLabel: 'Daily route between Montpellier and La Grande-Motte',
-  carouselImage: 'Show image',
+  routeVisualAriaLabel: 'Daily local route between Montpellier and the coast',
+  routeVisualVehicleAriaLabel: 'Current vehicle position on the route',
 } as const;

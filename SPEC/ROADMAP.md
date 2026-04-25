@@ -1,10 +1,10 @@
 # SPM — Project Roadmap
 
-## SEO STATUS (as of 2026-04-18 21:08)
+## SEO STATUS (as of 2026-04-19)
 
 State:
 - Phase: Phase 2 — Implemented
-- Status: Indexing in progress
+- Status: Indexing confirmed
 
 Details:
 - 3 SEO pages deployed:
@@ -16,7 +16,10 @@ Details:
   https://www.spmads.fr/sitemap.xml → submitted to Google Search Console
 
 - Indexing:
-  All 3 URLs manually submitted via GSC
+  All 3 URLs are indexed in Google
+
+- Search presence:
+  All 3 SEO pages already appear in Google search results
 
 - Internal linking:
   Implemented via Footer + Hero + Concept + cross-links
@@ -25,24 +28,28 @@ Details:
   robots.txt + sitemap + canonical OK
 
 Important:
-Indexing is NOT yet confirmed.
-Next SEO steps depend on indexing results.
+Indexing is confirmed.
+The next SEO phase is ranking improvement and authority building.
 
 ## SEO PROGRESSION RULE
 
-Current state: indexing in progress.
+Current state: indexing confirmed, ranking still early.
 
 Rules:
-- DO NOT start blog / long-tail SEO (Phase 3)
-- DO NOT expand SEO pages
-- DO NOT change SEO copy
+- Phase 3 (blog / long-tail) is now unlocked
+- Start SEO expansion in a controlled way
+- Do NOT spam new pages
+- Do NOT rewrite existing SEO pages without clear ranking evidence
 
 Allowed:
-- UI/UX improvements (non-SEO)
+- blog / long-tail content
+- authority building
+- external links / citations / social distribution
+- UI/UX improvements
 - technical fixes
 
 Next step:
-Wait for indexing confirmation in Google Search Console.
+Move from indexing phase to ranking improvement and controlled SEO expansion.
 
 ## Current Status
 

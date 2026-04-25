@@ -17,7 +17,6 @@ export const hero = {
   ctaPrimary: 'Obtenir une estimation',
   ctaSecondary: 'Comment ça fonctionne',
   imageAlt: 'Véhicule en circulation entre Montpellier et le littoral',
-  carouselLabel:
-    'Parcours quotidien entre Montpellier et La Grande-Motte',
-  carouselImage: "Afficher l'image",
+  routeVisualAriaLabel: 'Trajet local quotidien entre Montpellier et le littoral',
+  routeVisualVehicleAriaLabel: 'Position actuelle du véhicule sur le trajet',
 } as const;

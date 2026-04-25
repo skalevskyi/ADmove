@@ -17,6 +17,6 @@ export const hero = {
   ctaPrimary: 'Отримати оцінку',
   ctaSecondary: 'Як це працює',
   imageAlt: 'Авто на маршруті між Монпельє та узбережжям',
-  carouselLabel: 'Щоденний маршрут між Монпельє та Ла-Гранд-Мотт',
-  carouselImage: 'Показати зображення',
+  routeVisualAriaLabel: 'Щоденний локальний маршрут між Монпельє та узбережжям',
+  routeVisualVehicleAriaLabel: 'Поточна позиція авто на маршруті',
 } as const;

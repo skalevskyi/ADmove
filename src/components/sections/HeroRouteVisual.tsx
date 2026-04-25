@@ -23,6 +23,7 @@ type MotionAnchorId =
   | 'grandeMotte'
   | 'carnonReturn'
   | 'palavas';
+type TrailPhase = 'hidden' | 'growing' | 'following' | 'collapsing';
 
 type HeroRouteVisualProps = {
   reducedMotion: boolean;
@@ -44,9 +45,13 @@ const LEFT_ENDPOINT_LABEL_OFFSET = 4.2;
 const RIGHT_ENDPOINT_LABEL_OFFSET = 4.2;
 const ROUTE_TRAIL_LENGTH = 12;
 const TRAIL_SAMPLE_COUNT = 32;
+const TRAIL_SEGMENT_COUNT = 18;
 const TRAIL_HIDDEN_EPSILON = 0.05;
 const TRAIL_CATCHUP_MULTIPLIER = 2;
 const TRAIL_MOVEMENT_EPSILON = 0.0005;
+const TRAIL_OPACITY_MIN = 0.04;
+const TRAIL_OPACITY_MAX = 0.82;
+const TRAIL_OPACITY_POWER = 1.6;
 const TOKEN_ROUTE_BASE = 'var(--hero-route-base)';
 const TOKEN_ROUTE_TRAIL = 'var(--hero-route-trail)';
 const TOKEN_MARKER_FILL = 'var(--hero-marker-fill)';
@@ -54,6 +59,12 @@ const TOKEN_MARKER_STROKE = 'var(--hero-marker-stroke)';
 const TOKEN_LABEL_FILL = 'var(--hero-label-fill)';
 const TOKEN_LABEL_STROKE = 'var(--hero-label-stroke)';
 const TOKEN_VEHICLE_SHADOW = 'var(--hero-vehicle-shadow)';
+const TOKEN_VEHICLE_BODY = 'var(--hero-vehicle-body)';
+const TOKEN_VEHICLE_CABIN = 'var(--hero-vehicle-cabin)';
+const TOKEN_VEHICLE_GLASS = 'var(--hero-vehicle-glass)';
+const TOKEN_VEHICLE_WHEEL = 'var(--hero-vehicle-wheel)';
+const TOKEN_VEHICLE_WHEEL_CENTER = 'var(--hero-vehicle-wheel-center)';
+const TOKEN_ROUTE_GLOW_COLOR = 'var(--hero-route-glow-color)';
 
 const STOP_POINTS: Record<StopId, { x: number; y: number }> = {
   montpellier: { x: 12, y: 50 },
@@ -120,18 +131,18 @@ export function HeroRouteVisual({
   const [motionAnchorLengths, setMotionAnchorLengths] = useState<Record<MotionAnchorId, number> | null>(
     null,
   );
-  const [trailState, setTrailState] = useState<{ head: number; tail: number; visibleLength: number }>({
-    head: 0,
-    tail: 0,
-    visibleLength: 0,
-  });
   const routePathRef = useRef<SVGPathElement | null>(null);
   const trailHeadRef = useRef(0);
   const trailTailRef = useRef(0);
+  const trailVisibleLengthRef = useRef(0);
   const previousDirectionRef = useRef<Direction>('outbound');
   const previousTickMsRef = useRef<number | null>(null);
   const previousCurrentLengthRef = useRef<number | null>(null);
   const trailDirectionSignRef = useRef<1 | -1>(1);
+  const trailPhaseRef = useRef<TrailPhase>('hidden');
+  const vehicleRef = useRef<SVGGElement | null>(null);
+  const vehicleFlipRef = useRef<SVGGElement | null>(null);
+  const trailSegmentRefs = useRef<Array<SVGLineElement | null>>([]);
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -154,8 +165,14 @@ export function HeroRouteVisual({
   useEffect(() => {
     if (reducedMotion) return;
     let frameId = 0;
+    let lastStateUpdateMs = 0;
+    const NOW_UPDATE_INTERVAL_MS = 80;
     const tick = () => {
-      setNowMs(Date.now());
+      const nextNow = Date.now();
+      if (nextNow - lastStateUpdateMs >= NOW_UPDATE_INTERVAL_MS) {
+        lastStateUpdateMs = nextNow;
+        setNowMs(nextNow);
+      }
       frameId = window.requestAnimationFrame(tick);
     };
     frameId = window.requestAnimationFrame(tick);
@@ -247,112 +264,179 @@ export function HeroRouteVisual({
     const point = path.getPointAtLength(currentLength);
     return { x: point.x, y: point.y, currentLength };
   }, [activeMotionAnchor, nextMotionAnchor, segmentProgress, motionAnchorLengths, totalPathLength]);
-  const currentLength = vehiclePosition.currentLength;
-  const isMoving = activeMotionAnchor !== nextMotionAnchor;
 
   useEffect(() => {
-    if (currentLength === null || totalPathLength <= 0) return;
-
-    const normalize = (length: number) =>
-      ((length % totalPathLength) + totalPathLength) % totalPathLength;
-    const signedDelta = (from: number, to: number) => {
-      let delta = to - from;
-      if (delta > totalPathLength / 2) delta -= totalPathLength;
-      if (delta < -totalPathLength / 2) delta += totalPathLength;
-      return delta;
+    if (reducedMotion) return;
+    let frameId = 0;
+    const hideTrailSegments = () => {
+      for (let i = 0; i < TRAIL_SEGMENT_COUNT; i += 1) {
+        const segmentEl = trailSegmentRefs.current[i];
+        if (!segmentEl) continue;
+        segmentEl.setAttribute('opacity', '0');
+      }
     };
 
-    const normalizedCurrent = normalize(currentLength);
-    const now = Date.now();
-    const previousTick = previousTickMsRef.current ?? now;
-    const elapsedMs = Math.max(now - previousTick, 0);
-    previousTickMsRef.current = now;
-
-    const directionChanged = previousDirectionRef.current !== state.direction;
-    previousDirectionRef.current = state.direction;
-
-    if (directionChanged) {
-      trailHeadRef.current = normalizedCurrent;
-      trailTailRef.current = normalizedCurrent;
-      previousCurrentLengthRef.current = normalizedCurrent;
-      setTrailState({ head: normalizedCurrent, tail: normalizedCurrent, visibleLength: 0 });
-      return;
-    }
-
-    const previousCurrent = previousCurrentLengthRef.current ?? normalizedCurrent;
-    const movementDelta = signedDelta(previousCurrent, normalizedCurrent);
-    previousCurrentLengthRef.current = normalizedCurrent;
-
-    const isActuallyMoving = isMoving && Math.abs(movementDelta) > TRAIL_MOVEMENT_EPSILON;
-    if (isActuallyMoving) {
-      const actualDirectionSign: 1 | -1 = movementDelta > 0 ? 1 : -1;
-      if (trailDirectionSignRef.current !== actualDirectionSign) {
-        trailHeadRef.current = normalizedCurrent;
-        trailTailRef.current = normalizedCurrent;
-        trailDirectionSignRef.current = actualDirectionSign;
-        setTrailState({ head: normalizedCurrent, tail: normalizedCurrent, visibleLength: 0 });
+    const tick = () => {
+      const path = routePathRef.current;
+      if (!path || !motionAnchorLengths || totalPathLength <= 0) {
+        hideTrailSegments();
+        frameId = window.requestAnimationFrame(tick);
         return;
       }
-      trailDirectionSignRef.current = actualDirectionSign;
-    }
-    const movementSign = trailDirectionSignRef.current;
 
-    trailHeadRef.current = normalizedCurrent;
+      const now = Date.now();
+      const segmentProgressRaw = (now - state.changedAt) / STEP_MS;
+      const segmentProgress = Math.min(Math.max(segmentProgressRaw, 0), 1);
+      const startLength = motionAnchorLengths[activeMotionAnchor];
+      const endLength = motionAnchorLengths[nextMotionAnchor];
+      const currentLengthForVehicle =
+        activeMotionAnchor === nextMotionAnchor
+          ? startLength
+          : (startLength +
+              (endLength >= startLength
+                ? endLength - startLength
+                : totalPathLength - startLength + endLength) *
+                segmentProgress) %
+            totalPathLength;
+      const point = path.getPointAtLength(currentLengthForVehicle);
 
-    let nextVisibleLength = trailState.visibleLength;
-    if (!isActuallyMoving) {
-      const catchupSpeed = (ROUTE_TRAIL_LENGTH / STEP_MS) * elapsedMs * TRAIL_CATCHUP_MULTIPLIER;
-      nextVisibleLength = Math.max(0, nextVisibleLength - catchupSpeed);
-    } else {
-      nextVisibleLength = Math.min(ROUTE_TRAIL_LENGTH, nextVisibleLength + Math.abs(movementDelta));
-    }
+      if (vehicleRef.current) {
+        vehicleRef.current.setAttribute('transform', `translate(${point.x} ${point.y})`);
+      }
 
-    trailTailRef.current = normalize(trailHeadRef.current - movementSign * nextVisibleLength);
-    const visibleLength = nextVisibleLength;
-    setTrailState({
-      head: trailHeadRef.current,
-      tail: trailTailRef.current,
-      visibleLength,
-    });
-  }, [currentLength, totalPathLength, state.direction, isMoving, trailState.visibleLength]);
+      if (vehicleFlipRef.current) {
+        const scaleX = state.direction === 'outbound' ? -1 : 1;
+        vehicleFlipRef.current.setAttribute('transform', `scale(${scaleX} 1)`);
+      }
 
-  const isTrailVisible = !reducedMotion && trailState.visibleLength > TRAIL_HIDDEN_EPSILON;
-  const trailSegments = useMemo(() => {
-    const path = routePathRef.current;
-    if (!path || totalPathLength <= 0 || trailState.visibleLength <= 0) return [];
+      const normalize = (length: number) =>
+        ((length % totalPathLength) + totalPathLength) % totalPathLength;
+      const signedDelta = (from: number, to: number) => {
+        let delta = to - from;
+        if (delta > totalPathLength / 2) delta -= totalPathLength;
+        if (delta < -totalPathLength / 2) delta += totalPathLength;
+        return delta;
+      };
 
-    const segmentCount = Math.max(
-      2,
-      Math.min(
-        TRAIL_SAMPLE_COUNT,
-        Math.ceil((trailState.visibleLength / ROUTE_TRAIL_LENGTH) * TRAIL_SAMPLE_COUNT),
-      ),
-    );
+      const normalizedCurrent = normalize(currentLengthForVehicle);
+      const previousTick = previousTickMsRef.current ?? now;
+      const elapsedMs = Math.max(now - previousTick, 0);
+      previousTickMsRef.current = now;
 
-    const points: { x: number; y: number }[] = [];
-    for (let i = 0; i <= segmentCount; i += 1) {
-      const distanceBehindHead = (trailState.visibleLength * i) / segmentCount;
-      const sampleLength = trailState.head - distanceBehindHead;
-      const normalizedSampleLength =
-        ((sampleLength % totalPathLength) + totalPathLength) % totalPathLength;
-      const point = path.getPointAtLength(normalizedSampleLength);
-      points.push({ x: point.x, y: point.y });
-    }
+      const directionChanged = previousDirectionRef.current !== state.direction;
+      previousDirectionRef.current = state.direction;
+      if (directionChanged) {
+        trailPhaseRef.current = 'hidden';
+        trailHeadRef.current = normalizedCurrent;
+        trailTailRef.current = normalizedCurrent;
+        trailVisibleLengthRef.current = 0;
+        trailDirectionSignRef.current = 1;
+        previousCurrentLengthRef.current = normalizedCurrent;
+        hideTrailSegments();
+      }
 
-    const segments: { x1: number; y1: number; x2: number; y2: number; opacity: number }[] = [];
-    for (let i = 0; i < points.length - 1; i += 1) {
-      const alpha = 0.85 * (1 - i / segmentCount);
-      const opacity = Math.max(0.1, alpha);
-      segments.push({
-        x1: points[i].x,
-        y1: points[i].y,
-        x2: points[i + 1].x,
-        y2: points[i + 1].y,
-        opacity,
-      });
-    }
-    return segments;
-  }, [trailState.head, trailState.visibleLength, totalPathLength]);
+      const previousCurrent = previousCurrentLengthRef.current ?? normalizedCurrent;
+      const movementDelta = signedDelta(previousCurrent, normalizedCurrent);
+      previousCurrentLengthRef.current = normalizedCurrent;
+
+      const isMoving = activeMotionAnchor !== nextMotionAnchor;
+      const isActuallyMoving = isMoving && Math.abs(movementDelta) > TRAIL_MOVEMENT_EPSILON;
+      if (isActuallyMoving) {
+        const actualDirectionSign: 1 | -1 = movementDelta > 0 ? 1 : -1;
+        if (trailDirectionSignRef.current !== actualDirectionSign) {
+          trailHeadRef.current = normalizedCurrent;
+          trailTailRef.current = normalizedCurrent;
+          trailVisibleLengthRef.current = 0;
+          trailDirectionSignRef.current = actualDirectionSign;
+        }
+        trailDirectionSignRef.current = actualDirectionSign;
+      }
+      const movementSign = trailDirectionSignRef.current;
+
+      trailHeadRef.current = normalizedCurrent;
+      let nextVisibleLength = trailVisibleLengthRef.current;
+      let nextPhase = trailPhaseRef.current;
+
+      if (isActuallyMoving) {
+        if (nextPhase === 'hidden' || nextPhase === 'collapsing') {
+          nextPhase = 'growing';
+        }
+
+        if (nextPhase === 'growing') {
+          nextVisibleLength = Math.min(ROUTE_TRAIL_LENGTH, nextVisibleLength + Math.abs(movementDelta));
+          if (nextVisibleLength >= ROUTE_TRAIL_LENGTH - TRAIL_HIDDEN_EPSILON) {
+            nextVisibleLength = ROUTE_TRAIL_LENGTH;
+            nextPhase = 'following';
+          }
+        } else {
+          nextVisibleLength = ROUTE_TRAIL_LENGTH;
+          nextPhase = 'following';
+        }
+      } else {
+        if (nextPhase === 'growing' || nextPhase === 'following') {
+          nextPhase = 'collapsing';
+        }
+
+        if (nextPhase === 'collapsing') {
+          const catchupSpeed = (ROUTE_TRAIL_LENGTH / STEP_MS) * elapsedMs * TRAIL_CATCHUP_MULTIPLIER;
+          nextVisibleLength = Math.max(0, nextVisibleLength - catchupSpeed);
+          if (nextVisibleLength <= TRAIL_HIDDEN_EPSILON) {
+            nextVisibleLength = 0;
+            nextPhase = 'hidden';
+          }
+        } else if (nextPhase === 'hidden') {
+          nextVisibleLength = 0;
+        }
+      }
+
+      trailPhaseRef.current = nextPhase;
+      trailVisibleLengthRef.current = nextVisibleLength;
+      trailTailRef.current = normalize(trailHeadRef.current - movementSign * nextVisibleLength);
+
+      if (nextPhase === 'hidden' || nextVisibleLength <= TRAIL_HIDDEN_EPSILON) {
+        hideTrailSegments();
+      } else {
+        const sampleCount = TRAIL_SEGMENT_COUNT;
+        const pointsX = new Array<number>(sampleCount + 1);
+        const pointsY = new Array<number>(sampleCount + 1);
+
+        for (let i = 0; i <= sampleCount; i += 1) {
+          const distanceBehindHead = (nextVisibleLength * i) / sampleCount;
+          const sampleLength = trailHeadRef.current - movementSign * distanceBehindHead;
+          const normalizedSampleLength = normalize(sampleLength);
+          const samplePoint = path.getPointAtLength(normalizedSampleLength);
+          pointsX[i] = samplePoint.x;
+          pointsY[i] = samplePoint.y;
+        }
+
+        for (let i = 0; i < sampleCount; i += 1) {
+          const segmentEl = trailSegmentRefs.current[i];
+          if (!segmentEl) continue;
+          const strength = 1 - i / sampleCount;
+          const opacity =
+            TRAIL_OPACITY_MIN + (TRAIL_OPACITY_MAX - TRAIL_OPACITY_MIN) * Math.pow(strength, TRAIL_OPACITY_POWER);
+          segmentEl.setAttribute('x1', `${pointsX[i]}`);
+          segmentEl.setAttribute('y1', `${pointsY[i]}`);
+          segmentEl.setAttribute('x2', `${pointsX[i + 1]}`);
+          segmentEl.setAttribute('y2', `${pointsY[i + 1]}`);
+          segmentEl.setAttribute('opacity', `${opacity}`);
+        }
+      }
+
+      frameId = window.requestAnimationFrame(tick);
+    };
+
+    frameId = window.requestAnimationFrame(tick);
+    return () => window.cancelAnimationFrame(frameId);
+  }, [
+    reducedMotion,
+    state.direction,
+    state.changedAt,
+    motionAnchorLengths,
+    totalPathLength,
+    activeMotionAnchor,
+    nextMotionAnchor,
+  ]);
 
   const isVisualStopActive = (visualId: VisualStopId, logicalStop: StopId) => {
     if (logicalStop !== activeStop) return false;
@@ -363,8 +447,8 @@ export function HeroRouteVisual({
   };
 
   return (
-    <div className="relative mx-auto aspect-[4/3] w-full max-w-xl overflow-hidden rounded-[2.4rem] border border-slate-200/55 bg-slate-100/30 [--hero-route-base:rgb(203_213_225)] [--hero-route-trail:rgba(56,189,248,0.5)] [--hero-marker-fill:rgb(248_250_252)] [--hero-marker-stroke:rgba(56,189,248,0.86)] [--hero-label-fill:rgb(226_232_240)] [--hero-label-stroke:rgba(15,23,42,0.45)] [--hero-vehicle-shadow:rgba(2,6,23,0.22)] dark:border-slate-700/55 dark:bg-slate-800/24 dark:[--hero-route-base:rgb(148_163_184)] dark:[--hero-route-trail:rgba(125,211,252,0.62)] dark:[--hero-marker-fill:rgb(226_232_240)] dark:[--hero-marker-stroke:rgba(125,211,252,0.92)] dark:[--hero-label-fill:rgb(241_245_249)] dark:[--hero-label-stroke:rgba(15,23,42,0.6)] dark:[--hero-vehicle-shadow:rgba(2,6,23,0.34)]">
-      <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_120%_100%_at_50%_50%,black_52%,rgba(0,0,0,0.92)_66%,rgba(0,0,0,0.58)_80%,transparent_100%)] [mask-repeat:no-repeat] [mask-size:100%_100%]">
+    <div className="relative mx-auto aspect-[4/3] w-full max-w-xl overflow-hidden rounded-[2.6rem] border border-slate-100/10 bg-slate-100/24 shadow-[0_10px_28px_rgba(15,23,42,0.045)] [--hero-route-base:rgb(148_163_184)] [--hero-route-gradient-mid:rgb(226_232_240)] [--hero-route-glow-color:rgba(203,213,225,0.34)] [--hero-route-trail:rgba(56,189,248,0.5)] [--hero-trail-opacity-head:0.8] [--hero-trail-opacity-tail:0.1] [--hero-trail-stroke-width:2.3] [--hero-marker-fill:rgb(241_245_249)] [--hero-marker-stroke:rgba(56,189,248,0.92)] [--hero-marker-glow-opacity-active:0.24] [--hero-marker-glow-opacity-inactive:0.16] [--hero-label-fill:rgb(226_232_240)] [--hero-label-stroke:rgba(15,23,42,0.56)] [--hero-label-stroke-width:0.2] [--hero-vehicle-shadow:rgba(2,6,23,0.22)] [--hero-vehicle-body:#ffffff] [--hero-vehicle-cabin:#e2e8f0] [--hero-vehicle-glass:#94a3b8] [--hero-vehicle-wheel:#0f172a] [--hero-vehicle-wheel-center:#cbd5f5] dark:border-slate-700/20 dark:bg-slate-800/24 dark:shadow-[0_12px_30px_rgba(2,6,23,0.24)] dark:[--hero-route-base:rgb(148_163_184)] dark:[--hero-route-gradient-mid:rgb(226_232_240)] dark:[--hero-route-glow-color:rgba(148,163,184,0.28)] dark:[--hero-route-trail:rgba(125,211,252,0.62)] dark:[--hero-trail-opacity-head:0.88] dark:[--hero-trail-opacity-tail:0.12] dark:[--hero-trail-stroke-width:2.3] dark:[--hero-marker-fill:rgb(226_232_240)] dark:[--hero-marker-stroke:rgba(125,211,252,0.92)] dark:[--hero-marker-glow-opacity-active:0.2] dark:[--hero-marker-glow-opacity-inactive:0.14] dark:[--hero-label-fill:rgb(241_245_249)] dark:[--hero-label-stroke:rgba(15,23,42,0.6)] dark:[--hero-label-stroke-width:0.18] dark:[--hero-vehicle-shadow:rgba(2,6,23,0.34)] dark:[--hero-vehicle-body:#f8fafc] dark:[--hero-vehicle-cabin:#cbd5e1] dark:[--hero-vehicle-glass:#94a3b8] dark:[--hero-vehicle-wheel:#0f172a] dark:[--hero-vehicle-wheel-center:#e2e8f0]">
+      <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_128%_112%_at_50%_52%,black_34%,rgba(0,0,0,0.94)_52%,rgba(0,0,0,0.72)_64%,rgba(0,0,0,0.38)_76%,rgba(0,0,0,0.14)_88%,transparent_100%)] [mask-repeat:no-repeat] [mask-size:100%_100%]">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeBackground}
@@ -378,7 +462,7 @@ export function HeroRouteVisual({
               src={activeBackground}
               alt={imageAlt}
               fill
-              className="object-cover opacity-55 dark:opacity-50"
+              className="object-cover opacity-75 dark:opacity-50"
               priority={activeStop === 'montpellier'}
             />
           </motion.div>
@@ -386,11 +470,11 @@ export function HeroRouteVisual({
       </div>
 
       <div
-        className="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-slate-900/20 to-slate-900/28 dark:from-slate-950/16 dark:via-slate-950/27 dark:to-slate-950/36"
+        className="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-slate-900/18 to-slate-900/24 dark:from-slate-950/16 dark:via-slate-950/27 dark:to-slate-950/36"
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_58%,rgba(2,6,23,0.08)_100%)] dark:bg-[radial-gradient(ellipse_at_center,transparent_56%,rgba(2,6,23,0.14)_100%)]"
+        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(241,245,249,0.03)_0%,rgba(226,232,240,0.03)_34%,rgba(148,163,184,0.08)_70%,rgba(51,65,85,0.18)_100%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.08)_0%,rgba(71,85,105,0.14)_44%,rgba(30,41,59,0.24)_74%,rgba(2,6,23,0.36)_100%)]"
         aria-hidden
       />
 
@@ -403,7 +487,7 @@ export function HeroRouteVisual({
           <defs>
             <linearGradient id="hero-route-line" x1="0%" y1="0%" x2="100%" y2="0%">
               <stop offset="0%" stopColor={TOKEN_ROUTE_BASE} />
-              <stop offset="50%" stopColor="rgb(241 245 249)" />
+              <stop offset="50%" stopColor="var(--hero-route-gradient-mid)" />
               <stop offset="100%" stopColor={TOKEN_ROUTE_BASE} />
             </linearGradient>
           </defs>
@@ -412,24 +496,25 @@ export function HeroRouteVisual({
             d={ROUTE_PATH_D}
             stroke="url(#hero-route-line)"
             strokeWidth="2.5"
-            className="drop-shadow-[0_0_4px_rgba(248,250,252,0.26)]"
+            style={{ filter: `drop-shadow(0 0 4px ${TOKEN_ROUTE_GLOW_COLOR})` }}
           />
-          {isTrailVisible
-            ? trailSegments.map((segment, index) => (
-                <line
-                  key={`trail-segment-${index}`}
-                  x1={segment.x1}
-                  y1={segment.y1}
-                  x2={segment.x2}
-                  y2={segment.y2}
-                  stroke={TOKEN_ROUTE_TRAIL}
-                  strokeWidth="2.3"
-                  strokeLinecap="round"
-                  opacity={segment.opacity}
-                  pointerEvents="none"
-                />
-              ))
-            : null}
+          {Array.from({ length: TRAIL_SEGMENT_COUNT }, (_, index) => (
+            <line
+              key={`trail-segment-static-${index}`}
+              ref={(el) => {
+                trailSegmentRefs.current[index] = el;
+              }}
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="0"
+              stroke={TOKEN_ROUTE_TRAIL}
+              strokeWidth="var(--hero-trail-stroke-width)"
+              strokeLinecap="round"
+              opacity="0"
+              pointerEvents="none"
+            />
+          ))}
           <circle cx="12" cy="50" r="2.35" fill={TOKEN_MARKER_FILL} stroke={TOKEN_MARKER_STROKE} strokeWidth="1.35" />
           <circle cx="88" cy="50" r="2.35" fill={TOKEN_MARKER_FILL} stroke={TOKEN_MARKER_STROKE} strokeWidth="1.35" />
           {VISUAL_STOPS.map((stop) => {
@@ -443,7 +528,7 @@ export function HeroRouteVisual({
                   cy={stop.y}
                   r={isActive ? 1.45 : 1.2}
                   fill={TOKEN_MARKER_STROKE}
-                  opacity={isActive ? 0.18 : 0.12}
+                  opacity={isActive ? 'var(--hero-marker-glow-opacity-active)' : 'var(--hero-marker-glow-opacity-inactive)'}
                 />
                 <circle
                   cx={stop.x}
@@ -484,26 +569,26 @@ export function HeroRouteVisual({
                 fontWeight="500"
                 fill={isActive ? TOKEN_MARKER_FILL : TOKEN_LABEL_FILL}
                 stroke={TOKEN_LABEL_STROKE}
-                strokeWidth="0.18"
+                strokeWidth="var(--hero-label-stroke-width)"
                 paintOrder="stroke"
               >
                 {label}
               </text>
             );
           })}
-          <g transform={`translate(${vehiclePosition.x} ${vehiclePosition.y})`} aria-label={vehicleAriaLabel}>
-            <g transform={`scale(${state.direction === 'outbound' ? -1 : 1}, 1)`}>
+          <g ref={vehicleRef} transform="translate(0 0)" aria-label={vehicleAriaLabel}>
+            <g ref={vehicleFlipRef} transform="scale(1 1)">
               <g transform="scale(1.25)">
                 <ellipse cx="0" cy="1.34" rx="1.9" ry="0.42" fill={TOKEN_VEHICLE_SHADOW} />
                 <g>
-                  <rect x="-2.2" y="-0.9" width="4.4" height="1.4" rx="0.45" fill="#ffffff" />
-                  <path d="M -1.6 -0.9 L 0.5 -0.9 L 1.3 -0.2 L -1.9 -0.2 Z" fill="#e2e8f0" />
-                  <rect x="-1.2" y="-0.7" width="1.0" height="0.4" rx="0.12" fill="#94a3b8" />
-                  <rect x="0.0" y="-0.7" width="0.9" height="0.4" rx="0.12" fill="#94a3b8" />
-                  <circle cx="-1.4" cy="0.75" r="0.4" fill="#0f172a" />
-                  <circle cx="1.4" cy="0.75" r="0.4" fill="#0f172a" />
-                  <circle cx="-1.4" cy="0.75" r="0.16" fill="#cbd5f5" />
-                  <circle cx="1.4" cy="0.75" r="0.16" fill="#cbd5f5" />
+                  <rect x="-2.2" y="-0.9" width="4.4" height="1.4" rx="0.45" fill={TOKEN_VEHICLE_BODY} />
+                  <path d="M -1.6 -0.9 L 0.5 -0.9 L 1.3 -0.2 L -1.9 -0.2 Z" fill={TOKEN_VEHICLE_CABIN} />
+                  <rect x="-1.2" y="-0.7" width="1.0" height="0.4" rx="0.12" fill={TOKEN_VEHICLE_GLASS} />
+                  <rect x="0.0" y="-0.7" width="0.9" height="0.4" rx="0.12" fill={TOKEN_VEHICLE_GLASS} />
+                  <circle cx="-1.4" cy="0.75" r="0.4" fill={TOKEN_VEHICLE_WHEEL} />
+                  <circle cx="1.4" cy="0.75" r="0.4" fill={TOKEN_VEHICLE_WHEEL} />
+                  <circle cx="-1.4" cy="0.75" r="0.16" fill={TOKEN_VEHICLE_WHEEL_CENTER} />
+                  <circle cx="1.4" cy="0.75" r="0.16" fill={TOKEN_VEHICLE_WHEEL_CENTER} />
                 </g>
               </g>
             </g>
