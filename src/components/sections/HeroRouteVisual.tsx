@@ -1,8 +1,6 @@
 'use client';
 
 import { useEffect, useMemo, useRef, useState } from 'react';
-import Image from 'next/image';
-import { AnimatePresence, motion } from 'framer-motion';
 
 import { BASE_PATH } from '@/lib/base-path';
 
@@ -64,7 +62,8 @@ const TOKEN_VEHICLE_CABIN = 'var(--hero-vehicle-cabin)';
 const TOKEN_VEHICLE_GLASS = 'var(--hero-vehicle-glass)';
 const TOKEN_VEHICLE_WHEEL = 'var(--hero-vehicle-wheel)';
 const TOKEN_VEHICLE_WHEEL_CENTER = 'var(--hero-vehicle-wheel-center)';
-const TOKEN_ROUTE_GLOW_COLOR = 'var(--hero-route-glow-color)';
+const MAP_LIGHT_SRC = `${BASE_PATH}/hero/locations/map-light.png`;
+const MAP_DARK_SRC = `${BASE_PATH}/hero/locations/map-dark.png`;
 
 const STOP_POINTS: Record<StopId, { x: number; y: number }> = {
   montpellier: { x: 12, y: 50 },
@@ -97,13 +96,23 @@ const VISUAL_STOPS: readonly {
   { visualId: 'carnonReturn', logicalStop: 'carnon', x: 66, y: 67, labelOffsetY: 11 },
   { visualId: 'palavas', logicalStop: 'palavas', x: 36, y: 67, labelOffsetY: 11 },
 ] as const;
-
-const BACKGROUNDS: Record<StopId, string> = {
-  montpellier: `${BASE_PATH}/hero/locations/montpellier.jpg`,
-  portMarianne: `${BASE_PATH}/hero/locations/port-marianne.jpg`,
-  carnon: `${BASE_PATH}/hero/locations/carnon.jpg`,
-  grandeMotte: `${BASE_PATH}/hero/locations/grande-motte.jpg`,
-  palavas: `${BASE_PATH}/hero/locations/palavas.jpg`,
+const LABEL_ANCHOR_POINTS: Record<VisualStopId, { x: number; y: number }> = {
+  montpellier: { x: 12 - LEFT_ENDPOINT_LABEL_OFFSET, y: 50 },
+  portMarianne: { x: 36, y: 33 - TOP_LABEL_OFFSET },
+  carnonOutbound: { x: 66, y: 33 - TOP_LABEL_OFFSET },
+  grandeMotte: { x: 88 + RIGHT_ENDPOINT_LABEL_OFFSET, y: 50 },
+  carnonReturn: { x: 66, y: 67 + BOTTOM_LABEL_OFFSET },
+  palavas: { x: 36, y: 67 + BOTTOM_LABEL_OFFSET },
+};
+const LABEL_PROXIMITY_RADIUS = 8;
+const LABEL_ACTIVE_SCALE = 1.12;
+const LABEL_PROXIMITY_TRANSFORMS: Record<VisualStopId, { dx: number; dy: number }> = {
+  montpellier: { dx: -1.4, dy: 0 },
+  portMarianne: { dx: 0, dy: -1.2 },
+  carnonOutbound: { dx: 0, dy: -1.2 },
+  grandeMotte: { dx: 1.4, dy: 0 },
+  carnonReturn: { dx: 0, dy: 1.2 },
+  palavas: { dx: 0, dy: 1.2 },
 };
 
 function getStops(direction: Direction): readonly StopId[] {
@@ -143,6 +152,14 @@ export function HeroRouteVisual({
   const vehicleRef = useRef<SVGGElement | null>(null);
   const vehicleFlipRef = useRef<SVGGElement | null>(null);
   const trailSegmentRefs = useRef<Array<SVGLineElement | null>>([]);
+  const labelTextRefs = useRef<Record<VisualStopId, SVGTextElement | null>>({
+    montpellier: null,
+    portMarianne: null,
+    carnonOutbound: null,
+    grandeMotte: null,
+    carnonReturn: null,
+    palavas: null,
+  });
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -237,7 +254,6 @@ export function HeroRouteVisual({
   const nextMotionAnchor = getMotionAnchorId(nextStop, state.direction);
   const segmentProgressRaw = (nowMs - state.changedAt) / STEP_MS;
   const segmentProgress = reducedMotion ? 1 : Math.min(Math.max(segmentProgressRaw, 0), 1);
-  const activeBackground = BACKGROUNDS[activeStop];
   const activeLabel = locations[activeStop];
   const totalPathLength = routePathRef.current?.getTotalLength() ?? 0;
 
@@ -308,6 +324,20 @@ export function HeroRouteVisual({
         const scaleX = state.direction === 'outbound' ? -1 : 1;
         vehicleFlipRef.current.setAttribute('transform', `scale(${scaleX} 1)`);
       }
+      VISUAL_STOPS.forEach((stop) => {
+        const labelEl = labelTextRefs.current[stop.visualId];
+        if (!labelEl) {
+          return;
+        }
+        const markerDx = point.x - stop.x;
+        const markerDy = point.y - stop.y;
+        const isNearMarker =
+          markerDx * markerDx + markerDy * markerDy <= LABEL_PROXIMITY_RADIUS * LABEL_PROXIMITY_RADIUS;
+        const proximityTransform = LABEL_PROXIMITY_TRANSFORMS[stop.visualId];
+        labelEl.style.transform = isNearMarker
+          ? `translate(${proximityTransform.dx}px, ${proximityTransform.dy}px) scale(${LABEL_ACTIVE_SCALE})`
+          : 'translate(0px, 0px) scale(1)';
+      });
 
       const normalize = (length: number) =>
         ((length % totalPathLength) + totalPathLength) % totalPathLength;
@@ -447,36 +477,48 @@ export function HeroRouteVisual({
   };
 
   return (
-    <div className="relative mx-auto aspect-[4/3] w-full max-w-xl overflow-hidden rounded-[2.6rem] border border-slate-100/10 bg-slate-100/24 shadow-[0_10px_28px_rgba(15,23,42,0.045)] [--hero-route-base:rgb(148_163_184)] [--hero-route-gradient-mid:rgb(226_232_240)] [--hero-route-glow-color:rgba(203,213,225,0.34)] [--hero-route-trail:rgba(56,189,248,0.5)] [--hero-trail-opacity-head:0.8] [--hero-trail-opacity-tail:0.1] [--hero-trail-stroke-width:2.3] [--hero-marker-fill:rgb(241_245_249)] [--hero-marker-stroke:rgba(56,189,248,0.92)] [--hero-marker-glow-opacity-active:0.24] [--hero-marker-glow-opacity-inactive:0.16] [--hero-label-fill:rgb(226_232_240)] [--hero-label-stroke:rgba(15,23,42,0.56)] [--hero-label-stroke-width:0.2] [--hero-vehicle-shadow:rgba(2,6,23,0.22)] [--hero-vehicle-body:#ffffff] [--hero-vehicle-cabin:#e2e8f0] [--hero-vehicle-glass:#94a3b8] [--hero-vehicle-wheel:#0f172a] [--hero-vehicle-wheel-center:#cbd5f5] dark:border-slate-700/20 dark:bg-slate-800/24 dark:shadow-[0_12px_30px_rgba(2,6,23,0.24)] dark:[--hero-route-base:rgb(148_163_184)] dark:[--hero-route-gradient-mid:rgb(226_232_240)] dark:[--hero-route-glow-color:rgba(148,163,184,0.28)] dark:[--hero-route-trail:rgba(125,211,252,0.62)] dark:[--hero-trail-opacity-head:0.88] dark:[--hero-trail-opacity-tail:0.12] dark:[--hero-trail-stroke-width:2.3] dark:[--hero-marker-fill:rgb(226_232_240)] dark:[--hero-marker-stroke:rgba(125,211,252,0.92)] dark:[--hero-marker-glow-opacity-active:0.2] dark:[--hero-marker-glow-opacity-inactive:0.14] dark:[--hero-label-fill:rgb(241_245_249)] dark:[--hero-label-stroke:rgba(15,23,42,0.6)] dark:[--hero-label-stroke-width:0.18] dark:[--hero-vehicle-shadow:rgba(2,6,23,0.34)] dark:[--hero-vehicle-body:#f8fafc] dark:[--hero-vehicle-cabin:#cbd5e1] dark:[--hero-vehicle-glass:#94a3b8] dark:[--hero-vehicle-wheel:#0f172a] dark:[--hero-vehicle-wheel-center:#e2e8f0]">
-      <div className="absolute inset-0 [mask-image:radial-gradient(ellipse_128%_112%_at_50%_52%,black_34%,rgba(0,0,0,0.94)_52%,rgba(0,0,0,0.72)_64%,rgba(0,0,0,0.38)_76%,rgba(0,0,0,0.14)_88%,transparent_100%)] [mask-repeat:no-repeat] [mask-size:100%_100%]">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={activeBackground}
-            className="absolute inset-0"
-            initial={{ opacity: reducedMotion ? 1 : 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: reducedMotion ? 1 : 0 }}
-            transition={{ duration: reducedMotion ? 0 : 0.45, ease: 'easeOut' }}
-          >
-            <Image
-              src={activeBackground}
-              alt={imageAlt}
-              fill
-              className="object-cover opacity-75 dark:opacity-50"
-              priority={activeStop === 'montpellier'}
+    <div className="relative mx-auto aspect-[4/3] w-full max-w-xl overflow-hidden rounded-[2.6rem] [--hero-route-base:rgb(125_139_158)] [--hero-route-trail:rgba(56,189,248,0.5)] [--hero-trail-opacity-head:0.8] [--hero-trail-opacity-tail:0.1] [--hero-trail-stroke-width:2.3] [--hero-marker-fill:rgb(255_255_255)] [--hero-marker-stroke:rgb(59_130_246)] [--hero-marker-glow-opacity-active:0.34] [--hero-marker-glow-opacity-inactive:0.24] [--hero-label-fill:rgb(71_85_105)] [--hero-label-stroke:rgba(15,23,42,0.56)] [--hero-label-stroke-width:0.2] [--hero-vehicle-shadow:rgba(2,6,23,0.22)] [--hero-vehicle-body:#ffffff] [--hero-vehicle-cabin:#e2e8f0] [--hero-vehicle-glass:#94a3b8] [--hero-vehicle-wheel:#0f172a] [--hero-vehicle-wheel-center:#cbd5f5] dark:[--hero-route-base:rgb(174_187_204)] dark:[--hero-route-trail:rgba(125,211,252,0.62)] dark:[--hero-trail-opacity-head:0.88] dark:[--hero-trail-opacity-tail:0.12] dark:[--hero-trail-stroke-width:2.3] dark:[--hero-marker-fill:rgb(15_23_42)] dark:[--hero-marker-stroke:rgb(59_130_246)] dark:[--hero-marker-glow-opacity-active:0.34] dark:[--hero-marker-glow-opacity-inactive:0.24] dark:[--hero-label-fill:rgb(148_163_184)] dark:[--hero-label-stroke:rgba(15,23,42,0.6)] dark:[--hero-label-stroke-width:0.18] dark:[--hero-vehicle-shadow:rgba(2,6,23,0.34)] dark:[--hero-vehicle-body:#f8fafc] dark:[--hero-vehicle-cabin:#cbd5e1] dark:[--hero-vehicle-glass:#94a3b8] dark:[--hero-vehicle-wheel:#0f172a] dark:[--hero-vehicle-wheel-center:#e2e8f0]">
+      <div className="absolute inset-x-0 top-[13%] bottom-[13%] overflow-hidden rounded-full" aria-hidden>
+        <svg viewBox="0 0 180 100" className="absolute inset-0 h-full w-full" preserveAspectRatio="none">
+          <defs>
+            <filter id="hero-map-capsule-mask-blur" x="-30%" y="-30%" width="160%" height="160%">
+              <feGaussianBlur in="SourceGraphic" stdDeviation="4.2" />
+            </filter>
+            <mask id="hero-map-capsule-mask">
+              <rect x="0" y="0" width="180" height="100" fill="black" />
+              <rect
+                x="8"
+                y="8"
+                width="164"
+                height="84"
+                rx="42"
+                fill="white"
+                filter="url(#hero-map-capsule-mask-blur)"
+              />
+            </mask>
+          </defs>
+          <g mask="url(#hero-map-capsule-mask)">
+            <image
+              href={MAP_LIGHT_SRC}
+              x="0"
+              y="0"
+              width="180"
+              height="100"
+              preserveAspectRatio="none"
+              className="dark:hidden"
             />
-          </motion.div>
-        </AnimatePresence>
+            <image
+              href={MAP_DARK_SRC}
+              x="0"
+              y="0"
+              width="180"
+              height="100"
+              preserveAspectRatio="none"
+              className="hidden dark:block"
+            />
+          </g>
+        </svg>
       </div>
-
-      <div
-        className="absolute inset-0 bg-gradient-to-b from-slate-900/10 via-slate-900/18 to-slate-900/24 dark:from-slate-950/16 dark:via-slate-950/27 dark:to-slate-950/36"
-        aria-hidden
-      />
-      <div
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(241,245,249,0.03)_0%,rgba(226,232,240,0.03)_34%,rgba(148,163,184,0.08)_70%,rgba(51,65,85,0.18)_100%)] dark:bg-[radial-gradient(ellipse_at_center,rgba(148,163,184,0.08)_0%,rgba(71,85,105,0.14)_44%,rgba(30,41,59,0.24)_74%,rgba(2,6,23,0.36)_100%)]"
-        aria-hidden
-      />
 
       <div
         className="pointer-events-none absolute inset-0"
@@ -484,19 +526,11 @@ export function HeroRouteVisual({
         aria-label={routeAriaLabel}
       >
         <svg viewBox="0 0 100 100" className="h-full w-full" fill="none" aria-hidden>
-          <defs>
-            <linearGradient id="hero-route-line" x1="0%" y1="0%" x2="100%" y2="0%">
-              <stop offset="0%" stopColor={TOKEN_ROUTE_BASE} />
-              <stop offset="50%" stopColor="var(--hero-route-gradient-mid)" />
-              <stop offset="100%" stopColor={TOKEN_ROUTE_BASE} />
-            </linearGradient>
-          </defs>
           <path
             ref={routePathRef}
             d={ROUTE_PATH_D}
-            stroke="url(#hero-route-line)"
+            stroke={TOKEN_ROUTE_BASE}
             strokeWidth="2.5"
-            style={{ filter: `drop-shadow(0 0 4px ${TOKEN_ROUTE_GLOW_COLOR})` }}
           />
           {Array.from({ length: TRAIL_SEGMENT_COUNT }, (_, index) => (
             <line
@@ -543,7 +577,6 @@ export function HeroRouteVisual({
           })}
           {VISUAL_STOPS.map((stop) => {
             const label = locations[stop.logicalStop];
-            const isActive = isVisualStopActive(stop.visualId, stop.logicalStop);
             const isLeftEndpoint = stop.visualId === 'montpellier';
             const isRightEndpoint = stop.visualId === 'grandeMotte';
             const isBottomLabel = stop.labelOffsetY > 0;
@@ -567,10 +600,18 @@ export function HeroRouteVisual({
                 dominantBaseline="middle"
                 fontSize="2.25"
                 fontWeight="500"
-                fill={isActive ? TOKEN_MARKER_FILL : TOKEN_LABEL_FILL}
+                fill={TOKEN_LABEL_FILL}
                 stroke={TOKEN_LABEL_STROKE}
                 strokeWidth="var(--hero-label-stroke-width)"
                 paintOrder="stroke"
+                ref={(labelEl) => {
+                  labelTextRefs.current[stop.visualId] = labelEl;
+                }}
+                style={{
+                  transformOrigin: `${LABEL_ANCHOR_POINTS[stop.visualId].x}px ${LABEL_ANCHOR_POINTS[stop.visualId].y}px`,
+                  transform: 'translate(0px, 0px) scale(1)',
+                  transition: 'transform 160ms ease-out',
+                }}
               >
                 {label}
               </text>

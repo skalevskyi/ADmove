@@ -17,7 +17,7 @@ export default function HomePage() {
   return (
     <>
       <Navbar />
-      <main className="max-md:pb-[var(--shell-mobile-bottom-occupancy)] max-md:pt-[var(--shell-main-padding-top-mobile)] md:pb-0 md:pt-0">
+      <main className="max-md:pb-[var(--shell-mobile-bottom-occupancy)] max-md:pt-[var(--shell-main-padding-top-mobile)] md:pb-0 md:pt-4">
         <HeroSection />
         <ConceptSection />
         <VehicleSection />
