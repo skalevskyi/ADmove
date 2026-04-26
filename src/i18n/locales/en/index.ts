@@ -20,6 +20,7 @@ import { tooltips } from './tooltips';
 import { seoPubliciteVoiture } from './seoPubliciteVoiture';
 import { seoAffichageMobile } from './seoAffichageMobile';
 import { seoPubliciteLocale } from './seoPubliciteLocale';
+import { trajets } from './trajets';
 
 export const en = {
   locations,
@@ -33,6 +34,7 @@ export const en = {
   seoPubliciteVoiture,
   seoAffichageMobile,
   seoPubliciteLocale,
+  trajets,
   footer,
   floating,
   mobileNav,

@@ -21,6 +21,7 @@ import { tooltips } from './tooltips';
 import { seoPubliciteVoiture } from './seoPubliciteVoiture';
 import { seoAffichageMobile } from './seoAffichageMobile';
 import { seoPubliciteLocale } from './seoPubliciteLocale';
+import { trajets } from './trajets';
 
 export const ua = {
   locations,
@@ -34,6 +35,7 @@ export const ua = {
   seoPubliciteVoiture,
   seoAffichageMobile,
   seoPubliciteLocale,
+  trajets,
   footer,
   floating,
   mobileNav,
