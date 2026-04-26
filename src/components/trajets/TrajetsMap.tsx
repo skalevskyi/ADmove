@@ -297,7 +297,13 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
         className="h-full w-full rounded-xl transition-[border-radius] duration-300 ease-out"
         aria-label="Trajets map"
       />
-      <div className="absolute right-3 top-3 z-10 flex flex-col gap-2">
+      <div
+        className={
+          isFullscreen
+            ? 'absolute bottom-3 right-3 z-10 flex flex-col gap-2 md:bottom-auto md:right-3 md:top-3'
+            : 'absolute bottom-3 left-1/2 z-10 flex -translate-x-1/2 flex-row gap-2 md:bottom-auto md:left-auto md:right-3 md:top-3 md:translate-x-0 md:flex-col'
+        }
+      >
         <button
           type="button"
           aria-label="Zoom in"
