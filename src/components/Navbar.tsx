@@ -221,7 +221,7 @@ export function Navbar({ useHomeAnchorHref = false }: NavbarProps = {}) {
           >
             <img
               src={`${BASE_PATH}/logo/favicon.svg`}
-              alt="Skalevskyi — publicité mobile"
+              alt={t.brand.logoAlt}
               loading="eager"
               className="h-7 md:h-8 w-auto shrink-0"
             />
@@ -230,7 +230,7 @@ export function Navbar({ useHomeAnchorHref = false }: NavbarProps = {}) {
                 SKALEVSKYI
               </span>
               <span className="text-[11px] font-medium text-slate-500 dark:text-slate-400">
-                publicite mobile
+                {t.brand.logoSubtitle}
               </span>
             </span>
           </Link>

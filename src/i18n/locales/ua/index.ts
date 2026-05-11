@@ -6,6 +6,7 @@
 import {
   locations,
   nav,
+  brand,
   footer,
   floating,
   mobileNav,
@@ -26,6 +27,7 @@ import { trajets } from './trajets';
 export const ua = {
   locations,
   nav,
+  brand,
   hero,
   support,
   parcours,

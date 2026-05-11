@@ -4,29 +4,26 @@
 
 export const support = {
   title: 'Comment ça fonctionne',
-  subtitle:
-    'Un véhicule, un trajet fixe entre Montpellier et le littoral — quatre étapes.',
+  subtitle: 'Lancer une publicité sur le trajet en quatre étapes simples.',
   steps: [
     {
       title: 'Choisir un format',
-      text: 'BASIC, PRO ou EXCLUSIVE : trois niveaux de présence sur le parcours.',
+      text: 'Choisissez le format adapté à votre budget et à vos objectifs.',
     },
     {
       title: 'Validation du format',
-      text: 'Nous validons le format et le véhicule. Vous gérez le visuel et la pose avec votre prestataire.',
+      text:
+        'Nous validons le format et préparons le véhicule pour l’affichage. Le visuel et la pose sont réalisés par votre prestataire.',
     },
     {
-      title: 'Circulation quotidienne',
-      text: 'La voiture circule chaque jour sur le même trajet.',
+      title: 'Mise en circulation',
+      text: 'Votre publicité s’intègre à la circulation quotidienne du véhicule.',
     },
     {
-      title: 'Résultat',
-      text: 'On vous voit encore et encore — et on commence à vous mémoriser.',
+      title: 'Présence locale',
+      text: 'Votre entreprise gagne une présence locale régulière sur le trajet.',
     },
   ],
-  methodologyTitle: 'Pourquoi ça fonctionne',
-  methodologyText:
-    'Trafic réel, même trajet, jour après jour — votre message devient familier sur le trajet.',
   conceptExploreLabel: 'Explorer aussi',
   conceptExploreLink1: 'Comment fonctionne la publicité mobile',
   conceptExploreLink2: 'Comment fonctionne la publicité locale',

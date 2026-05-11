@@ -100,15 +100,6 @@ export function ConceptSection() {
               );
             })}
           </div>
-
-          <div className="mt-6 border-t border-slate-200/80 pt-5 dark:border-slate-700/70">
-            <p className="text-sm font-semibold leading-snug text-slate-900 dark:text-white">
-              {t.support.methodologyTitle}
-            </p>
-            <p className="mt-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300 break-words">
-              {t.support.methodologyText}
-            </p>
-          </div>
         </motion.div>
 
         <div className="mt-10">

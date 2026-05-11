@@ -5,6 +5,7 @@
 import {
   locations,
   nav,
+  brand,
   footer,
   floating,
   mobileNav,
@@ -25,6 +26,7 @@ import { trajets } from './trajets';
 export const en = {
   locations,
   nav,
+  brand,
   hero,
   support,
   parcours,

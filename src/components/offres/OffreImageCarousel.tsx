@@ -21,6 +21,8 @@ type OffreImageCarouselProps = {
   imageCarouselImage: string;
   openGallery: string;
   lightboxClose: string;
+  lightboxZoomIn: string;
+  lightboxZoomOut: string;
 };
 
 export function OffreImageCarousel({
@@ -32,6 +34,8 @@ export function OffreImageCarousel({
   imageCarouselImage,
   openGallery,
   lightboxClose,
+  lightboxZoomIn,
+  lightboxZoomOut,
 }: OffreImageCarouselProps) {
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const openerRef = useRef<HTMLButtonElement>(null);
@@ -87,6 +91,8 @@ export function OffreImageCarousel({
         labelClose={lightboxClose}
         imageCarouselLabel={imageCarouselLabel}
         imageCarouselImage={imageCarouselImage}
+        labelZoomIn={lightboxZoomIn}
+        labelZoomOut={lightboxZoomOut}
         reducedMotion={reducedMotion}
       />
     </>

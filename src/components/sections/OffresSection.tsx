@@ -255,12 +255,12 @@ export function OffresSection() {
                 : offer.id === 'PRO'
                   ? t.offres.descriptionSide
                   : t.offres.descriptionFull;
-            const benefits =
+            const mechanismLines =
               offer.id === 'BASIC'
                 ? t.offres.benefitsRear
                 : offer.id === 'PRO'
                   ? t.offres.benefitsSide
-                  : t.offres.benefitsFull;
+                  : t.offres.premium360Rows;
             const alt =
               offer.id === 'BASIC'
                 ? t.offres.altRear
@@ -297,7 +297,7 @@ export function OffresSection() {
                         <h3 className="text-xl font-semibold tracking-tight text-slate-900 dark:text-white">
                           {name}
                         </h3>
-                        <p className="mt-1 text-sm font-medium text-slate-600 dark:text-slate-300">
+                        <p className="mt-1 whitespace-nowrap text-sm font-medium text-slate-600 dark:text-slate-300">
                           {positioning}
                         </p>
                         <p className="mt-2 whitespace-nowrap text-base font-semibold tabular-nums text-slate-900 dark:text-white">
@@ -325,50 +325,30 @@ export function OffresSection() {
                       imageCarouselImage={t.offres.imageCarouselImage}
                       openGallery={t.offres.openGallery}
                       lightboxClose={t.offres.lightboxClose}
+                      lightboxZoomIn={t.offres.lightboxZoomIn}
+                      lightboxZoomOut={t.offres.lightboxZoomOut}
                     />
 
                     <p className="mt-4 text-sm font-medium leading-relaxed text-slate-600 dark:text-slate-300">
                       {description}
                     </p>
 
-                    {offer.id !== 'EXCLUSIVE' ? (
-                      <ul className="mt-5 space-y-2">
-                        {benefits.map((benefit, bi) => (
+                    <div className="mt-3 rounded-lg border border-sky-200/80 bg-sky-50/70 p-3 dark:border-sky-800/50 dark:bg-sky-950/25">
+                      <ul className="space-y-1.5">
+                        {mechanismLines.map((line, bi) => (
                           <li
                             key={bi}
-                            className="flex gap-2.5 text-sm leading-relaxed text-slate-600 dark:text-slate-300"
+                            className="flex gap-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300"
                           >
                             <span
                               className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500 dark:bg-sky-400"
                               aria-hidden
                             />
-                            <span>{benefit}</span>
+                            <span>{line}</span>
                           </li>
                         ))}
                       </ul>
-                    ) : null}
-
-                    {offer.id === 'EXCLUSIVE' ? (
-                      <div className="mt-3 rounded-lg border border-sky-200/80 bg-sky-50/70 p-3 dark:border-sky-800/50 dark:bg-sky-950/25">
-                        <p className="text-xs font-semibold uppercase tracking-wide text-sky-700 dark:text-sky-300">
-                          {t.offres.premium360Title}
-                        </p>
-                        <ul className="mt-2 space-y-1.5">
-                          {t.offres.premium360Rows.map((line) => (
-                            <li
-                              key={line}
-                              className="flex gap-2 text-xs leading-relaxed text-slate-600 dark:text-slate-300"
-                            >
-                              <span
-                                className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-sky-500 dark:bg-sky-400"
-                                aria-hidden
-                              />
-                              <span>{line}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    ) : null}
+                    </div>
 
                     {offer.id === 'EXCLUSIVE' ? (
                       <p className="mt-3 text-xs text-slate-500 dark:text-slate-400">

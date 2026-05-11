@@ -4,29 +4,26 @@
 
 export const support = {
   title: 'How it works',
-  subtitle:
-    'One vehicle, a fixed route between Montpellier and the coast — four steps.',
+  subtitle: 'Launch advertising on the route in four simple steps.',
   steps: [
     {
       title: 'Choose a format',
-      text: 'BASIC, PRO, or EXCLUSIVE — three levels of presence on the route.',
+      text: 'Choose the format that fits your budget and goals.',
     },
     {
       title: 'Format validation',
-      text: 'We validate the format and provide the vehicle. You handle creative and installation with your supplier.',
+      text:
+        'We confirm the format and prepare the vehicle for placement. The visual and installation are handled by your provider.',
     },
     {
-      title: 'Daily circulation',
-      text: 'The car drives the same route every day.',
+      title: 'In circulation',
+      text: 'Your advertising becomes part of the vehicle’s daily circulation.',
     },
     {
-      title: 'Outcome',
-      text: 'People see you again and again — and start to remember you.',
+      title: 'Local presence',
+      text: 'Your business gains steady local presence along the route.',
     },
   ],
-  methodologyTitle: 'Why it works',
-  methodologyText:
-    'Real traffic, same route, day after day — your message starts to feel familiar on the route.',
   conceptExploreLabel: 'Explore also',
   conceptExploreLink1: 'How mobile advertising works',
   conceptExploreLink2: 'How local advertising works',

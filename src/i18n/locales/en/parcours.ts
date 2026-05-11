@@ -4,7 +4,8 @@
 
 export const parcours = {
   title: 'A real route, seen every day',
-  subtitle: 'The same route, the same traffic, every day.',
+  subtitle:
+    'A real corridor between Montpellier and the littoral, driven daily in both directions.',
   timelineHint:
     'Click a route point to pause and view details.',
   descriptors: {
@@ -18,63 +19,81 @@ export const parcours = {
   locationContent: {
     montpellier: {
       description:
-        'A high-traffic urban center with daily circulation and steady visibility.',
+        'Dense urban core: strong exposure to everyday flows and a local anchor for the message at the start of the route.',
       tag: 'Traffic hub',
       icon: 'city',
-      bullet1: 'Visibility in daily urban traffic flows',
-      bullet2: 'Repeated views from an active local audience',
-      bullet3: 'Visible presence in circulation and stopping areas',
+      bullet1:
+        'High passage density: the brand surfaces at the heart of local trips.',
+      bullet2:
+        'Frequent contacts with people living and working near the corridor.',
+      bullet3:
+        'Readable moments in queues, intersections, and stopping areas.',
     },
     perols: {
       description:
-        'Outbound to the coast: regular pass-by moments and recurring visibility in everyday flows.',
+        'City-to-coast link: traffic gathers on this axis before reaching the sea.',
       tag: 'Outbound corridor',
       icon: 'district',
-      bullet1: 'Visibility in pass-by moments toward the coast',
-      bullet2: 'Repeated views during recurring weekday flows',
-      bullet3: 'Good visibility near traffic and stop areas',
+      bullet1:
+        'Regular pass-through while the leg is still urban in character.',
+      bullet2:
+        'Steady presence as the route opens toward the littoral.',
+      bullet3:
+        'Clear read moments when traffic narrows onto the axis.',
     },
     portMarianne: {
       description:
-        'Active district: frequent pass-by moments and visibility during stops.',
+        'High-activity district: daily mobility between workplaces, services, and residential areas.',
       tag: 'Active district',
       icon: 'district',
-      bullet1: 'Visibility in a district with strong local activity',
-      bullet2: 'Frequent views from a regular urban audience',
-      bullet3: 'Stronger presence during slowdowns and stops',
+      bullet1:
+        'Structured flows between business clusters and neighborhoods.',
+      bullet2:
+        'A recurring audience on short, repeated trips.',
+      bullet3:
+        'Visibility during queues and slowdown phases.',
     },
     carnon: {
       description:
-        'Coastal axis: constant traffic and route repetition.',
+        'Key coastal segment: sustained movement between urban flows and trips toward the shore.',
       tag: 'Coastal route',
       icon: 'route',
-      bullet1: 'Direct exposure on the route to the coast',
-      bullet2: 'Repeated message visibility on a high-traffic route',
-      bullet3: 'Higher visibility during slowdowns and parking',
+      bullet1:
+        'Exposure on the stretch where the corridor continues toward the sea.',
+      bullet2:
+        'The same message encountered at different times on one path.',
+      bullet3:
+        'Stronger read at slowdowns and junctions.',
     },
     palavas: {
       description:
-        'Seaside area: exposure and daily repetition.',
+        'Approaching the seafront: slower traffic and longer windows to see the message.',
       tag: 'Stop points',
       icon: 'stop',
-      bullet1: 'Visible presence in traffic flows toward the seafront',
-      bullet2: 'Repeated views from local and passing audiences',
-      bullet3: 'Good visibility in stop and parking areas',
+      bullet1:
+        'Coastal traffic where vehicles stay longer in view.',
+      bullet2:
+        'The brand seen in flows toward or from the shore.',
+      bullet3:
+        'Readable moments near stops and parking.',
     },
     grandeMotte: {
       description:
-        'Dense coastal sector: stronger visibility through consistent circulation.',
+        'Dense coastal hub near the end of the leg: strong exposure in a heavily used area.',
       tag: 'Busy zone',
       icon: 'coast',
-      bullet1: 'Visibility in a lively coastal area',
-      bullet2: 'Regular views from a mobile local audience',
-      bullet3: 'Stronger presence in circulation and parking zones',
+      bullet1:
+        'Exposure in a busy littoral hub with heavy vehicle movement.',
+      bullet2:
+        'Repeated encounters that build gradual recognition.',
+      bullet3:
+        'Sustained presence in approach and parking flows.',
     },
   },
   sharedBullets: {
-    bullet1: 'Direct exposure in daily traffic (drivers and pedestrians)',
-    bullet2: 'Repeated views from a stable local audience',
-    bullet3: 'High visibility during stops and parking',
+    bullet1: 'Exposure in the route’s real-world traffic (drivers and pedestrians)',
+    bullet2: 'Regular returns of the message for a local audience',
+    bullet3: 'Favorable reading during stops and parking',
     note: 'Indicative visibility based on local traffic flows.',
   },
   proofTitle: 'Recorded real routes',

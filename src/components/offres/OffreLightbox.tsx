@@ -45,6 +45,8 @@ type OffreLightboxProps = {
   labelClose: string;
   imageCarouselLabel: string;
   imageCarouselImage: string;
+  labelZoomIn: string;
+  labelZoomOut: string;
   reducedMotion: boolean;
 };
 
@@ -60,6 +62,8 @@ export function OffreLightbox({
   labelClose,
   imageCarouselLabel,
   imageCarouselImage,
+  labelZoomIn,
+  labelZoomOut,
   reducedMotion,
 }: OffreLightboxProps) {
   const [mounted, setMounted] = useState(false);
@@ -426,7 +430,7 @@ export function OffreLightbox({
                   <button
                     type="button"
                     className={zoomButtonClassMobileOnly}
-                    aria-label="Zoom out"
+                    aria-label={labelZoomOut}
                     onClick={(e) => {
                       e.stopPropagation();
                       zoomOut();
@@ -466,7 +470,7 @@ export function OffreLightbox({
                   <button
                     type="button"
                     className={zoomButtonClassMobileOnly}
-                    aria-label="Zoom in"
+                    aria-label={labelZoomIn}
                     onClick={(e) => {
                       e.stopPropagation();
                       zoomIn();
@@ -482,7 +486,7 @@ export function OffreLightbox({
                   <button
                     type="button"
                     className={zoomButtonClass}
-                    aria-label="Zoom out"
+                    aria-label={labelZoomOut}
                     onClick={(e) => {
                       e.stopPropagation();
                       zoomOut();
@@ -494,7 +498,7 @@ export function OffreLightbox({
                   <button
                     type="button"
                     className={zoomButtonClass}
-                    aria-label="Zoom in"
+                    aria-label={labelZoomIn}
                     onClick={(e) => {
                       e.stopPropagation();
                       zoomIn();

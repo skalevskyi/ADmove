@@ -4,7 +4,8 @@
 
 export const parcours = {
   title: 'Un parcours réel, visible chaque jour',
-  subtitle: 'Le même trajet, le même trafic, chaque jour.',
+  subtitle:
+    'Trajet réel sur le corridor Montpellier–littoral, repris chaque jour dans les deux sens.',
   timelineHint:
     'Cliquez sur une étape pour mettre en pause et voir les détails.',
   descriptors: {
@@ -18,64 +19,82 @@ export const parcours = {
   locationContent: {
     montpellier: {
       description:
-        'Centre urbain à fort trafic, circulation quotidienne et visibilité régulière.',
+        'Noyau urbain dense : forte exposition aux flux du quotidien et ancrage local du message au départ du trajet.',
       tag: 'Centre de flux',
       icon: 'city',
-      bullet1: 'Visibilité dans les flux urbains quotidiens',
-      bullet2: 'Vues répétées par une audience locale active',
-      bullet3: 'Présence visible dans les zones de circulation et d’arrêt',
+      bullet1:
+        'Densité de passages : la marque apparaît au cœur des déplacements locaux.',
+      bullet2:
+        'Contacts fréquents avec une population proche du corridor.',
+      bullet3:
+        'Lecture possible dans les files, intersections et zones d’arrêt.',
     },
     perols: {
       description:
-        'Vers le littoral : passages réguliers et visibilité récurrente dans les flux quotidiens.',
+        'Liaison centre-ville → littoral : l’axe canalise les flux avant d’atteindre la mer.',
       tag: 'Axe vers la mer',
       icon: 'district',
-      bullet1: 'Visibilité lors des passages vers le littoral',
-      bullet2: 'Vues répétées pendant les flux réguliers en semaine',
-      bullet3: 'Visibilité favorable près des zones de circulation et d’arrêt',
+      bullet1:
+        'Passages réguliers pendant la phase de trajet encore urbaine.',
+      bullet2:
+        'Continuité de présence sur la sortie progressive vers le littoral.',
+      bullet3:
+        'Moments lisibles lorsque le flux se concentre sur l’axe.',
     },
     portMarianne: {
       description:
-        "Quartier actif: passages fréquents et visibilité lors des arrêts.",
+        'Quartier à forte dynamique : mobilité locale et flux du quotidien entre activités et résidences.',
       tag: 'Quartier actif',
       icon: 'district',
-      bullet1: 'Visibilité dans un quartier à forte activité locale',
-      bullet2: 'Vues fréquentes par une audience urbaine régulière',
-      bullet3: 'Présence renforcée lors des ralentissements et arrêts',
+      bullet1:
+        'Circulation structurée entre zones d’activités et quartiers.',
+      bullet2:
+        'Audience régulière en courts déplacements récurrents.',
+      bullet3:
+        'Visibilité lors des phases de files et de ralentissement.',
     },
     carnon: {
       description:
-        'Axe littoral emprunté : trafic constant et répétition du trajet.',
+        'Segment clé du corridor littoral : passage soutenu entre flux urbains et déplacements vers la côte.',
       tag: 'Axe vers le littoral',
       icon: 'route',
-      bullet1: 'Exposition directe sur l’axe vers le littoral',
-      bullet2: 'Répétition du message sur un trajet très fréquenté',
-      bullet3: 'Visibilité accrue lors des ralentissements et stationnements',
+      bullet1:
+        'Exposition sur l’axe où le trajet prolonge le corridor vers la mer.',
+      bullet2:
+        'Le message retrouvé à différents moments de la journée sur le même parcours.',
+      bullet3:
+        'Lecture renforcée aux ralentissements et aux croisements.',
     },
     palavas: {
       description:
-        'Zone balnéaire fréquentée: exposition et répétition quotidienne.',
+        'Approche du front de mer : circulation plus lente, temps de regard plus long pour le message.',
       tag: 'Points d’arrêt',
       icon: 'stop',
-      bullet1: 'Présence visible dans les flux vers le front de mer',
-      bullet2: 'Vues répétées par une audience locale et de passage',
-      bullet3: 'Bonne visibilité dans les zones d’arrêt et de parking',
+      bullet1:
+        'Trafic côtier où les véhicules restent plus longtemps dans le champ visuel.',
+      bullet2:
+        'Marque croisée dans les flux vers ou depuis le littoral.',
+      bullet3:
+        'Moments lisibles près des zones d’arrêt et de stationnement.',
     },
     grandeMotte: {
       description:
-        'Secteur littoral dense: visibilité renforcée par une circulation régulière.',
+        'Secteur littoral dense en fin de trajet : forte exposition dans un pôle fortement parcouru.',
       tag: 'Zone animée',
       icon: 'coast',
-      bullet1: 'Visibilité dans une zone côtière animée',
-      bullet2: 'Vues régulières par une audience mobile et locale',
-      bullet3: 'Présence renforcée dans les zones de circulation et de stationnement',
+      bullet1:
+        'Exposition dans une zone d’activité du littoral à fort passage.',
+      bullet2:
+        'Retrouvailles répétées du message pour une reconnaissance progressive.',
+      bullet3:
+        'Présence soutenue dans les flux d’accès et de stationnement.',
     },
   },
   sharedBullets: {
     bullet1:
-      "Exposition directe dans les flux quotidiens (automobilistes et piétons)",
-    bullet2: 'Vues répétées par une audience locale stable',
-    bullet3: 'Visibilité renforcée lors des arrêts et stationnements',
+      "Exposition dans les flux réels du trajet (automobilistes et piétons)",
+    bullet2: 'Retours réguliers du message pour une audience locale',
+    bullet3: 'Lecture favorable lors des arrêts et stationnements',
     note: 'Visibilité indicative basée sur les flux locaux.',
   },
   proofTitle: 'Trajets réels enregistrés',

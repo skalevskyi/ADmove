@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { CalendarDays, Eye, Route } from 'lucide-react';
+import { CalendarDays, Route, ShieldCheck } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -89,15 +89,12 @@ export function HeroSection() {
             </p>
 
             <div className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 md:text-sm">
-              <p className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                <span>{t.hero.heroSeoLine1}</span>
-                <span>{t.hero.heroSeoLine2Before}</span>
+              <p className="min-w-0 break-words">
                 <Link
                   href={withBasePath('/publicite-voiture-montpellier')}
-                  className={`whitespace-nowrap text-slate-600 underline decoration-slate-400/70 underline-offset-2 transition-colors hover:text-sky-600 hover:decoration-sky-500 dark:text-slate-400 dark:decoration-slate-500/80 dark:hover:text-sky-400 dark:hover:decoration-sky-500/80 ${focusRing} rounded-sm`}
+                  className={`text-slate-600 underline decoration-slate-400/70 underline-offset-2 transition-colors hover:text-sky-600 hover:decoration-sky-500 dark:text-slate-400 dark:decoration-slate-500/80 dark:hover:text-sky-400 dark:hover:decoration-sky-500/80 ${focusRing} rounded-sm`}
                 >
                   {t.hero.heroSeoLine2Link}
-                  {t.hero.heroSeoLine2After}
                 </Link>
               </p>
             </div>
@@ -127,7 +124,7 @@ export function HeroSection() {
                 {t.hero.chip_daily}
               </span>
               <span className="whitespace-nowrap rounded-full border border-slate-200 px-3.5 py-1.5 text-sm text-slate-600 dark:border-slate-700 dark:text-slate-400">
-                <Eye className="mr-1 inline h-4 w-4 text-sky-500" />
+                <ShieldCheck className="mr-1 inline h-4 w-4 text-sky-500" />
                 {t.hero.chip_repeat}
               </span>
             </div>

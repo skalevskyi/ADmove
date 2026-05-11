@@ -8,10 +8,11 @@ export function OrganizationJsonLd() {
   const data = {
     '@context': 'https://schema.org',
     '@type': 'Organization',
-    name: 'SPM — Skalevskyi publicité mobile',
+    name: 'SPM — Skalevskyi',
+    alternateName: 'Skalevskyi publicité mobile',
     url,
     description:
-      'Publicité mobile sur véhicule à Montpellier et sur le littoral : formats Rear, Side, Full.',
+      'Visibilité locale régulière entre Montpellier et le littoral : présence mobile sur un trajet réel quotidien, pour une exposition physique répétée sur le même corridor.',
     areaServed: {
       '@type': 'AdministrativeArea',
       name: 'Montpellier et littoral occitan',

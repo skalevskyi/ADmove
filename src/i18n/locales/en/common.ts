@@ -19,6 +19,11 @@ export const nav = {
   ariaLabel: 'Main navigation',
 } as const;
 
+export const brand = {
+  logoSubtitle: 'Mobile advertising',
+  logoAlt: 'Skalevskyi SPM — local visibility on a real route',
+} as const;
+
 export const footer = {
   links: {
     support: 'Process',

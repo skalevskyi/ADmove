@@ -257,75 +257,45 @@ export function TrajetsClient() {
                   {t.trajets.detail.timeLabel}
                 </p>
                 <div className="justify-self-end text-right text-sm md:hidden">
-                  {'timeSlots' in activeDay ? (
-                    <>
-                      <p className="leading-tight">
-                        <span className="text-slate-500 dark:text-slate-400">
-                          {activeDay.timeSlots[0].label}
-                        </span>{' '}
-                        <span className="font-medium text-slate-900 dark:text-white">
-                          {activeDay.timeSlots[0].value}
-                        </span>
-                      </p>
-                      <p className="mt-1 leading-tight">
-                        <span className="text-slate-500 dark:text-slate-400">
-                          {activeDay.timeSlots[1].label}
-                        </span>{' '}
-                        <span className="font-medium text-slate-900 dark:text-white">
-                          {activeDay.timeSlots[1].value}
-                        </span>
-                      </p>
-                    </>
-                  ) : activeDay.isRecorded ? (
-                    <>
-                      <p className="font-medium leading-tight text-slate-900 dark:text-white">
-                        {activeDay.timeStart}
-                      </p>
-                      <p className="mt-1 font-medium leading-tight text-slate-900 dark:text-white">
-                        {activeDay.timeEnd}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="font-medium leading-tight text-slate-500 dark:text-slate-400">
-                      {activeDay.time}
+                  <>
+                    <p className="leading-tight">
+                      <span className="text-slate-500 dark:text-slate-400">
+                        {activeDay.timeSlots[0].label}
+                      </span>{' '}
+                      <span className="font-medium text-slate-900 dark:text-white">
+                        {activeDay.timeSlots[0].value}
+                      </span>
                     </p>
-                  )}
+                    <p className="mt-1 leading-tight">
+                      <span className="text-slate-500 dark:text-slate-400">
+                        {activeDay.timeSlots[1].label}
+                      </span>{' '}
+                      <span className="font-medium text-slate-900 dark:text-white">
+                        {activeDay.timeSlots[1].value}
+                      </span>
+                    </p>
+                  </>
                 </div>
                 <div className="mt-1.5 hidden text-sm md:block">
-                  {'timeSlots' in activeDay ? (
-                    <>
-                      <p className="whitespace-nowrap leading-tight">
-                        <span className="text-slate-500 dark:text-slate-400">
-                          {activeDay.timeSlots[0].label}
-                        </span>{' '}
-                        <span className="font-medium text-slate-900 dark:text-white">
-                          {activeDay.timeSlots[0].value}
-                        </span>
-                      </p>
-                      <div className="h-2.5" />
-                      <p className="whitespace-nowrap leading-tight">
-                        <span className="text-slate-500 dark:text-slate-400">
-                          {activeDay.timeSlots[1].label}
-                        </span>{' '}
-                        <span className="font-medium text-slate-900 dark:text-white">
-                          {activeDay.timeSlots[1].value}
-                        </span>
-                      </p>
-                    </>
-                  ) : activeDay.isRecorded ? (
-                    <>
-                      <p className="font-medium leading-tight text-slate-900 dark:text-white">
-                        {activeDay.timeStart}
-                      </p>
-                      <p className="font-medium leading-tight text-slate-900 dark:text-white">
-                        — {activeDay.timeEnd}
-                      </p>
-                    </>
-                  ) : (
-                    <p className="font-medium leading-tight text-slate-500 dark:text-slate-400">
-                      {activeDay.time}
+                  <>
+                    <p className="whitespace-nowrap leading-tight">
+                      <span className="text-slate-500 dark:text-slate-400">
+                        {activeDay.timeSlots[0].label}
+                      </span>{' '}
+                      <span className="font-medium text-slate-900 dark:text-white">
+                        {activeDay.timeSlots[0].value}
+                      </span>
                     </p>
-                  )}
+                    <div className="h-2.5" />
+                    <p className="whitespace-nowrap leading-tight">
+                      <span className="text-slate-500 dark:text-slate-400">
+                        {activeDay.timeSlots[1].label}
+                      </span>{' '}
+                      <span className="font-medium text-slate-900 dark:text-white">
+                        {activeDay.timeSlots[1].value}
+                      </span>
+                    </p>
+                  </>
                 </div>
               </div>
 

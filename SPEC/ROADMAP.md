@@ -57,7 +57,7 @@ Move from indexing phase to ranking improvement and controlled SEO expansion.
 - **Phase 2B (functionality):** **Substantially complete** for implemented runtime features (contact lead API, emails, calculator engine + UI, structured lead fields `leadOrigin` / `calculatorSummary` where applicable — see `/SPEC/CALCULATOR_CURRENT_STATE.md` §13).
 - **Landing (`/`):** **Conversion-first** homepage — primary funnel (Hero → Offres estimator → Contact); unchanged as the core conversion layer.
 - **SEO page layer (v1) — shipped:** three App Router routes (search-intent entry pages; i18n body copy; shared shell; internal links between those pages; metadata + canonical + `sitemap.xml` entries). See **Phase 3** below for what remains outside that layer.
-- **Trajets proof page (`/trajets`) — shipped:** App Router proof page implemented (MapLibre/MapTiler route visualization, 7-day selector, responsive controls, theme-synced styles, credibility-focused UX; not a dashboard).
+- **Trajets proof page (`/trajets`) — shipped:** App Router proof page implemented (client-only/lazy MapLibre + MapTiler route visualization, 7-day selector, responsive controls, fullscreen/compact map mode, theme-synced styles, no custom duplicate map labels, credibility-focused UX; not a dashboard).
 - **Parcours → Trajets integration — shipped:** soft proof micro-card in Parcours right column links to `/trajets`.
 - **Trajets polish:** ongoing (Phase 8 style/spacing/micro-UX refinements continue as needed).
 - **Remaining** roadmap scope: FAQ, coverage map, media kit; optional **pricing calibration** / calculator UX polish.

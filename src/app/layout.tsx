@@ -19,11 +19,11 @@ const siteUrl = getPublicSiteUrl();
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: 'SPM — Publicité mobile Montpellier',
+    default: 'SPM — Visibilité locale Montpellier · publicité mobile',
     template: '%s | SPM',
   },
   description:
-    'Publicité mobile sur véhicule à Montpellier et sur le littoral (Port Marianne, Carnon, Palavas, La Grande-Motte). Formats Rear, Side, Full. Estimation en ligne.',
+    'Visibilité locale régulière sur un trajet réel entre Montpellier et le littoral (Port Marianne, Carnon, Palavas, La Grande-Motte). Publicité mobile sur véhicule pour entreprises — estimation en ligne.',
   alternates: {
     canonical: '/',
   },
@@ -32,15 +32,15 @@ export const metadata: Metadata = {
     locale: 'fr_FR',
     url: siteUrl,
     siteName: 'SPM',
-    title: 'SPM — Publicité mobile Montpellier',
+    title: 'SPM — Visibilité locale Montpellier · publicité mobile',
     description:
-      'Publicité mobile sur véhicule à Montpellier et sur le littoral. Visibilité locale B2B — estimation en ligne.',
+      'Visibilité locale sur trajet réel entre Montpellier et le littoral. Publicité mobile sur véhicule pour entreprises locales — estimation en ligne.',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'SPM — Publicité mobile Montpellier',
+    title: 'SPM — Visibilité locale Montpellier · publicité mobile',
     description:
-      'Publicité mobile sur véhicule à Montpellier et sur le littoral. Formats Rear, Side, Full.',
+      'Visibilité locale régulière, trajet réel Montpellier–littoral. Publicité mobile sur véhicule — estimation en ligne.',
   },
   icons: {
     icon: [
