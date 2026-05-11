@@ -85,9 +85,9 @@ NO mixing responsibilities
 
 | Package   | Base €/month |
 | --------- | ------------ |
-| BASIC     | 300          |
-| PRO       | 490          |
-| EXCLUSIVE | 690          |
+| BASIC     | 350          |
+| PRO       | 550          |
+| EXCLUSIVE | 750          |
 
 ---
 

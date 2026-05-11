@@ -15,7 +15,7 @@ export const DISPLAY_MODES = ['monthly', 'contract_total'] as const satisfies Di
 export const BASE_MONTHLY_MEDIA_EUR: Record<PackageId, number> = {
   BASIC: 350,
   PRO: 550,
-  EXCLUSIVE: 900,
+  EXCLUSIVE: 750,
 };
 
 // ===== Duration multipliers (applied to base media fee only) =====

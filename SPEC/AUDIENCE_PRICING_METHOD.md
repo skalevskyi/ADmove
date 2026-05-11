@@ -153,9 +153,9 @@ Le **package surface factor** est un **levier de modélisation** : PRO et EXCLUS
 
 | Package | Prix €/mois |
 |---------|-------------|
-| BASIC | 300 |
-| PRO | 490 |
-| EXCLUSIVE | 690 |
+| BASIC | 350 |
+| PRO | 550 |
+| EXCLUSIVE | 750 |
 
 **Formule (illustrative) :**
 
@@ -171,9 +171,9 @@ Exemples **non exhaustifs** en raisonnant au **milieu de corridor** défendable 
 
 | Illustration | Contacts retenus | Prix (€) | CPM indicatif (€) |
 |--------------|------------------|------------|-------------------|
-| BASIC, milieu de fourchette ~80k | 80 000 | 300 | ~3,75 |
-| PRO, milieu ~125k | 125 000 | 490 | ~3,92 |
-| EXCLUSIVE, milieu ~165k | 165 000 | 690 | ~4,18 |
+| BASIC, milieu de fourchette ~80k | 80 000 | 350 | ~4,38 |
+| PRO, milieu ~125k | 125 000 | 550 | ~4,40 |
+| EXCLUSIVE, milieu ~165k | 165 000 | 750 | ~4,55 |
 
 Le calculateur affiche une **ligne CPM statique** (copy par locale, ex. FR ≈ 4 € pour 1000 vues), **alignée** sur cette logique corridor — **non** calculée à partir de constantes internes 30k/45k/60k.
 
@@ -185,9 +185,9 @@ Si l’on appliquait la formule aux seules constantes techniques **30k / 45k / 6
 
 | Package | Prix (€) | Contacts (interne, non messaging) | CPM (€) |
 |---------|----------|-----------------------------------|---------|
-| BASIC | 300 | 30 000 | **10,00** |
-| PRO | 490 | 45 000 | **10,89** (arrondi) |
-| EXCLUSIVE | 690 | 60 000 | **11,50** (arrondi) |
+| BASIC | 350 | 30 000 | **11,67** |
+| PRO | 550 | 45 000 | **12,22** (arrondi) |
+| EXCLUSIVE | 750 | 60 000 | **12,50** (arrondi) |
 
 ---
 
