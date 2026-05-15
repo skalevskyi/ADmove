@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import { useTheme } from '@/context/ThemeContext';
 import { BASE_PATH } from '@/lib/base-path';
@@ -58,11 +58,9 @@ const TOKEN_MARKER_STROKE = 'var(--hero-marker-stroke)';
 const TOKEN_LABEL_FILL = 'var(--hero-label-fill)';
 const TOKEN_LABEL_STROKE = 'var(--hero-label-stroke)';
 const TOKEN_VEHICLE_SHADOW = 'var(--hero-vehicle-shadow)';
-const TOKEN_VEHICLE_BODY = 'var(--hero-vehicle-body)';
-const TOKEN_VEHICLE_CABIN = 'var(--hero-vehicle-cabin)';
-const TOKEN_VEHICLE_GLASS = 'var(--hero-vehicle-glass)';
-const TOKEN_VEHICLE_WHEEL = 'var(--hero-vehicle-wheel)';
-const TOKEN_VEHICLE_WHEEL_CENTER = 'var(--hero-vehicle-wheel-center)';
+const ROUTE_CENTER = { x: 50, y: 50 } as const;
+const MARKER_VISUAL_SCALE = 1.2;
+const MARKER_HIGHLIGHT_VECTOR_LENGTH = 4.4;
 const MAP_LIGHT_SRC = `${BASE_PATH}/hero/locations/map-light.webp`;
 const MAP_DARK_SRC = `${BASE_PATH}/hero/locations/map-dark.webp`;
 
@@ -82,6 +80,9 @@ const MOTION_ANCHOR_POINTS: Record<MotionAnchorId, { x: number; y: number }> = {
   carnonReturn: { x: 66, y: 67 },
   palavas: { x: 36, y: 67 },
 };
+
+/** First paint + reduced-motion: vehicle must sit on Montpellier, not translate(0 0). */
+const INITIAL_VEHICLE_TRANSLATE = `translate(${MOTION_ANCHOR_POINTS.montpellier.x} ${MOTION_ANCHOR_POINTS.montpellier.y})`;
 
 const VISUAL_STOPS: readonly {
   visualId: VisualStopId;
@@ -158,6 +159,7 @@ export function HeroRouteVisual({
   const trailPhaseRef = useRef<TrailPhase>('hidden');
   const vehicleRef = useRef<SVGGElement | null>(null);
   const vehicleFlipRef = useRef<SVGGElement | null>(null);
+  const spmMarkerHighlightRef = useRef<SVGLinearGradientElement | null>(null);
   const trailSegmentRefs = useRef<Array<SVGLineElement | null>>([]);
   const labelTextRefs = useRef<Record<VisualStopId, SVGTextElement | null>>({
     montpellier: null,
@@ -208,6 +210,27 @@ export function HeroRouteVisual({
     observer.observe(rootRef.current);
     return () => observer.disconnect();
   }, []);
+
+  /**
+   * When the route animation is allowed to run (deferred + in viewport), realign the segment
+   * clock to "now" so progress is not derived from stale mount-time `changedAt` (which made
+   * the vehicle appear to start near Port Marianne). Reset trail tick refs so re-entry after
+   * leaving the viewport does not apply huge elapsed deltas on the first frame.
+   */
+  useLayoutEffect(() => {
+    if (!hasDeferredStart || !isInViewport) return;
+    const now = Date.now();
+    setNowMs(now);
+    setState((prev) => ({ ...prev, changedAt: now }));
+
+    previousTickMsRef.current = null;
+    previousCurrentLengthRef.current = null;
+    trailPhaseRef.current = 'hidden';
+    trailHeadRef.current = 0;
+    trailTailRef.current = 0;
+    trailVisibleLengthRef.current = 0;
+    trailDirectionSignRef.current = 1;
+  }, [hasDeferredStart, isInViewport]);
 
   useEffect(() => {
     if (!hasDeferredStart || !isInViewport) return;
@@ -370,9 +393,18 @@ export function HeroRouteVisual({
         vehicleRef.current.setAttribute('transform', `translate(${point.x} ${point.y})`);
       }
 
-      if (vehicleFlipRef.current) {
-        const scaleX = state.direction === 'outbound' ? -1 : 1;
-        vehicleFlipRef.current.setAttribute('transform', `scale(${scaleX} 1)`);
+      const highlightGradient = spmMarkerHighlightRef.current;
+      if (highlightGradient) {
+        const dx = (ROUTE_CENTER.x - point.x) / MARKER_VISUAL_SCALE;
+        const dy = (ROUTE_CENTER.y - point.y) / MARKER_VISUAL_SCALE;
+        const distance = Math.hypot(dx, dy) || 1;
+        const ux = dx / distance;
+        const uy = dy / distance;
+        const half = MARKER_HIGHLIGHT_VECTOR_LENGTH / 2;
+        highlightGradient.setAttribute('x1', String(-ux * half));
+        highlightGradient.setAttribute('y1', String(-uy * half));
+        highlightGradient.setAttribute('x2', String(ux * half));
+        highlightGradient.setAttribute('y2', String(uy * half));
       }
       VISUAL_STOPS.forEach((stop) => {
         const labelEl = labelTextRefs.current[stop.visualId];
@@ -662,21 +694,75 @@ export function HeroRouteVisual({
               </text>
             );
           })}
-          <g ref={vehicleRef} transform="translate(0 0)" aria-label={vehicleAriaLabel}>
-            <g ref={vehicleFlipRef} transform="scale(1 1)">
-              <g transform="scale(1.25)">
-                <ellipse cx="0" cy="1.34" rx="1.9" ry="0.42" fill={TOKEN_VEHICLE_SHADOW} />
-                <g>
-                  <rect x="-2.2" y="-0.9" width="4.4" height="1.4" rx="0.45" fill={TOKEN_VEHICLE_BODY} />
-                  <path d="M -1.6 -0.9 L 0.5 -0.9 L 1.3 -0.2 L -1.9 -0.2 Z" fill={TOKEN_VEHICLE_CABIN} />
-                  <rect x="-1.2" y="-0.7" width="1.0" height="0.4" rx="0.12" fill={TOKEN_VEHICLE_GLASS} />
-                  <rect x="0.0" y="-0.7" width="0.9" height="0.4" rx="0.12" fill={TOKEN_VEHICLE_GLASS} />
-                  <circle cx="-1.4" cy="0.75" r="0.4" fill={TOKEN_VEHICLE_WHEEL} />
-                  <circle cx="1.4" cy="0.75" r="0.4" fill={TOKEN_VEHICLE_WHEEL} />
-                  <circle cx="-1.4" cy="0.75" r="0.16" fill={TOKEN_VEHICLE_WHEEL_CENTER} />
-                  <circle cx="1.4" cy="0.75" r="0.16" fill={TOKEN_VEHICLE_WHEEL_CENTER} />
-                </g>
+          <g ref={vehicleRef} transform={INITIAL_VEHICLE_TRANSLATE} aria-label={vehicleAriaLabel}>
+            <g transform="scale(1.2)">
+              <defs>
+                <linearGradient
+                  id="spmMarkerGradient"
+                  x1="-4.2"
+                  y1="-2.1"
+                  x2="4.2"
+                  y2="2.1"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stopColor="#38bdf8" />
+                  <stop offset="48%" stopColor="#0ea5e9" />
+                  <stop offset="100%" stopColor="#1d4ed8" />
+                </linearGradient>
+                <linearGradient
+                  id="spmMarkerHighlight"
+                  ref={spmMarkerHighlightRef}
+                  x1="0"
+                  y1="-2.1"
+                  x2="0"
+                  y2="2.1"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stopColor="rgba(255,255,255,0.38)" />
+                  <stop offset="50%" stopColor="rgba(255,255,255,0.08)" />
+                  <stop offset="100%" stopColor="rgba(255,255,255,0)" />
+                </linearGradient>
+              </defs>
+              <g ref={vehicleFlipRef} transform="scale(1 1)">
+                {/* Symmetric pill; highlight vector updated in rAF from route center. */}
+                <ellipse
+                  cx="0"
+                  cy="2.35"
+                  rx="3.85"
+                  ry="0.5"
+                  fill={TOKEN_VEHICLE_SHADOW}
+                  opacity="0.55"
+                />
+                <rect
+                  x="-4.2"
+                  y="-2.1"
+                  width="8.4"
+                  height="4.2"
+                  rx="1.25"
+                  fill="url(#spmMarkerGradient)"
+                />
+                <rect
+                  x="-4.2"
+                  y="-2.1"
+                  width="8.4"
+                  height="4.2"
+                  rx="1.25"
+                  fill="url(#spmMarkerHighlight)"
+                />
               </g>
+              <text
+                x="0"
+                y="0"
+                textAnchor="middle"
+                dominantBaseline="middle"
+                fontFamily="Manrope, Arial, sans-serif"
+                fontSize="2.2"
+                fontWeight="900"
+                letterSpacing="0.04"
+                fill="white"
+              >
+                SPM
+              </text>
             </g>
           </g>
         </svg>
