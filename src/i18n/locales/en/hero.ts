@@ -4,12 +4,12 @@
 
 export const hero = {
   headline_line1: 'Local advertising in Montpellier',
-  headline_line2: 'Your business is seen every day',
+  headline_line2: 'Your business will be seen every day',
   subheadline:
-    'Real visibility from a vehicle on the same route every day',
-  support: 'Between Montpellier and the coast — a real route, seen every day',
+    'Place your advertising on our vehicle — already in daily circulation between Montpellier and the coast',
+  support: '',
   proof: 'Up to 200,000 local views per month',
-  trust: 'Simple start · first month at −50%',
+  trust: 'Simple start on the route · first month at −50%',
   heroSeoLine1: '',
   heroSeoLine2Before: '',
   heroSeoLine2Link: 'How this differs from classic car advertising →',

@@ -6,10 +6,10 @@ export const hero = {
   headline_line1: 'Publicité locale à Montpellier',
   headline_line2: 'Votre entreprise est vue chaque jour',
   subheadline:
-    'Une visibilité réelle grâce à un véhicule qui circule chaque jour sur le même trajet',
-  support: 'Entre Montpellier et le littoral — un trajet réel, vu chaque jour',
+    'Placez votre publicité sur notre véhicule — déjà en circulation chaque jour entre Montpellier et le littoral',
+  support: '',
   proof: 'Jusqu’à 200 000 vues locales par mois',
-  trust: 'Démarrage simple · premier mois à −50 %',
+  trust: 'Démarrage simple sur le trajet · premier mois à −50 %',
   heroSeoLine1: '',
   heroSeoLine2Before: '',
   heroSeoLine2Link:

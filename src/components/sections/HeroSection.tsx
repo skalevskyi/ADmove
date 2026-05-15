@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { CalendarDays, Route, ShieldCheck } from 'lucide-react';
+import { CalendarDays, Route, ShieldCheck, Tag } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -12,6 +12,57 @@ import { HeroRouteVisual } from './HeroRouteVisual';
 
 const focusRing =
   'focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70';
+
+const OFFER_TRUST_SEP = ' · ';
+
+const UA_MOBILE_OFFER_LINE_1 = 'Простий старт';
+const UA_MOBILE_OFFER_LINE_2 = '−50% перший місяць';
+
+function OfferReassurancePill({ trust }: { trust: string }) {
+  const { locale } = useLanguage();
+  const sepIndex = trust.lastIndexOf(OFFER_TRUST_SEP);
+  const hasOfferTail = sepIndex !== -1;
+  const lead = hasOfferTail ? trust.slice(0, sepIndex) : trust;
+  const offerTail = hasOfferTail ? trust.slice(sepIndex + OFFER_TRUST_SEP.length) : null;
+
+  return (
+    <span className="inline-flex min-h-10 w-full max-w-full items-center justify-center rounded-full border border-transparent bg-sky-50 px-5 py-2 text-[0.9375rem] font-medium leading-snug text-sky-900 shadow-sm shadow-sky-100/50 ring-1 ring-sky-100/60 md:justify-start md:whitespace-nowrap dark:bg-sky-900/60 dark:text-sky-50 dark:shadow-none dark:ring-sky-700/40">
+      <span className="inline-flex items-center gap-3">
+        <Tag
+          className="h-4 w-4 shrink-0 self-center scale-x-[-1] text-sky-700 dark:text-sky-100"
+          strokeWidth={1.75}
+          aria-hidden
+        />
+        <span className="flex flex-col items-start text-left leading-snug md:hidden">
+          {locale === 'ua' && hasOfferTail ? (
+            <>
+              <span>{UA_MOBILE_OFFER_LINE_1}</span>
+              <span className="font-semibold">{UA_MOBILE_OFFER_LINE_2}</span>
+            </>
+          ) : offerTail ? (
+            <>
+              <span>{lead}</span>
+              <span className="font-semibold">{offerTail}</span>
+            </>
+          ) : (
+            <span>{trust}</span>
+          )}
+        </span>
+        <span className="hidden min-w-0 md:inline">
+          {offerTail ? (
+            <>
+              {lead}
+              <span aria-hidden>{OFFER_TRUST_SEP}</span>
+              <span className="font-semibold">{offerTail}</span>
+            </>
+          ) : (
+            trust
+          )}
+        </span>
+      </span>
+    </span>
+  );
+}
 
 export function HeroSection() {
   const reducedMotion = useReducedMotion();
@@ -64,29 +115,26 @@ export function HeroSection() {
               {t.hero.proof}
             </p>
 
-            <div className="flex min-w-0 flex-col gap-3 md:flex-row md:items-stretch md:gap-4">
-              <a
-                href="#contact"
-                className={`inline-block w-full min-w-0 flex-1 rounded-2xl bg-gradient-to-b from-sky-500 to-sky-600 px-6 py-4 text-center text-base font-medium text-white transition-colors duration-150 ease-out hover:from-sky-600 hover:to-sky-700 active:from-sky-600 active:to-sky-700 dark:bg-gradient-to-b dark:from-sky-500 dark:to-sky-400 dark:hover:from-sky-500 dark:hover:to-sky-300 dark:active:from-sky-500 dark:active:to-sky-600 md:rounded-lg md:py-3 ${focusRing}`}
-              >
-                {t.hero.ctaPrimary}
-              </a>
-              <a
-                href="#support"
-                className={`inline-block w-full min-w-0 flex-1 text-center ${ctaShapeBase} border border-slate-300 bg-white text-slate-700 transition-colors duration-150 ease-out hover:bg-slate-50 active:bg-slate-100 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-800 ${focusRing}`}
-              >
-                {t.hero.ctaSecondary}
-              </a>
-            </div>
+            <div className="flex min-w-0 flex-col">
+              <div className="flex min-w-0 flex-col gap-3 md:flex-row md:items-stretch md:gap-4">
+                <a
+                  href="#contact"
+                  className={`inline-block w-full min-w-0 flex-1 rounded-2xl bg-gradient-to-b from-sky-500 to-sky-600 px-6 py-4 text-center text-base font-medium text-white transition-colors duration-150 ease-out hover:from-sky-600 hover:to-sky-700 active:from-sky-600 active:to-sky-700 dark:bg-gradient-to-b dark:from-sky-500 dark:to-sky-400 dark:hover:from-sky-500 dark:hover:to-sky-300 dark:active:from-sky-500 dark:active:to-sky-600 md:rounded-lg md:py-3 ${focusRing}`}
+                >
+                  {t.hero.ctaPrimary}
+                </a>
+                <a
+                  href="#support"
+                  className={`inline-block w-full min-w-0 flex-1 text-center ${ctaShapeBase} border border-slate-300 bg-white text-slate-700 transition-colors duration-150 ease-out hover:bg-slate-50 active:bg-slate-100 dark:border-slate-600 dark:bg-slate-800/50 dark:text-slate-200 dark:hover:bg-slate-800 dark:active:bg-slate-800 ${focusRing}`}
+                >
+                  {t.hero.ctaSecondary}
+                </a>
+              </div>
 
-            {t.hero.support ? (
-              <p className="break-words text-xs leading-relaxed text-slate-500 dark:text-slate-400">
-                {t.hero.support}
-              </p>
-            ) : null}
-            <p className="break-words text-sm font-medium leading-relaxed text-slate-700 dark:text-slate-200">
-              {t.hero.trust}
-            </p>
+              <div className="mt-7 w-full min-w-0">
+                <OfferReassurancePill trust={t.hero.trust} />
+              </div>
+            </div>
 
             <div className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 md:text-sm">
               <p className="min-w-0 break-words">
