@@ -41,7 +41,7 @@ export const seoPubliciteLocale = {
 
   section6Title: 'Une visibilité locale concrète',
   section6Text:
-    'Selon le format choisi, la présence peut atteindre jusqu’à 200 000 vues locales par mois.\n\nMais l’essentiel reste la répétition sur un trajet réel, qui rend votre message visible et mémorisé.',
+    'Selon le modèle prévisionnel et le format choisi, la présence peut atteindre jusqu’à 200 000 vues locales par mois.\n\nMais l’essentiel reste la répétition sur un trajet réel, qui rend votre message visible et mémorisé.',
 
   internalLink1Text: 'Vous recherchez un format de publicité sur voiture ?',
   internalLink1Label: 'Publicité sur voiture',

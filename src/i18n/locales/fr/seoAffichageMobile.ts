@@ -36,7 +36,7 @@ export const seoAffichageMobile = {
 
   section5Title: 'Une visibilité locale concrète',
   section5Text:
-    'Selon le format choisi, la présence peut atteindre jusqu’à 200 000 vues locales par mois.\n\nMais l’essentiel n’est pas seulement le volume : c’est la répétition sur un trajet réel, qui rend votre message visible et mémorisé.',
+    'Selon le modèle prévisionnel et le format choisi, la présence peut atteindre jusqu’à 200 000 vues locales par mois.\n\nMais l’essentiel n’est pas seulement le volume : c’est la répétition sur un trajet réel, qui rend votre message visible et mémorisé.',
 
   internalLinkText: 'Vous recherchez plutôt une solution de publicité sur voiture ?',
   internalLinkLabel: 'Publicité sur voiture',

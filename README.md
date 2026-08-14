@@ -1,6 +1,6 @@
 # 🚗 SPM — Skalevskyi publicité mobile
 
-Mobile advertising SaaS landing platform based on a real-world OOH model: vehicle-based exposure, fixed route, local B2B targeting.
+Conversion-focused web product for a local mobile outdoor advertising service: vehicle-based exposure, corridor visibility, and local B2B lead capture.
 
 ---
 
@@ -18,7 +18,7 @@ Mobile advertising SaaS landing platform based on a real-world OOH model: vehicl
 </p>
 
 <p align="center">
-  <i>Fully responsive SaaS landing — desktop & mobile optimized</i>
+  <i>Fully responsive conversion website — desktop & mobile optimized</i>
 </p>
 
 
@@ -26,7 +26,7 @@ Mobile advertising SaaS landing platform based on a real-world OOH model: vehicl
 
 ## 📌 About
 
-SPM is a mobile outdoor advertising platform designed for local B2B businesses.
+SPM is a mobile outdoor advertising service website designed for local B2B businesses.
 
 - 🚗 One vehicle (Nissan Qashqai)
 - 📍 Fixed daily route (Montpellier → Littoral)
@@ -40,7 +40,7 @@ SPM is a mobile outdoor advertising platform designed for local B2B businesses.
 
 - 🧮 Dynamic pricing calculator (engine + UI separation)
 - 📐 Corridor-based visibility model (i18n-driven)
-- 📩 Lead capture (`POST /api/lead`, Resend, optional Upstash backup)
+- 📩 Lead capture (`POST /api/lead`, Resend, required durable Upstash backup in production)
 - 📱 Responsive, mobile-first UI (bottom nav, safe areas)
 - 🌍 Multi-language support (FR / EN / UA)
 - ✨ Motion with Framer Motion (reduced-motion aware)
@@ -73,7 +73,7 @@ SPM is a mobile outdoor advertising platform designed for local B2B businesses.
 - 💸 Pricing lives in the calculator engine (`config.ts`, `rules.ts`, `engine.ts`)
 - 👁 User-facing visibility uses **corridor ranges** per format (i18n), not raw engine contact constants
 - ⚠️ Internal engine constants are not treated as product truth in messaging
-- 📉 CPM in the UI is a **static, corridor-aligned** explanatory line (e.g. ≈ 4 € / 1000 contacts), not dynamically computed from engine contacts
+- 📉 CPM in the UI is a **static, corridor-aligned** explanatory line (e.g. ≈ 3.5 € / 1000 local views), not dynamically computed from engine contacts
 
 ---
 
@@ -128,7 +128,7 @@ RESEND_API_KEY=
 LEAD_TO_EMAIL=
 ```
 
-Optional: `RESEND_FROM_EMAIL`, Upstash `UPSTASH_REDIS_REST_*`, `LEAD_BACKUP_LIST_KEY`, rate limits, `NEXT_PUBLIC_BASE_PATH` for subpath deploys.
+Production requires `RESEND_API_KEY`, `CONTACT_TO_EMAIL`, and Upstash `UPSTASH_REDIS_REST_*` for durable lead backup. Optional: `RESEND_FROM_EMAIL`, `LEAD_BACKUP_LIST_KEY`, rate limits, `NEXT_PUBLIC_BASE_PATH` for subpath deploys. Local/dev may use `LEAD_BACKUP_SKIP=true`; do not enable it in production.
 
 **Local development**
 

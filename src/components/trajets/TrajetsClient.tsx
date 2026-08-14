@@ -36,9 +36,9 @@ export function TrajetsClient() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeDay = routeDays[activeIndex];
   const activeRouteId = activeDay.id as TrajetsRouteId;
-  const hasRouteTrace = activeDay.id !== 'day-7' || activeDay.isRecorded;
+  const hasRouteTrace = activeDay.isRecorded;
   const statusType =
-    activeDay.id === 'day-7' && !activeDay.isRecorded
+    !activeDay.isRecorded
       ? 'noMovement'
       : activeDay.id === 'day-6'
         ? 'routeMayVary'
@@ -136,6 +136,7 @@ export function TrajetsClient() {
             <div className="no-scrollbar flex gap-2 overflow-x-auto whitespace-nowrap pb-1">
               {t.trajets.selector.weekdaysShort.map((weekday, index) => {
                 const isActive = index === activeIndex;
+                const isRecorded = routeDays[index]?.isRecorded;
                 return (
                   <button
                     key={routeDays[index]?.id ?? `${weekday}-${index}`}
@@ -144,7 +145,9 @@ export function TrajetsClient() {
                     className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                       isActive
                         ? 'border-sky-300 bg-sky-50/40 text-sky-700 dark:border-sky-500/60 dark:bg-sky-950/20 dark:text-sky-300'
-                        : 'border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-700/80 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:bg-slate-800/40'
+                        : isRecorded
+                          ? 'border-slate-200/80 bg-white text-slate-600 hover:bg-slate-50 dark:border-slate-700/80 dark:bg-slate-800/40 dark:text-slate-300 dark:hover:bg-slate-800/40'
+                          : 'border-slate-200/70 bg-white/60 text-slate-400 hover:bg-slate-50 dark:border-slate-700/70 dark:bg-slate-800/25 dark:text-slate-500 dark:hover:bg-slate-800/35'
                     }`}
                   >
                     {weekday}
@@ -171,7 +174,9 @@ export function TrajetsClient() {
                   }`}
                 >
                   <p className="text-sm font-semibold text-slate-900 dark:text-white">{day.weekday}</p>
-                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">{day.route}</p>
+                  <p className="mt-0.5 text-xs text-slate-500 dark:text-slate-400">
+                    {isRecorded ? day.route : noMovementStatus.title}
+                  </p>
                 </button>
               );
             })}
@@ -184,7 +189,7 @@ export function TrajetsClient() {
           >
             <p className="flex items-start gap-2 text-sm leading-relaxed text-slate-600 dark:text-slate-300">
               <MapPinned className="mt-0.5 h-5 w-5 shrink-0 text-sky-500" aria-hidden />
-              {t.trajets.map.description}
+              {hasRouteTrace ? t.trajets.map.description : noMovementStatus.title}
             </p>
 
             <div className="mt-5 h-72 rounded-xl border border-slate-200 bg-white p-2 md:h-[18.25rem] md:p-4 dark:border-slate-700 dark:bg-slate-900/40">
@@ -324,24 +329,30 @@ export function TrajetsClient() {
                   <Ruler className="h-4 w-4 text-sky-500" aria-hidden />
                   {t.trajets.detail.metricsLabel}
                 </p>
-                <div className="mt-1 grid grid-cols-2 gap-1.5 md:w-[10.5rem]">
-                  <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
-                    <Route className="h-3.5 w-3.5 text-sky-500" aria-hidden />
-                    <span>{activeDay.distance}</span>
+                {hasRouteTrace ? (
+                  <div className="mt-1 grid grid-cols-2 gap-1.5 md:w-[10.5rem]">
+                    <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
+                      <Route className="h-3.5 w-3.5 text-sky-500" aria-hidden />
+                      <span>{activeDay.distance}</span>
+                    </div>
+                    <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
+                      <Repeat className="h-3.5 w-3.5 text-sky-500" aria-hidden />
+                      <span>{activeDay.passages}</span>
+                    </div>
+                    <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
+                      <Clock3 className="h-3.5 w-3.5 text-sky-500" aria-hidden />
+                      <span>{activeDay.duration}</span>
+                    </div>
+                    <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
+                      <MapPinned className="h-3.5 w-3.5 text-sky-500" aria-hidden />
+                      <span>{activeDay.gpsPoints}</span>
+                    </div>
                   </div>
-                  <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
-                    <Repeat className="h-3.5 w-3.5 text-sky-500" aria-hidden />
-                    <span>{activeDay.passages}</span>
-                  </div>
-                  <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
-                    <Clock3 className="h-3.5 w-3.5 text-sky-500" aria-hidden />
-                    <span>{activeDay.duration}</span>
-                  </div>
-                  <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
-                    <MapPinned className="h-3.5 w-3.5 text-sky-500" aria-hidden />
-                    <span>{activeDay.gpsPoints}</span>
-                  </div>
-                </div>
+                ) : (
+                  <p className="mt-1 text-sm font-medium leading-tight text-slate-500 dark:text-slate-400">
+                    {noMovementStatus.title}
+                  </p>
+                )}
               </div>
             </div>
           </article>

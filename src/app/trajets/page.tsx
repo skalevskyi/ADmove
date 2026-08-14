@@ -7,7 +7,7 @@ import { Navbar } from '@/components/Navbar';
 import { TrajetsClient } from '@/components/trajets/TrajetsClient';
 
 export const metadata: Metadata = {
-  title: 'Trajets GPS réels sur 7 jours',
+  title: 'Trajets GPS enregistrés — 3 jours sur 7',
   description:
     'Preuve de circulation réelle SPM entre Montpellier et le littoral, avec jours enregistrés par GPS et limites de suivi clairement indiquées.',
   alternates: {

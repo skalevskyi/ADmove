@@ -36,7 +36,7 @@ export const seoAffichageMobile = {
 
   section5Title: 'Real local visibility',
   section5Text:
-    'Depending on the format, visibility can reach up to 200,000 local views per month along a real route between Montpellier and the coast.',
+    'Depending on the forecast model and selected format, visibility can reach up to 200,000 local views per month along a real route between Montpellier and the coast.',
 
   internalLinkText: 'Looking for car advertising instead?',
   internalLinkLabel: 'Car advertising',

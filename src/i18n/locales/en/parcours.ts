@@ -97,7 +97,7 @@ export const parcours = {
     note: 'Indicative visibility based on local traffic flows.',
   },
   proofTitle: 'Recorded real routes',
-  proofDescription: 'Examples of real circulation over 7 days',
+  proofDescription: 'Real GPS examples from 3 recorded days',
   proofCta: 'View routes',
   proofGoogleCta: 'Google profile',
   visibilityTitle: 'Local visibility estimate',

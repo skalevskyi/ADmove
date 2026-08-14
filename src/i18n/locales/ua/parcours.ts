@@ -97,7 +97,7 @@ export const parcours = {
     note: 'Орієнтовна видимість на основі локальних потоків.',
   },
   proofTitle: 'Реальні записані маршрути',
-  proofDescription: 'Приклади реального руху за 7 днів',
+  proofDescription: 'Реальні GPS-приклади з 3 зафіксованих днів',
   proofCta: 'Переглянути маршрути',
   proofGoogleCta: 'Профіль Google',
   visibilityTitle: 'Оцінка видимості',

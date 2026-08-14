@@ -8,7 +8,7 @@ export const hero = {
   subheadline:
     'Placez votre publicité sur notre véhicule — déjà en circulation chaque jour entre Montpellier et le littoral',
   support: '',
-  proof: 'Jusqu’à 200 000 vues locales par mois',
+  proof: 'Modèle prévisionnel : jusqu’à 200 000 vues locales par mois',
   trust: 'Démarrage simple sur le trajet · premier mois à −50 %',
   heroSeoLine1: '',
   heroSeoLine2Before: '',

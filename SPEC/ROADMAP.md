@@ -80,7 +80,7 @@ Documented here so roadmap status matches the repo; all items are **implemented 
 ## Phase 1 — Concept
 
 - ✓ concept defined
-- ✓ pricing estimation model (no fixed prices; see pricing_model.md)
+- ✓ pricing estimation model (starting prices + calculator; see `/SPEC/CALCULATOR_CURRENT_STATE.md`)
 - ✓ visibility methodology (indicative placeholders; see visibility_model.md)
 - ✓ landing wireframe
 
@@ -90,7 +90,7 @@ Documented here so roadmap status matches the repo; all items are **implemented 
 - ✓ Hero (real imagery, premium rotator, reduced motion support)
 - ✓ **Process / Fonctionnement / Як працює** section (id #support; UI titles per locale; concise 4-step explanatory flow; no route/format breakdown; no package numbers/pricing)
 - ✓ Parcours section (route credibility block; id #parcours; schematic timeline with **live ping-pong progress** — aller fill top→bottom; retour established path with fade/mute behind active stop; retour markers filled then mute when passed; **semi-static right column**: dynamic location title + description + compact icon/tag row; **three bullets are semi-dynamic** by active route point; previously repeated note under bullets is not shown; subtle timeline hint under the route module; calmer autoplay interval; visibility block **BASIC / PRO / EXCLUSIVE** — numeric range + unit line (no Range/Fourchette/Діапазон prefix); no map)
-- ✓ Offres section (three packages **BASIC / PRO / EXCLUSIVE**; real mockups — **2 / 2 / 3** gallery images per package in `OffresSection.tsx`; **no fixed prices in UI**; per-card **`calculer`** i18n button expands shared **estimation panel** with **live calculator** (engine + UI); inner CTA to #contact)
+- ✓ Offres section (three packages **BASIC / PRO / EXCLUSIVE**; real mockups — **2 / 2 / 3** gallery images per package in `OffresSection.tsx`; localized starting prices shown on cards; per-card **`calculer`** i18n button expands shared **estimation panel** with **live calculator** (engine + UI); inner CTA to #contact)
 - ✓ Estimation panel inside Offres (expandable shell; selected format, duration, add-ons, summary, disclaimer; CTA to #contact; backed by `src/lib/calculator`)
 - ✓ Contact section — id `#contact`, layout, and form shell (**Phase 2A**). **Functional submission, emails, and contact UX** are **Phase 2B** — **completed** (see Phase 2B bullets below).
 - ✓ Footer (compact premium footer with brand/positioning; no duplicated navigation links)

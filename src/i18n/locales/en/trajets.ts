@@ -1,8 +1,8 @@
 export const trajets = {
   backHome: 'Back to home',
-  badge: 'Route confirmed by GPS',
-  title: 'Routes over 7 days',
-  intro: 'One vehicle. One route. Moving every day.',
+  badge: '3 days confirmed by GPS',
+  title: 'Recorded GPS routes',
+  intro: '3 recorded days out of 7. One vehicle. A regular corridor between Montpellier and the coast.',
 
   summary: {
     distanceLabel: 'Total distance',
@@ -23,7 +23,7 @@ export const trajets = {
   },
 
   selector: {
-    title: 'Recorded days',
+    title: 'Week overview',
     weekdaysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
   },
 
@@ -37,7 +37,7 @@ export const trajets = {
     durationChipLabel: 'Duration',
   },
 
-  trust: 'Routes are recorded automatically via GPS. Data is shown as proof of real movement, without a technical interface and without live tracking. If weekend visibility is not activated, weekend routes may vary depending on personal and local trips, mainly around the city.',
+  trust: 'Days marked as recorded are captured automatically via GPS. Data is shown as proof of real movement, without a technical interface and without live tracking. Other days are not presented as GPS proof. If weekend visibility is not activated, weekend routes may vary depending on personal and local trips, mainly around the city.',
   status: {
     noMovement: {
       title: 'No route recorded for this day',
@@ -65,10 +65,10 @@ export const trajets = {
         { label: 'Out', value: '06:10–06:42' },
         { label: 'Back', value: '16:50–18:09' },
       ],
-      distance: '72 km',
-      duration: '115 min',
-      passages: '2 trips',
-      gpsPoints: '43 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
     {
       id: 'day-2',
@@ -85,10 +85,10 @@ export const trajets = {
         { label: 'Out', value: '06:14–06:46' },
         { label: 'Back', value: '16:58–18:12' },
       ],
-      distance: '81 km',
-      duration: '112 min',
-      passages: '2 trips',
-      gpsPoints: '142 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
     {
       id: 'day-3',
@@ -105,10 +105,10 @@ export const trajets = {
         { label: 'Out', value: '06:16–06:48' },
         { label: 'Back', value: '16:52–18:08' },
       ],
-      distance: '77 km',
-      duration: '108 min',
-      passages: '2 trips',
-      gpsPoints: '210 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
     {
       id: 'day-4',

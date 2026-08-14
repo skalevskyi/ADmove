@@ -40,7 +40,7 @@ export const seoPubliciteLocale = {
 
   section6Title: 'Real local visibility',
   section6Text:
-    'Depending on the format, visibility can reach up to 200,000 local views per month.\n\nThe key factor is repetition along a real route.',
+    'Depending on the forecast model and selected format, visibility can reach up to 200,000 local views per month.\n\nThe key factor is repetition along a real route.',
 
   internalLink1Text: 'Looking for car advertising?',
   internalLink1Label: 'Car advertising',

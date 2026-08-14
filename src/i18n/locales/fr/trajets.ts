@@ -1,8 +1,8 @@
 export const trajets = {
   backHome: 'Retour à l’accueil',
-  badge: 'Trajet confirmé par GPS',
-  title: 'Trajets sur 7 jours',
-  intro: 'Un véhicule. Un trajet. En mouvement chaque jour.',
+  badge: '3 jours confirmés par GPS',
+  title: 'Trajets GPS enregistrés',
+  intro: '3 jours enregistrés sur 7. Un véhicule. Un corridor régulier entre Montpellier et le littoral.',
 
   summary: {
     distanceLabel: 'Distance totale',
@@ -23,7 +23,7 @@ export const trajets = {
   },
 
   selector: {
-    title: 'Jours enregistrés',
+    title: 'Aperçu de la semaine',
     weekdaysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
   },
 
@@ -37,7 +37,7 @@ export const trajets = {
     durationChipLabel: 'Durée',
   },
 
-  trust: 'Les trajets sont enregistrés automatiquement par GPS. Les données sont présentées comme preuve de circulation réelle, sans interface technique ni suivi en direct. Si l’option de diffusion le week-end n’est pas activée, le trajet le week-end peut varier selon les déplacements personnels et locaux, principalement en ville.',
+  trust: 'Les jours marqués comme enregistrés sont captés automatiquement par GPS. Les données sont présentées comme preuve de circulation réelle, sans interface technique ni suivi en direct. Les autres jours ne sont pas présentés comme des preuves GPS. Si l’option de diffusion le week-end n’est pas activée, le trajet le week-end peut varier selon les déplacements personnels et locaux, principalement en ville.',
   status: {
     noMovement: {
       title: 'Aucun trajet enregistré ce jour-là',
@@ -65,10 +65,10 @@ export const trajets = {
         { label: 'Aller', value: '06:10–06:42' },
         { label: 'Retour', value: '16:50–18:09' },
       ],
-      distance: '72 km',
-      duration: '115 min',
-      passages: '2 trajets',
-      gpsPoints: '43 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
     {
       id: 'day-2',
@@ -85,10 +85,10 @@ export const trajets = {
         { label: 'Aller', value: '06:14–06:46' },
         { label: 'Retour', value: '16:58–18:12' },
       ],
-      distance: '81 km',
-      duration: '112 min',
-      passages: '2 trajets',
-      gpsPoints: '142 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
     {
       id: 'day-3',
@@ -105,10 +105,10 @@ export const trajets = {
         { label: 'Aller', value: '06:16–06:48' },
         { label: 'Retour', value: '16:52–18:08' },
       ],
-      distance: '77 km',
-      duration: '108 min',
-      passages: '2 trajets',
-      gpsPoints: '210 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
     {
       id: 'day-4',

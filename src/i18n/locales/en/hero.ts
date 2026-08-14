@@ -8,7 +8,7 @@ export const hero = {
   subheadline:
     'Place your advertising on our vehicle — already in daily circulation between Montpellier and the coast',
   support: '',
-  proof: 'Up to 200,000 local views per month',
+  proof: 'Forecast model: up to 200,000 local views per month',
   trust: 'Simple start on the route · first month at −50%',
   heroSeoLine1: '',
   heroSeoLine2Before: '',
