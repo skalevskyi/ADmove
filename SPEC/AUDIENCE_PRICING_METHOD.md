@@ -60,7 +60,7 @@ Ces paramètres servent à raisonner sur l’exposition ; ils ne sont pas des ga
 | **Estimation indicative** | Fourchette ou ordre de grandeur communiqué avec transparence sur les hypothèses ; **pas** un engagement chiffré. |
 | **Estimation conservative** | Choix de paramètres **prudents** (visibilité, répétition, couverture) pour limiter le sur-promesse. |
 | **Conditions de pointe (peak conditions)** | Scénarios (trafic dense, météo favorable, format maximal, répétition forte) qui **majorent** l’exposition possible ; à cadrer explicitement comme plafond, pas comme défaut. |
-| **CPM** | Métrique **explicative** alignée sur le **corridor** et les plages affichées : `CPM = (prix mensuel / contacts mensuels) × 1000` en ne retenant pour le **discours produit** que des **contacts** cohérents avec ce corridor — **pas** dérivés des seules constantes moteur internes. **Sur le site**, la ligne CPM du calculateur est une **copie statique** par locale (ex. FR **≈ 4 € pour 1000 vues** — voir `calculatorEstimatedCostCpmValue` dans `offres.ts`), **non** recalculée dynamiquement à partir du moteur. |
+| **CPM** | Métrique **explicative** alignée sur le **corridor** et les plages affichées : `CPM = (prix mensuel / contacts mensuels) × 1000` en ne retenant pour le **discours produit** que des **contacts** cohérents avec ce corridor — **pas** dérivés des seules constantes moteur internes. **Sur le site**, la ligne CPM du calculateur est une **copie statique** par locale (ex. FR **≈ 3,5 € pour 1000 vues** — voir `calculatorEstimatedCostCpmValue` dans `offres.ts`), **non** recalculée dynamiquement à partir du moteur. |
 
 **Principe rédactionnel (méthodologie interne).** Pour les **documents internes** et la **vente**, privilégier **contacts estimés**, **contacts visibles**, **OTS**, et qualifier toute métrique de type « vue ». **Sur le landing**, les **libellés publiés** suivent l’**i18n** actuelle (voir §1.b) : l’écart de vocabulaire **ne** contredit **pas** le corridor tant que les **plages chiffrées** et le **prix** restent alignés sur le runtime.
 
@@ -153,9 +153,9 @@ Le **package surface factor** est un **levier de modélisation** : PRO et EXCLUS
 
 | Package | Prix €/mois |
 |---------|-------------|
-| BASIC | 350 |
-| PRO | 550 |
-| EXCLUSIVE | 750 |
+| BASIC | 300 |
+| PRO | 425 |
+| EXCLUSIVE | 550 |
 
 **Formule (illustrative) :**
 
@@ -171,11 +171,11 @@ Exemples **non exhaustifs** en raisonnant au **milieu de corridor** défendable 
 
 | Illustration | Contacts retenus | Prix (€) | CPM indicatif (€) |
 |--------------|------------------|------------|-------------------|
-| BASIC, milieu de fourchette ~80k | 80 000 | 350 | ~4,38 |
-| PRO, milieu ~125k | 125 000 | 550 | ~4,40 |
-| EXCLUSIVE, milieu ~165k | 165 000 | 750 | ~4,55 |
+| BASIC, milieu de fourchette ~80k | 80 000 | 300 | ~3,75 |
+| PRO, milieu ~125k | 125 000 | 425 | ~3,40 |
+| EXCLUSIVE, milieu ~165k | 165 000 | 550 | ~3,33 |
 
-Le calculateur affiche une **ligne CPM statique** (copy par locale, ex. FR ≈ 4 € pour 1000 vues), **alignée** sur cette logique corridor — **non** calculée à partir de constantes internes 30k/45k/60k.
+Le calculateur affiche une **ligne CPM statique** (copy par locale, ex. FR ≈ 3,5 € pour 1000 vues), **alignée** sur cette logique corridor — **non** calculée à partir de constantes internes 30k/45k/60k.
 
 Le **CPM baisse** si les contacts retenus augmentent **à prix fixe**. L’objectif n’est pas de « vendre » le CPM le plus bas, mais d’**expliciter** que le chiffre repose sur le **corridor** et des hypothèses de contacts cohérentes avec les plages affichées.
 
@@ -185,9 +185,9 @@ Si l’on appliquait la formule aux seules constantes techniques **30k / 45k / 6
 
 | Package | Prix (€) | Contacts (interne, non messaging) | CPM (€) |
 |---------|----------|-----------------------------------|---------|
-| BASIC | 350 | 30 000 | **11,67** |
-| PRO | 550 | 45 000 | **12,22** (arrondi) |
-| EXCLUSIVE | 750 | 60 000 | **12,50** (arrondi) |
+| BASIC | 300 | 30 000 | **10,00** |
+| PRO | 425 | 45 000 | **9,44** (arrondi) |
+| EXCLUSIVE | 550 | 60 000 | **9,17** (arrondi) |
 
 ---
 

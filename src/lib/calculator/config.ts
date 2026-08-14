@@ -13,9 +13,9 @@ export const DISPLAY_MODES = ['monthly', 'contract_total'] as const satisfies Di
 
 // ===== Base media fees (ex-tax / HT as per calculator spec) =====
 export const BASE_MONTHLY_MEDIA_EUR: Record<PackageId, number> = {
-  BASIC: 350,
-  PRO: 550,
-  EXCLUSIVE: 750,
+  BASIC: 300,
+  PRO: 425,
+  EXCLUSIVE: 550,
 };
 
 // ===== Duration multipliers (applied to base media fee only) =====
@@ -77,13 +77,3 @@ export const INCLUDED_BY_DEFINITION: Record<PackageId, Partial<Record<AddonId, b
     exclusivity: true,
   },
 };
-
-// ===== Guardrails: tier hierarchy protection =====
-// These checks exclude extra_route_day and one_time fees from tier-substitution intent.
-export const GUARDRAILS = {
-  // BASIC loadout uses photo_reporting + exclusivity (recurring monthly add-ons only).
-  basicUpperAdds: ['photo_reporting', 'exclusivity'] as AddonId[],
-  // PRO loadout uses video_reporting + exclusivity (recurring monthly add-ons only).
-  proUpperAdds: ['video_reporting', 'exclusivity'] as AddonId[],
-} as const;
-

@@ -85,9 +85,9 @@ NO mixing responsibilities
 
 | Package   | Base €/month |
 | --------- | ------------ |
-| BASIC     | 350          |
-| PRO       | 550          |
-| EXCLUSIVE | 750          |
+| BASIC     | 300          |
+| PRO       | 425          |
+| EXCLUSIVE | 550          |
 
 ---
 
@@ -265,7 +265,7 @@ Base price (package list / nominal)
 Immediately after the base price line, a **static** explanatory row is shown (not computed dynamically by the engine):
 
 * **Label:** `calculatorEstimatedCostCpmLabel` (i18n)
-* **Value:** `calculatorEstimatedCostCpmValue` — corridor-aligned **static** copy per locale (e.g. FR **≈ 4 € pour 1000 vues** — see `offres.ts`), consistent with the **corridor** model — **not** derived from `INDICATIVE_MONTHLY_CONTACTS` or a live CPM calculation in code.
+* **Value:** `calculatorEstimatedCostCpmValue` — corridor-aligned **static** copy per locale (e.g. FR **≈ 3,5 € pour 1000 vues** — see `offres.ts`), consistent with the **corridor** model — **not** derived from `INDICATIVE_MONTHLY_CONTACTS` or a live CPM calculation in code. Package-specific CPM copy is calibrated from the public corridor midpoints: BASIC **≈ 3,8 €**, PRO **≈ 3,4 €**, EXCLUSIVE **≈ 3,3 €** per 1000 estimated views.
 
 ---
 

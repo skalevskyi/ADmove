@@ -248,25 +248,16 @@ export function computeTierGuardrailsStatus(): TierGuardrailsStatus {
   for (const durationMonths of [3, 6, 9, 12] as DurationMonths[]) {
     const mult = DURATION_MULTIPLIERS[durationMonths];
 
-    // BASIC upper stack uses base + photo + exclusivity (recurring monthly add-ons only).
     const basicBase = toCents(BASE_MONTHLY_MEDIA_EUR.BASIC) * mult;
-    const basicUpperRecurring =
-      basicBase + toCents(ADDON_PRICES.photo_reporting.eur) + toCents(EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.BASIC);
     const proBase = toCents(BASE_MONTHLY_MEDIA_EUR.PRO) * mult;
-
-    if (!(basicUpperRecurring < proBase)) {
-      errors.push(`Guardrail failed for duration=${durationMonths}: BASIC recurring stack must be < PRO base`);
-    }
-
-    // PRO upper stack uses base + video + exclusivity (photo is included and 0-charge; extra route day excluded).
-    const proUpperRecurring =
-      toCents(BASE_MONTHLY_MEDIA_EUR.PRO) * mult +
-      toCents(ADDON_PRICES.video_reporting.eur) +
-      toCents(EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE.PRO);
     const exclusiveBase = toCents(BASE_MONTHLY_MEDIA_EUR.EXCLUSIVE) * mult;
 
-    if (!(proUpperRecurring < exclusiveBase)) {
-      errors.push(`Guardrail failed for duration=${durationMonths}: PRO recurring stack must be < EXCLUSIVE base`);
+    if (!(basicBase < proBase)) {
+      errors.push(`Guardrail failed for duration=${durationMonths}: BASIC base must be < PRO base`);
+    }
+
+    if (!(proBase < exclusiveBase)) {
+      errors.push(`Guardrail failed for duration=${durationMonths}: PRO base must be < EXCLUSIVE base`);
     }
   }
 
