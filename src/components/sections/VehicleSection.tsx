@@ -321,11 +321,11 @@ export function VehicleSection() {
                   <p className="mt-1 text-sm text-slate-600 dark:text-slate-300">
                     {t.parcours.proofDescription}
                   </p>
-                  <div className="mt-4 grid gap-2 sm:flex sm:flex-wrap">
+                  <div className="mt-4 grid gap-2 sm:max-w-xl sm:grid-cols-2 sm:gap-4">
                     <Link
                       href={withBasePath('/trajets')}
                       prefetch={false}
-                      className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-sky-600/20 transition hover:bg-sky-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-sky-500 dark:hover:bg-sky-400"
+                      className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg bg-sky-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-sky-600/20 transition hover:bg-sky-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:bg-sky-500 dark:hover:bg-sky-400"
                     >
                       <Route className="h-4 w-4" aria-hidden />
                       <span>{t.parcours.proofCta}</span>
@@ -334,7 +334,7 @@ export function VehicleSection() {
                       href={GOOGLE_PROFILE_URL}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex min-h-10 items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-500 dark:hover:bg-slate-800"
+                      className="inline-flex min-h-10 w-full items-center justify-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-800 shadow-sm transition hover:border-slate-400 hover:bg-slate-50 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 dark:border-slate-600 dark:bg-slate-900 dark:text-slate-100 dark:hover:border-slate-500 dark:hover:bg-slate-800"
                     >
                       <GoogleIcon className="h-4 w-4 shrink-0" />
                       <span>{t.parcours.proofGoogleCta}</span>
