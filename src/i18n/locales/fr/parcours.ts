@@ -99,7 +99,8 @@ export const parcours = {
   },
   proofTitle: 'Trajets réels enregistrés',
   proofDescription: 'Exemples de circulation réelle sur 7 jours',
-  proofCta: 'Voir les trajets →',
+  proofCta: 'Voir les trajets',
+  proofGoogleCta: 'Profil Google',
   visibilityTitle: 'Estimation de visibilité locale',
   visibilityBlockTitle: 'Estimation de visibilité locale',
   visibilityIntro:

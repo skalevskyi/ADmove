@@ -98,7 +98,8 @@ export const parcours = {
   },
   proofTitle: 'Реальні записані маршрути',
   proofDescription: 'Приклади реального руху за 7 днів',
-  proofCta: 'Переглянути маршрути →',
+  proofCta: 'Переглянути маршрути',
+  proofGoogleCta: 'Профіль Google',
   visibilityTitle: 'Оцінка видимості',
   visibilityIntro:
     'Оцінки базуються на локальному трафіку та щоденному повторенні.',

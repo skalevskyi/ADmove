@@ -98,7 +98,8 @@ export const parcours = {
   },
   proofTitle: 'Recorded real routes',
   proofDescription: 'Examples of real circulation over 7 days',
-  proofCta: 'View routes →',
+  proofCta: 'View routes',
+  proofGoogleCta: 'Google profile',
   visibilityTitle: 'Local visibility estimate',
   visibilityIntro:
     'Based on the real route and daily traffic.',
