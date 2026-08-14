@@ -138,7 +138,7 @@ export function VehicleSection() {
   };
 
   return (
-    <section id="parcours" className="py-16">
+    <section id="parcours" className="scroll-mt-8 py-16 md:scroll-mt-28">
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         {/* Shared section header */}
         <header className="mx-auto mb-10 max-w-4xl text-center">

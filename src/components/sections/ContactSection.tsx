@@ -302,7 +302,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="py-16"
+      className="scroll-mt-8 py-16 md:scroll-mt-28"
     >
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="mx-auto max-w-xl md:max-w-2xl">

@@ -36,7 +36,7 @@ export function ConceptSection() {
   return (
     <section
       id="support"
-      className="border-t border-slate-200 bg-slate-50/40 py-16 dark:border-slate-800 dark:bg-slate-900/25"
+      className="scroll-mt-8 border-t border-slate-200 bg-slate-50/40 py-16 dark:border-slate-800 dark:bg-slate-900/25 md:scroll-mt-28"
     >
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <div className="mx-auto max-w-4xl">

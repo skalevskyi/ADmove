@@ -189,7 +189,7 @@ export function OffresSection() {
   return (
     <section
       id="offres"
-      className="border-t border-slate-200 bg-slate-100/40 py-16 dark:border-slate-800 dark:bg-slate-900/40"
+      className="scroll-mt-8 border-t border-slate-200 bg-slate-100/40 py-16 dark:border-slate-800 dark:bg-slate-900/40 md:scroll-mt-28"
     >
       <div className="mx-auto max-w-6xl px-4 md:px-6">
         <motion.h2

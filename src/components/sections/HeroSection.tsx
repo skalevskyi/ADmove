@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { CalendarDays, Route, ShieldCheck, Tag } from 'lucide-react';
+import { ArrowRight, CalendarDays, Route, ShieldCheck, Tag } from 'lucide-react';
 
 import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
@@ -67,6 +67,7 @@ function OfferReassurancePill({ trust }: { trust: string }) {
 export function HeroSection() {
   const reducedMotion = useReducedMotion();
   const { t } = useLanguage();
+  const seoLinkText = t.hero.heroSeoLine2Link.replace(/\s*→\s*$/, '');
 
   const motionOpts = {
     initial: { opacity: 1, y: reducedMotion ? 0 : 8 },
@@ -137,12 +138,13 @@ export function HeroSection() {
             </div>
 
             <div className="text-xs leading-relaxed text-slate-600 dark:text-slate-300 md:text-sm">
-              <p className="min-w-0 break-words">
+              <p className="min-w-0">
                 <Link
                   href={withBasePath('/publicite-voiture-montpellier')}
-                  className={`text-slate-600 underline decoration-slate-400/70 underline-offset-2 transition-colors hover:text-sky-600 hover:decoration-sky-500 dark:text-slate-400 dark:decoration-slate-500/80 dark:hover:text-sky-400 dark:hover:decoration-sky-500/80 ${focusRing} rounded-sm`}
+                  className={`inline-flex max-w-full items-center gap-1.5 rounded-full border border-slate-200 bg-white/75 px-3 py-2 text-slate-600 shadow-sm shadow-slate-200/40 transition-colors hover:border-sky-200 hover:bg-sky-50 hover:text-sky-700 dark:border-slate-700 dark:bg-slate-900/55 dark:text-slate-300 dark:shadow-none dark:hover:border-sky-800/70 dark:hover:bg-sky-950/50 dark:hover:text-sky-300 ${focusRing}`}
                 >
-                  {t.hero.heroSeoLine2Link}
+                  <span className="min-w-0 break-words">{seoLinkText}</span>
+                  <ArrowRight className="h-3.5 w-3.5 shrink-0" aria-hidden />
                 </Link>
               </p>
             </div>
