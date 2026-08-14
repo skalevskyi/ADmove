@@ -13,6 +13,7 @@ import {
 type TrajetsMapProps = {
   activeRouteId: TrajetsRouteId;
   fallbackText: string;
+  showRoute?: boolean;
 };
 
 const ROUTE_SOURCE_ID = 'trajets-route-source';
@@ -79,6 +80,18 @@ function ensureRouteLayer(
   }
 }
 
+function removeRouteLayer(map: MapLibreMap): void {
+  if (map.getLayer(ROUTE_MAIN_LAYER_ID)) {
+    map.removeLayer(ROUTE_MAIN_LAYER_ID);
+  }
+  if (map.getLayer(ROUTE_UNDERLAY_LAYER_ID)) {
+    map.removeLayer(ROUTE_UNDERLAY_LAYER_ID);
+  }
+  if (map.getSource(ROUTE_SOURCE_ID)) {
+    map.removeSource(ROUTE_SOURCE_ID);
+  }
+}
+
 function fitMapToRoute(
   map: MapLibreMap,
   route: GeoJSON.Feature<GeoJSON.LineString>,
@@ -107,7 +120,7 @@ function getRouteBounds(route: GeoJSON.Feature<GeoJSON.LineString>): LngLatBound
   ];
 }
 
-export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
+export function TrajetsMap({ activeRouteId, fallbackText, showRoute = true }: TrajetsMapProps) {
   const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
   const { resolvedTheme } = useTheme();
   const activeRoute = useMemo(() => trajetsRoutes[activeRouteId], [activeRouteId]);
@@ -116,6 +129,7 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
   const mapRef = useRef<MapLibreMap | null>(null);
   const activeRouteRef = useRef(activeRoute);
   const selectedRouteIdRef = useRef(activeRouteId);
+  const showRouteRef = useRef(showRoute);
   const resolvedThemeRef = useRef(resolvedTheme);
   const appliedThemeRef = useRef<'light' | 'dark' | null>(null);
   const targetStyleUrlRef = useRef<string | null>(null);
@@ -135,7 +149,8 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
   useEffect(() => {
     activeRouteRef.current = activeRoute;
     selectedRouteIdRef.current = activeRouteId;
-  }, [activeRoute, activeRouteId]);
+    showRouteRef.current = showRoute;
+  }, [activeRoute, activeRouteId, showRoute]);
 
   useEffect(() => {
     resolvedThemeRef.current = resolvedTheme;
@@ -188,8 +203,10 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
 
         onLoad = () => {
           setHasMapError(false);
-          ensureRouteLayer(map, activeRouteRef.current, resolvedThemeRef.current);
-          fitMapToRoute(map, activeRouteRef.current, { duration: 0 });
+          if (showRouteRef.current) {
+            ensureRouteLayer(map, activeRouteRef.current, resolvedThemeRef.current);
+            fitMapToRoute(map, activeRouteRef.current, { duration: 0 });
+          }
           appliedThemeRef.current = resolvedThemeRef.current;
           activeRouteIdRef.current = selectedRouteIdRef.current;
           setMapReady(true);
@@ -225,7 +242,11 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
     const targetStyleUrl = getStyleUrl(resolvedTheme, apiKey);
     if (targetStyleUrlRef.current === targetStyleUrl) {
       if (map.isStyleLoaded()) {
-        ensureRouteLayer(map, activeRouteRef.current, resolvedTheme);
+        if (showRouteRef.current) {
+          ensureRouteLayer(map, activeRouteRef.current, resolvedTheme);
+        } else {
+          removeRouteLayer(map);
+        }
         appliedThemeRef.current = resolvedTheme;
       }
       return;
@@ -242,6 +263,14 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
 
       const routeToApply = activeRouteRef.current;
       if (!routeToApply) return false;
+
+      if (!showRouteRef.current) {
+        removeRouteLayer(map);
+        appliedThemeRef.current = resolvedTheme;
+        activeRouteIdRef.current = selectedRouteIdRef.current;
+        didRestoreForRequest = true;
+        return true;
+      }
 
       const hasRouteSource = map.getSource(ROUTE_SOURCE_ID) !== undefined;
       const hasMainRouteLayer = map.getLayer(ROUTE_MAIN_LAYER_ID) !== undefined;
@@ -304,12 +333,17 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
     const hasRouteLayer =
       mapRef.current.getSource(ROUTE_SOURCE_ID) !== undefined &&
       mapRef.current.getLayer(ROUTE_MAIN_LAYER_ID) !== undefined;
+    if (!showRoute) {
+      removeRouteLayer(mapRef.current);
+      activeRouteIdRef.current = activeRouteId;
+      return;
+    }
     if (activeRouteIdRef.current === activeRouteId && hasRouteLayer) return;
     activeRouteIdRef.current = activeRouteId;
     mapRef.current.stop();
     ensureRouteLayer(mapRef.current, activeRoute, resolvedTheme);
     fitMapToRoute(mapRef.current, activeRoute, { duration: ROUTE_CHANGE_FIT_DURATION_MS });
-  }, [activeRoute, activeRouteId, mapReady, resolvedTheme]);
+  }, [activeRoute, activeRouteId, mapReady, resolvedTheme, showRoute]);
 
   useEffect(() => {
     if (!mapRef.current) return;
@@ -321,7 +355,7 @@ export function TrajetsMap({ activeRouteId, fallbackText }: TrajetsMapProps) {
     const animationFrame = window.requestAnimationFrame(resizeMap);
     const resizeTimeout = window.setTimeout(() => {
       resizeMap();
-      if (mapRef.current?.isStyleLoaded()) {
+      if (showRouteRef.current && mapRef.current?.isStyleLoaded()) {
         fitMapToRoute(mapRef.current, activeRouteRef.current, { duration: RESET_FIT_DURATION_MS });
       }
     }, 320);

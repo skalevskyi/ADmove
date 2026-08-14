@@ -24,7 +24,6 @@ import type {
   CalculatorContractTotalView,
   CalculatorMonthlyView,
   MoneyEur,
-  TierGuardrailsStatus,
 } from './types';
 
 const centsToEur = (cents: number): MoneyEur => cents / 100;
@@ -168,4 +167,3 @@ export function calculateCalculator(selection: CalculatorSelection): CalculatorR
 
   return ok;
 }
-

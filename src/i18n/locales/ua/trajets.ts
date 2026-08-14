@@ -6,11 +6,11 @@ export const trajets = {
 
   summary: {
     distanceLabel: 'Загальна дистанція',
-    distanceValue: '413 км',
+    distanceValue: '193 км',
     timeLabel: 'Загальний час',
-    timeValue: '11 год 34 хв',
+    timeValue: '4 год 47 хв',
     daysLabel: 'Покрито днів',
-    daysValue: '7 / 7',
+    daysValue: '3 / 7',
     routeLabel: 'Маршрут',
     routeValue: 'Монпельє Узбережжя',
     routeValueLines: ['Монпельє', 'Узбережжя'],
@@ -37,7 +37,7 @@ export const trajets = {
     durationChipLabel: 'Тривалість',
   },
 
-  trust: 'Маршрути зафіксовані через GPS протягом 7 днів.',
+  trust: 'Маршрути записуються автоматично через GPS. Дані показані як доказ реального руху, без технічного інтерфейсу та без live-відстеження. Якщо опція показів у вихідні дні не активована, маршрут у вихідні може змінюватися залежно від особистих і локальних поїздок, переважно містом.',
   status: {
     noMovement: {
       title: 'Цього дня рух не зафіксовано',
@@ -52,7 +52,7 @@ export const trajets = {
   days: [
     {
       id: 'day-1',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Понеділок',
       date: '27 квітня 2026',
       route: 'Монпельє ↔ Ла-Гранд-Мотт',
@@ -72,7 +72,7 @@ export const trajets = {
     },
     {
       id: 'day-2',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Вівторок',
       date: '5 травня 2026',
       route: 'Монпельє ↔ Ла-Гранд-Мотт',
@@ -92,7 +92,7 @@ export const trajets = {
     },
     {
       id: 'day-3',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Середа',
       date: '7 травня 2026',
       route: 'Монпельє ↔ Ла-Гранд-Мотт',
@@ -172,7 +172,7 @@ export const trajets = {
     },
     {
       id: 'day-7',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Неділя',
       date: '10 травня 2026',
       route: 'Монпельє ↔ Ла-Гранд-Мотт',
@@ -185,10 +185,10 @@ export const trajets = {
         { label: 'Туди', value: '09:05–09:38' },
         { label: 'Назад', value: '14:25–15:05' },
       ],
-      distance: '61 км',
-      duration: '72 хв',
-      passages: '2 поїздки',
-      gpsPoints: '145 GPS',
+      distance: '0 км',
+      duration: '0 хв',
+      passages: '0 поїздок',
+      gpsPoints: '0 GPS',
     },
   ],
 } as const;

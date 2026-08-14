@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { Globe, Layers, Mail, Monitor, Moon, Package, Route, Smartphone, Sun } from 'lucide-react';
 import { useEffect, useLayoutEffect, useRef, useState } from 'react';
@@ -9,9 +10,6 @@ import { useLanguage } from '@/context/LanguageContext';
 import { useTheme } from '@/context/ThemeContext';
 import type { Locale } from '@/i18n';
 import { BASE_PATH, withBasePath } from '@/lib/base-path';
-
-const linkClass =
-  'text-sm font-medium text-slate-600 transition hover:text-slate-900 dark:text-slate-300 dark:hover:text-white focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70 rounded px-1';
 
 const desktopNavLinkBaseClass =
   'inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-sm font-medium focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70 transition-colors duration-150 ease-out';
@@ -219,9 +217,11 @@ export function Navbar({ useHomeAnchorHref = false }: NavbarProps = {}) {
             href={useHomeAnchorHref ? withBasePath('/#hero') : '#hero'}
             className="flex min-w-0 items-center gap-2 rounded-lg px-1 py-1 focus:outline-none focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-slate-400/70 dark:focus-visible:ring-slate-500/70"
           >
-            <img
+            <Image
               src={`${BASE_PATH}/logo/favicon.svg`}
               alt={t.brand.logoAlt}
+              width={112}
+              height={32}
               loading="eager"
               className="h-7 md:h-8 w-auto shrink-0"
             />

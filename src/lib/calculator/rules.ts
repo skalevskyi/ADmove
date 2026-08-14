@@ -11,25 +11,18 @@ import {
   DURATION_MULTIPLIERS,
   EXCLUSIVITY_MONTHLY_EUR_BY_PACKAGE,
   FIRST_MONTH_BASE_MEDIA_PRICE_FRACTION,
-  GUARDRAILS,
   INDICATIVE_MONTHLY_CONTACTS,
   INCLUDED_BY_DEFINITION,
 } from './config';
 import type {
   AddonEligibility,
-  AddonId,
-  CalculatorResult,
   CalculatorSelection,
-  CalculatorResultError,
-  CalculatorResultOk,
   DurationMonths,
-  MoneyEur,
   PackageId,
   TierGuardrailsStatus,
 } from './types';
 
 const toCents = (eur: number): number => Math.round(eur * 100);
-const centsToEur = (cents: number): MoneyEur => cents / 100;
 
 export const DEFAULT_EXTRA_ROUTE_DAYS_MIN = 0;
 
@@ -279,4 +272,3 @@ export function computeTierGuardrailsStatus(): TierGuardrailsStatus {
 
   return { ok: errors.length === 0, errors };
 }
-

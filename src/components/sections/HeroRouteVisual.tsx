@@ -43,7 +43,6 @@ const BOTTOM_LABEL_OFFSET = 4.2;
 const LEFT_ENDPOINT_LABEL_OFFSET = 4.2;
 const RIGHT_ENDPOINT_LABEL_OFFSET = 4.2;
 const ROUTE_TRAIL_LENGTH = 12;
-const TRAIL_SAMPLE_COUNT = 32;
 const TRAIL_SEGMENT_COUNT = 18;
 const TRAIL_HIDDEN_EPSILON = 0.05;
 const TRAIL_CATCHUP_MULTIPLIER = 2;
@@ -63,14 +62,6 @@ const MARKER_VISUAL_SCALE = 1.2;
 const MARKER_HIGHLIGHT_VECTOR_LENGTH = 4.4;
 const MAP_LIGHT_SRC = `${BASE_PATH}/hero/locations/map-light.webp`;
 const MAP_DARK_SRC = `${BASE_PATH}/hero/locations/map-dark.webp`;
-
-const STOP_POINTS: Record<StopId, { x: number; y: number }> = {
-  montpellier: { x: 12, y: 50 },
-  portMarianne: { x: 36, y: 33 },
-  carnon: { x: 66, y: 33 },
-  grandeMotte: { x: 88, y: 50 },
-  palavas: { x: 36, y: 67 },
-};
 
 const MOTION_ANCHOR_POINTS: Record<MotionAnchorId, { x: number; y: number }> = {
   montpellier: { x: 12, y: 50 },
@@ -353,6 +344,10 @@ export function HeroRouteVisual({
     const point = path.getPointAtLength(currentLength);
     return { x: point.x, y: point.y, currentLength };
   }, [activeMotionAnchor, nextMotionAnchor, segmentProgress, motionAnchorLengths, totalPathLength]);
+  const vehicleTransform =
+    vehiclePosition.currentLength === null
+      ? INITIAL_VEHICLE_TRANSLATE
+      : `translate(${vehiclePosition.x} ${vehiclePosition.y})`;
 
   useEffect(() => {
     if (!hasDeferredStart || reducedMotion || !isInViewport) return;
@@ -694,7 +689,7 @@ export function HeroRouteVisual({
               </text>
             );
           })}
-          <g ref={vehicleRef} transform={INITIAL_VEHICLE_TRANSLATE} aria-label={vehicleAriaLabel}>
+          <g ref={vehicleRef} transform={vehicleTransform} aria-label={vehicleAriaLabel}>
             <g transform="scale(1.2)">
               <defs>
                 <linearGradient
@@ -767,7 +762,9 @@ export function HeroRouteVisual({
           </g>
         </svg>
 
-        <div className="sr-only">{activeLabel}</div>
+        <div className="sr-only">
+          {imageAlt} {activeLabel}
+        </div>
       </div>
     </div>
   );

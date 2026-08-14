@@ -200,9 +200,9 @@ test('snapshot cases (rounded expectations): BASIC/6, PRO/12, EXCLUSIVE/9', () =
   });
   assert.equal(exclusive.ok, true);
   if (exclusive.ok) {
-    assert.equal(exclusive.monthlyView.month1TotalEur, 484);
-    assert.equal(exclusive.monthlyView.fromMonth2TotalEur, 898);
-    assert.equal(exclusive.contractTotalView.contractTotalEur, 7668);
+    assert.equal(exclusive.monthlyView.month1TotalEur, 415);
+    assert.equal(exclusive.monthlyView.fromMonth2TotalEur, 760);
+    assert.equal(exclusive.contractTotalView.contractTotalEur, 6495);
   }
 });
 

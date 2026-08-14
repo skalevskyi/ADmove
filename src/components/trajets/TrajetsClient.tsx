@@ -36,7 +36,13 @@ export function TrajetsClient() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeDay = routeDays[activeIndex];
   const activeRouteId = activeDay.id as TrajetsRouteId;
-  const statusType = !activeDay.isRecorded ? 'noMovement' : activeDay.id === 'day-6' ? 'routeMayVary' : null;
+  const hasRouteTrace = activeDay.id !== 'day-7' || activeDay.isRecorded;
+  const statusType =
+    activeDay.id === 'day-7' && !activeDay.isRecorded
+      ? 'noMovement'
+      : activeDay.id === 'day-6'
+        ? 'routeMayVary'
+        : null;
   const statusContent = statusType ? t.trajets.status[statusType] : null;
   const hasStatus = statusType !== null && statusContent !== null;
   const noMovementStatus = t.trajets.status.noMovement;
@@ -57,11 +63,10 @@ export function TrajetsClient() {
     'shadow-[0_8px_18px_rgba(14,165,233,0.12)] dark:shadow-[0_10px_22px_rgba(14,165,233,0.16)]';
 
   useEffect(() => {
-    const jsWeekday = new Date().getDay();
-    const mondayFirstIndex = (jsWeekday + 6) % 7;
+    const proofStartIndex = routeDays.findIndex((day) => day.id === 'day-4');
 
-    if (routeDays[mondayFirstIndex]) {
-      setActiveIndex(mondayFirstIndex);
+    if (proofStartIndex >= 0) {
+      setActiveIndex(proofStartIndex);
       return;
     }
 
@@ -183,7 +188,11 @@ export function TrajetsClient() {
             </p>
 
             <div className="mt-5 h-72 rounded-xl border border-slate-200 bg-white p-2 md:h-[18.25rem] md:p-4 dark:border-slate-700 dark:bg-slate-900/40">
-              <TrajetsMap activeRouteId={activeRouteId} fallbackText={t.trajets.map.fallback} />
+              <TrajetsMap
+                activeRouteId={activeRouteId}
+                fallbackText={t.trajets.map.fallback}
+                showRoute={hasRouteTrace}
+              />
             </div>
           </article>
 
@@ -207,14 +216,14 @@ export function TrajetsClient() {
                   {t.trajets.detail.routeLabel}
                 </p>
                 <div className="justify-self-end text-right md:hidden">
-                  {activeDay.isRecorded ? (
+                  {hasRouteTrace ? (
                     <div className="grid w-fit grid-cols-[auto_0.375rem] items-center gap-x-2 justify-self-end">
                       <span className="text-sm font-medium leading-tight text-slate-900 dark:text-white">
                         {activeDay.routeStart}
                       </span>
                       <span className="h-1.5 w-1.5 rounded-full bg-slate-500 dark:bg-slate-400" />
                       <span aria-hidden />
-                      <span className="mx-auto h-2.5 w-px bg-slate-300 dark:bg-slate-600" />
+                      <span className="mx-auto h-1.5 w-px bg-slate-300 dark:bg-slate-600" />
                       <span className="text-sm font-medium leading-tight text-slate-900 dark:text-white">
                         {activeDay.routeEnd}
                       </span>
@@ -222,12 +231,12 @@ export function TrajetsClient() {
                     </div>
                   ) : (
                     <p className="text-sm font-medium leading-tight text-slate-500 dark:text-slate-400">
-                      {activeDay.routeStart}
+                      {noMovementStatus.title}
                     </p>
                   )}
                 </div>
                 <div className="mt-1.5 hidden md:block">
-                  {activeDay.isRecorded ? (
+                  {hasRouteTrace ? (
                     <>
                       <div className="flex items-center gap-2">
                         <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-slate-500 dark:bg-slate-400" />
@@ -245,7 +254,7 @@ export function TrajetsClient() {
                     </>
                   ) : (
                     <p className="text-sm font-medium leading-tight text-slate-500 dark:text-slate-400">
-                      {activeDay.routeStart}
+                      {noMovementStatus.title}
                     </p>
                   )}
                 </div>
@@ -257,7 +266,34 @@ export function TrajetsClient() {
                   {t.trajets.detail.timeLabel}
                 </p>
                 <div className="justify-self-end text-right text-sm md:hidden">
-                  <>
+                  {hasRouteTrace ? (
+                    <>
+                      <p className="leading-tight">
+                        <span className="text-slate-500 dark:text-slate-400">
+                          {activeDay.timeSlots[0].label}
+                        </span>{' '}
+                        <span className="font-medium text-slate-900 dark:text-white">
+                          {activeDay.timeSlots[0].value}
+                        </span>
+                      </p>
+                      <p className="mt-1 leading-tight">
+                        <span className="text-slate-500 dark:text-slate-400">
+                          {activeDay.timeSlots[1].label}
+                        </span>{' '}
+                        <span className="font-medium text-slate-900 dark:text-white">
+                          {activeDay.timeSlots[1].value}
+                        </span>
+                      </p>
+                    </>
+                  ) : (
+                    <p className="font-medium leading-tight text-slate-500 dark:text-slate-400">
+                      {noMovementStatus.title}
+                    </p>
+                  )}
+                </div>
+                <div className="mt-1.5 hidden text-sm md:block">
+                  {hasRouteTrace ? (
+                    <>
                     <p className="leading-tight">
                       <span className="text-slate-500 dark:text-slate-400">
                         {activeDay.timeSlots[0].label}
@@ -274,28 +310,12 @@ export function TrajetsClient() {
                         {activeDay.timeSlots[1].value}
                       </span>
                     </p>
-                  </>
-                </div>
-                <div className="mt-1.5 hidden text-sm md:block">
-                  <>
-                    <p className="whitespace-nowrap leading-tight">
-                      <span className="text-slate-500 dark:text-slate-400">
-                        {activeDay.timeSlots[0].label}
-                      </span>{' '}
-                      <span className="font-medium text-slate-900 dark:text-white">
-                        {activeDay.timeSlots[0].value}
-                      </span>
+                    </>
+                  ) : (
+                    <p className="font-medium leading-tight text-slate-500 dark:text-slate-400">
+                      {noMovementStatus.title}
                     </p>
-                    <div className="h-2.5" />
-                    <p className="whitespace-nowrap leading-tight">
-                      <span className="text-slate-500 dark:text-slate-400">
-                        {activeDay.timeSlots[1].label}
-                      </span>{' '}
-                      <span className="font-medium text-slate-900 dark:text-white">
-                        {activeDay.timeSlots[1].value}
-                      </span>
-                    </p>
-                  </>
+                  )}
                 </div>
               </div>
 

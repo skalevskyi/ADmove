@@ -1,5 +1,6 @@
 'use client';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
 import { useLanguage } from '@/context/LanguageContext';
@@ -18,9 +19,11 @@ export function Footer() {
       <div className="mx-auto max-w-6xl px-4 py-8 md:px-6">
         <div className="flex flex-col gap-2">
           <div className="flex w-auto max-w-full items-center gap-3">
-            <img
+            <Image
               src={`${BASE_PATH}/logo/favicon.svg`}
               alt={t.brand.logoAlt}
+              width={112}
+              height={32}
               loading="eager"
               className="h-7 w-auto shrink-0"
             />

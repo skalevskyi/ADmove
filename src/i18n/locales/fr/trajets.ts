@@ -6,11 +6,11 @@ export const trajets = {
 
   summary: {
     distanceLabel: 'Distance totale',
-    distanceValue: '413 km',
+    distanceValue: '193 km',
     timeLabel: 'Temps total',
-    timeValue: '11 h 34',
+    timeValue: '4 h 47',
     daysLabel: 'Jours couverts',
-    daysValue: '7 / 7',
+    daysValue: '3 / 7',
     routeLabel: 'Itinéraire',
     routeValue: 'Montpellier Littoral',
     routeValueLines: ['Montpellier', 'Littoral'],
@@ -37,7 +37,7 @@ export const trajets = {
     durationChipLabel: 'Durée',
   },
 
-  trust: 'Données enregistrées via GPS sur 7 jours consécutifs.',
+  trust: 'Les trajets sont enregistrés automatiquement par GPS. Les données sont présentées comme preuve de circulation réelle, sans interface technique ni suivi en direct. Si l’option de diffusion le week-end n’est pas activée, le trajet le week-end peut varier selon les déplacements personnels et locaux, principalement en ville.',
   status: {
     noMovement: {
       title: 'Aucun trajet enregistré ce jour-là',
@@ -52,7 +52,7 @@ export const trajets = {
   days: [
     {
       id: 'day-1',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Lundi',
       date: '27 avril 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -72,7 +72,7 @@ export const trajets = {
     },
     {
       id: 'day-2',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Mardi',
       date: '5 mai 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -92,7 +92,7 @@ export const trajets = {
     },
     {
       id: 'day-3',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Mercredi',
       date: '7 mai 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -172,7 +172,7 @@ export const trajets = {
     },
     {
       id: 'day-7',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Dimanche',
       date: '10 mai 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -185,10 +185,10 @@ export const trajets = {
         { label: 'Aller', value: '09:05–09:38' },
         { label: 'Retour', value: '14:25–15:05' },
       ],
-      distance: '61 km',
-      duration: '72 min',
-      passages: '2 trajets',
-      gpsPoints: '145 GPS',
+      distance: '0 km',
+      duration: '0 min',
+      passages: '0 trajet',
+      gpsPoints: '0 GPS',
     },
   ],
 } as const;

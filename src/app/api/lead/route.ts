@@ -123,12 +123,20 @@ export async function POST(request: Request): Promise<NextResponse<LeadApiRespon
 
   const backup = await persistLeadBackup(lead, requestId);
   if (!backup.ok) {
-    logLeadLine(requestId, 'backup_failed_non_blocking', {
+    logLeadLine(requestId, 'backup_failed_blocking', {
       code: backup.code,
       locale: lead.locale,
       leadOrigin,
       hasCalculatorSummary,
     });
+
+    return NextResponse.json(
+      {
+        ok: false,
+        error: backup.code === 'not_configured' ? 'configuration_error' : 'provider_error',
+      },
+      { status: 503 },
+    );
   } else {
     logLeadLine(requestId, 'backup_persisted', {
       skipped: backup.skipped,

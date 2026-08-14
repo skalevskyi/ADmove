@@ -6,11 +6,11 @@ export const trajets = {
 
   summary: {
     distanceLabel: 'Total distance',
-    distanceValue: '413 km',
+    distanceValue: '193 km',
     timeLabel: 'Total time',
-    timeValue: '11 h 34',
+    timeValue: '4 h 47',
     daysLabel: 'Days covered',
-    daysValue: '7 / 7',
+    daysValue: '3 / 7',
     routeLabel: 'Route',
     routeValue: 'Montpellier Coast',
     routeValueLines: ['Montpellier', 'Coast'],
@@ -37,7 +37,7 @@ export const trajets = {
     durationChipLabel: 'Duration',
   },
 
-  trust: 'Routes recorded via GPS over 7 consecutive days.',
+  trust: 'Routes are recorded automatically via GPS. Data is shown as proof of real movement, without a technical interface and without live tracking. If weekend visibility is not activated, weekend routes may vary depending on personal and local trips, mainly around the city.',
   status: {
     noMovement: {
       title: 'No route recorded for this day',
@@ -52,7 +52,7 @@ export const trajets = {
   days: [
     {
       id: 'day-1',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Monday',
       date: '27 April 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -72,7 +72,7 @@ export const trajets = {
     },
     {
       id: 'day-2',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Tuesday',
       date: '5 May 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -92,7 +92,7 @@ export const trajets = {
     },
     {
       id: 'day-3',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Wednesday',
       date: '7 May 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -172,7 +172,7 @@ export const trajets = {
     },
     {
       id: 'day-7',
-      isRecorded: true,
+      isRecorded: false,
       weekday: 'Sunday',
       date: '10 May 2026',
       route: 'Montpellier ↔ La Grande-Motte',
@@ -185,10 +185,10 @@ export const trajets = {
         { label: 'Out', value: '09:05–09:38' },
         { label: 'Back', value: '14:25–15:05' },
       ],
-      distance: '61 km',
-      duration: '72 min',
-      passages: '2 trips',
-      gpsPoints: '145 GPS',
+      distance: '0 km',
+      duration: '0 min',
+      passages: '0 trips',
+      gpsPoints: '0 GPS',
     },
   ],
 } as const;

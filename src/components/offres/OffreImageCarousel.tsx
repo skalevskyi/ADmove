@@ -47,7 +47,7 @@ export function OffreImageCarousel({
     setLightboxOpen(true);
   }, []);
 
-  const handleLightboxClose = useCallback((_finalIndex: number) => {
+  const handleLightboxClose = useCallback(() => {
     setLightboxOpen(false);
   }, []);
 
