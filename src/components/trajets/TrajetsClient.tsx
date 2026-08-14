@@ -10,6 +10,11 @@ import { useLanguage } from '@/context/LanguageContext';
 import { useReducedMotion } from '@/hooks/useReducedMotion';
 import { withBasePath } from '@/lib/base-path';
 import type { TrajetsRouteId } from '@/components/trajets/data/trajets-routes';
+import {
+  getGpsRecordStatusText,
+  shouldShowGpsMetrics,
+  shouldShowGpsRouteTrace,
+} from '@/components/trajets/trajets-proof';
 
 function TrajetsMapSkeleton() {
   return (
@@ -36,7 +41,8 @@ export function TrajetsClient() {
   const [activeIndex, setActiveIndex] = useState(0);
   const activeDay = routeDays[activeIndex];
   const activeRouteId = activeDay.id as TrajetsRouteId;
-  const hasRouteTrace = activeDay.isRecorded;
+  const hasRouteTrace = shouldShowGpsRouteTrace(activeDay);
+  const hasGpsMetrics = shouldShowGpsMetrics(activeDay);
   const statusType =
     !activeDay.isRecorded
       ? 'noMovement'
@@ -132,17 +138,33 @@ export function TrajetsClient() {
           <h2 className="text-sm font-medium text-slate-600 dark:text-slate-300">
             {t.trajets.selector.title}
           </h2>
+          <div className="mt-2 flex flex-wrap gap-x-3 gap-y-1 text-xs text-slate-500 dark:text-slate-400">
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full bg-sky-500" aria-hidden />
+              {t.trajets.selector.recordedLabel}
+            </span>
+            <span className="inline-flex items-center gap-1.5">
+              <span className="h-1.5 w-1.5 rounded-full border border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-900" aria-hidden />
+              {t.trajets.selector.notRecordedLabel}
+            </span>
+          </div>
           <div className="mt-3 md:hidden">
             <div className="no-scrollbar flex gap-2 overflow-x-auto whitespace-nowrap pb-1">
               {t.trajets.selector.weekdaysShort.map((weekday, index) => {
                 const isActive = index === activeIndex;
-                const isRecorded = routeDays[index]?.isRecorded;
+                const day = routeDays[index];
+                const isRecorded = day?.isRecorded ?? false;
+                const statusText = getGpsRecordStatusText(day ?? activeDay, {
+                  recorded: t.trajets.selector.recordedAria,
+                  notRecorded: t.trajets.selector.notRecordedAria,
+                });
                 return (
                   <button
                     key={routeDays[index]?.id ?? `${weekday}-${index}`}
                     type="button"
+                    aria-label={`${day?.weekday ?? weekday} — ${statusText}`}
                     onClick={() => setActiveIndex(index)}
-                    className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+                    className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 ${
                       isActive
                         ? 'border-sky-300 bg-sky-50/40 text-sky-700 dark:border-sky-500/60 dark:bg-sky-950/20 dark:text-sky-300'
                         : isRecorded
@@ -150,6 +172,14 @@ export function TrajetsClient() {
                           : 'border-slate-200/70 bg-white/60 text-slate-400 hover:bg-slate-50 dark:border-slate-700/70 dark:bg-slate-800/25 dark:text-slate-500 dark:hover:bg-slate-800/35'
                     }`}
                   >
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${
+                        isRecorded
+                          ? 'bg-sky-500'
+                          : 'border border-slate-300 bg-white dark:border-slate-600 dark:bg-slate-900'
+                      }`}
+                      aria-hidden
+                    />
                     {weekday}
                   </button>
                 );
@@ -160,12 +190,17 @@ export function TrajetsClient() {
             {routeDays.map((day, index) => {
               const isActive = index === activeIndex;
               const isRecorded = day.isRecorded;
+              const statusText = getGpsRecordStatusText(day, {
+                recorded: t.trajets.selector.recordedAria,
+                notRecorded: t.trajets.selector.notRecordedAria,
+              });
               return (
                 <button
                   key={day.id}
                   type="button"
+                  aria-label={`${day.weekday} — ${statusText}`}
                   onClick={() => setActiveIndex(index)}
-                  className={`w-full rounded-xl border px-3 py-2.5 text-left transition-colors ${
+                  className={`w-full rounded-xl border px-3 py-2.5 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-500 ${
                     isActive
                       ? `border-sky-300 bg-sky-50/40 dark:border-sky-500/60 dark:bg-sky-950/20 ${activeDayElevation}`
                       : isRecorded
@@ -197,6 +232,7 @@ export function TrajetsClient() {
                 activeRouteId={activeRouteId}
                 fallbackText={t.trajets.map.fallback}
                 showRoute={hasRouteTrace}
+                emptyStateText={noMovementStatus.title}
               />
             </div>
           </article>
@@ -329,7 +365,7 @@ export function TrajetsClient() {
                   <Ruler className="h-4 w-4 text-sky-500" aria-hidden />
                   {t.trajets.detail.metricsLabel}
                 </p>
-                {hasRouteTrace ? (
+                {hasGpsMetrics ? (
                   <div className="mt-1 grid grid-cols-2 gap-1.5 md:w-[10.5rem]">
                     <div className="inline-flex h-6 items-center justify-center gap-1 whitespace-nowrap rounded-full border border-slate-200/80 bg-slate-50/80 px-2 text-[11px] font-medium text-slate-700 dark:border-slate-700/80 dark:bg-slate-900/40 dark:text-slate-200">
                       <Route className="h-3.5 w-3.5 text-sky-500" aria-hidden />

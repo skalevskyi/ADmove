@@ -20,14 +20,14 @@ export const offres = {
   descriptionSide: 'Grounded presence in urban traffic and on main roads.',
   descriptionFull: 'The strongest presence in everyday traffic flows.',
   noteRear:
-    'May coexist with another brand on a different vehicle zone if there is no direct market competition.',
+    'May coexist with another brand on a different vehicle zone, depending on sector compatibility.',
   noteSide:
     'May coexist with another advertiser depending on sector compatibility.',
   noteFull: 'The most visible presence on the vehicle for your brand',
   competitionNote:
-    'No direct competitors on the route. Other advertisers may be active, but not from the same niche.',
+    'Category exclusivity on this vehicle, subject to availability.',
   exclusivityNote:
-    'Exclusivity: your message is not competing with another brand from the same niche on this route.',
+    'Category exclusivity on this vehicle, subject to availability.',
   /** Mechanism layer (blue box): reading situations — split from outcome paragraphs */
   benefitsRear: [
     'Clearly visible in traffic jams, at lights, and in parking areas.',

@@ -17,3 +17,4 @@ require.extensions['.ts'] = function registerTypeScript(module, filename) {
 };
 
 require(path.resolve(__dirname, '../src/lib/calculator/__tests__/calculator-engine.test.ts'));
+require(path.resolve(__dirname, '../src/components/trajets/__tests__/trajets-proof.test.ts'));

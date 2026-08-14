@@ -25,6 +25,10 @@ export const trajets = {
   selector: {
     title: 'Week overview',
     weekdaysShort: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
+    recordedLabel: 'GPS recorded',
+    notRecordedLabel: 'Not recorded',
+    recordedAria: 'GPS route recorded',
+    notRecordedAria: 'no GPS route recorded',
   },
 
   detail: {
@@ -185,10 +189,10 @@ export const trajets = {
         { label: 'Out', value: '09:05–09:38' },
         { label: 'Back', value: '14:25–15:05' },
       ],
-      distance: '0 km',
-      duration: '0 min',
-      passages: '0 trips',
-      gpsPoints: '0 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
   ],
 } as const;

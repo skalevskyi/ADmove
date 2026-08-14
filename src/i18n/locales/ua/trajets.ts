@@ -25,6 +25,10 @@ export const trajets = {
   selector: {
     title: 'Огляд тижня',
     weekdaysShort: ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Нд'],
+    recordedLabel: 'GPS зафіксовано',
+    notRecordedLabel: 'Не зафіксовано',
+    recordedAria: 'GPS-маршрут зафіксовано',
+    notRecordedAria: 'GPS-маршрут не зафіксовано',
   },
 
   detail: {
@@ -185,10 +189,10 @@ export const trajets = {
         { label: 'Туди', value: '09:05–09:38' },
         { label: 'Назад', value: '14:25–15:05' },
       ],
-      distance: '0 км',
-      duration: '0 хв',
-      passages: '0 поїздок',
-      gpsPoints: '0 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
   ],
 } as const;

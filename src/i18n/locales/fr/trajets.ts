@@ -25,6 +25,10 @@ export const trajets = {
   selector: {
     title: 'Aperçu de la semaine',
     weekdaysShort: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+    recordedLabel: 'GPS enregistré',
+    notRecordedLabel: 'Non enregistré',
+    recordedAria: 'trajet GPS enregistré',
+    notRecordedAria: 'aucun trajet GPS enregistré',
   },
 
   detail: {
@@ -185,10 +189,10 @@ export const trajets = {
         { label: 'Aller', value: '09:05–09:38' },
         { label: 'Retour', value: '14:25–15:05' },
       ],
-      distance: '0 km',
-      duration: '0 min',
-      passages: '0 trajet',
-      gpsPoints: '0 GPS',
+      distance: '—',
+      duration: '—',
+      passages: '—',
+      gpsPoints: '—',
     },
   ],
 } as const;

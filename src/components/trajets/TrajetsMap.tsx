@@ -14,6 +14,7 @@ type TrajetsMapProps = {
   activeRouteId: TrajetsRouteId;
   fallbackText: string;
   showRoute?: boolean;
+  emptyStateText?: string;
 };
 
 const ROUTE_SOURCE_ID = 'trajets-route-source';
@@ -120,7 +121,12 @@ function getRouteBounds(route: GeoJSON.Feature<GeoJSON.LineString>): LngLatBound
   ];
 }
 
-export function TrajetsMap({ activeRouteId, fallbackText, showRoute = true }: TrajetsMapProps) {
+export function TrajetsMap({
+  activeRouteId,
+  fallbackText,
+  showRoute = true,
+  emptyStateText,
+}: TrajetsMapProps) {
   const apiKey = process.env.NEXT_PUBLIC_MAPTILER_API_KEY;
   const { resolvedTheme } = useTheme();
   const activeRoute = useMemo(() => trajetsRoutes[activeRouteId], [activeRouteId]);
@@ -435,6 +441,13 @@ export function TrajetsMap({ activeRouteId, fallbackText, showRoute = true }: Tr
       />
       {!mapReady ? (
         <div className="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-br from-slate-100/80 via-slate-50/70 to-slate-100/80 dark:from-slate-900/70 dark:via-slate-900/40 dark:to-slate-900/70" />
+      ) : null}
+      {mapReady && !showRoute && emptyStateText ? (
+        <div className="pointer-events-none absolute inset-x-3 top-3 z-10 flex justify-center">
+          <p className="rounded-lg border border-slate-200/90 bg-white/95 px-3 py-2 text-center text-xs font-medium text-slate-600 shadow-sm backdrop-blur dark:border-slate-700/90 dark:bg-slate-900/90 dark:text-slate-200">
+            {emptyStateText}
+          </p>
+        </div>
       ) : null}
       <div
         className={

@@ -20,14 +20,14 @@ export const offres = {
   descriptionSide: 'Présence ancrée en centre-ville et sur les grands axes.',
   descriptionFull: 'La présence la plus marquée au fil du flux quotidien.',
   noteRear:
-    "Peut coexister avec une autre marque sur une autre zone du véhicule en l'absence de concurrence directe.",
+    "Peut coexister avec une autre marque sur une autre zone du véhicule, selon la compatibilité des secteurs.",
   noteSide:
     'Peut coexister avec une autre annonce selon la compatibilité des secteurs.',
   noteFull: 'La présence la plus visible sur le véhicule pour votre marque',
   competitionNote:
-    "Sans concurrence directe sur le parcours. D'autres annonces peuvent être actives, mais pas dans la même niche.",
+    'Exclusivité sectorielle sur ce véhicule, sous réserve de disponibilité.',
   exclusivityNote:
-    'Exclusivité : votre message n’est pas concurrencé par une marque de la même niche sur ce trajet.',
+    'Exclusivité sectorielle sur ce véhicule, sous réserve de disponibilité.',
   /** Mechanism layer (blue box): reading situations — split from outcome paragraphs */
   benefitsRear: [
     'Bien visible dans les embouteillages, aux feux et sur les parkings.',
