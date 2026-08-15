@@ -17,7 +17,9 @@ function isBackupExplicitlySkipped(): boolean {
 
 /**
  * Durable backup for accepted leads (Upstash Redis LIST, LPUSH).
- * Production: set UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.
+ * Production: set Upstash Redis REST env vars. Vercel Marketplace Upstash KV
+ * provides KV_REST_API_URL and KV_REST_API_TOKEN; manual Upstash setup may use
+ * UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN.
  * Local/dev only: LEAD_BACKUP_SKIP=true skips persistence (loud log) — do not use in production.
  */
 export async function persistLeadBackup(lead: Lead, requestId: string): Promise<PersistLeadBackupResult> {
@@ -33,8 +35,8 @@ export async function persistLeadBackup(lead: Lead, requestId: string): Promise<
     return { ok: true, skipped: true };
   }
 
-  const url = process.env.UPSTASH_REDIS_REST_URL?.trim();
-  const token = process.env.UPSTASH_REDIS_REST_TOKEN?.trim();
+  const url = process.env.UPSTASH_REDIS_REST_URL?.trim() || process.env.KV_REST_API_URL?.trim();
+  const token = process.env.UPSTASH_REDIS_REST_TOKEN?.trim() || process.env.KV_REST_API_TOKEN?.trim();
   if (!url || !token) {
     return { ok: false, code: 'not_configured' };
   }

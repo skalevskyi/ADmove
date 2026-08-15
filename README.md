@@ -128,7 +128,7 @@ RESEND_API_KEY=
 LEAD_TO_EMAIL=
 ```
 
-Production requires `RESEND_API_KEY`, `LEAD_TO_EMAIL`, and Upstash `UPSTASH_REDIS_REST_*` for durable lead backup. Optional: `RESEND_FROM_EMAIL`, `LEAD_BACKUP_LIST_KEY`, rate limits, `NEXT_PUBLIC_BASE_PATH` for subpath deploys. Local/dev may use `LEAD_BACKUP_SKIP=true`; do not enable it in production.
+Production requires `RESEND_API_KEY`, `LEAD_TO_EMAIL`, and Upstash Redis REST env vars for durable lead backup. Vercel Marketplace Upstash KV provides `KV_REST_API_URL` + `KV_REST_API_TOKEN`; manual Upstash setup may use `UPSTASH_REDIS_REST_URL` + `UPSTASH_REDIS_REST_TOKEN`. Optional: `RESEND_FROM_EMAIL`, `LEAD_BACKUP_LIST_KEY`, rate limits, `NEXT_PUBLIC_BASE_PATH` for subpath deploys. Local/dev may use `LEAD_BACKUP_SKIP=true`; do not enable it in production.
 
 **Local development**
 
